@@ -1,0 +1,8 @@
+[16-Jan-2023 17:16:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_magic_quotes_gpc() in /home/customdemo/public_html/apps/saw-you-on-the-train/sqlmini.php:49
+Stack trace:
+#0 {main}
+  thrown in /home/customdemo/public_html/apps/saw-you-on-the-train/sqlmini.php on line 49
+[16-Jan-2023 17:16:36 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_magic_quotes_gpc() in /home/customdemo/public_html/apps/saw-you-on-the-train/sqlmini.php:49
+Stack trace:
+#0 {main}
+  thrown in /home/customdemo/public_html/apps/saw-you-on-the-train/sqlmini.php on line 49

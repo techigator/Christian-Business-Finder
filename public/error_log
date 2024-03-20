@@ -1,0 +1,8 @@
+[16-Jan-2023 23:55:48 UTC] PHP Warning:  POST Content-Length of 18298583 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[26-Jan-2023 22:11:50 Asia/Karachi] PHP Fatal error:  Cannot redeclare App\Http\Controllers\API\ShopController::MyProduct() in /home/customdemo/public_html/apps/saw-you-on-the-train/app/Http/Controllers/API/ShopController.php on line 117
+[26-Jan-2023 22:14:14 Asia/Karachi] PHP Fatal error:  Cannot redeclare App\Http\Controllers\API\ShopController::MyProduct() in /home/customdemo/public_html/apps/saw-you-on-the-train/app/Http/Controllers/API/ShopController.php on line 117
+[23-Mar-2023 18:28:33 UTC] PHP Warning:  POST Content-Length of 13618467 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[23-Mar-2023 18:30:11 UTC] PHP Warning:  POST Content-Length of 13618467 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[20-Apr-2023 19:12:27 UTC] PHP Warning:  POST Content-Length of 10098688 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[04-May-2023 21:31:21 Asia/Karachi] PHP Fatal error:  Cannot use temporary expression in write context in /home/customdemo/public_html/apps/renterprise/app/Http/Controllers/API/ShopController.php on line 205
+[27-May-2023 03:10:29 Asia/Karachi] PHP Fatal error:  Cannot use Stripe\Stripe as Stripe because the name is already in use in /home/customdemo/public_html/apps/renterprise/app/Http/Controllers/API/ShopController.php on line 14

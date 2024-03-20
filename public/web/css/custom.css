@@ -1,0 +1,2622 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url(https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
+
+@font-face {
+    font-family: 'Gobold';
+    src: url('../fonts/Gobold.eot');
+    src: url('../fonts/Gobold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/Gobold.woff2') format('woff2'),
+    url('../fonts/Gobold.woff') format('woff'),
+    url('../fonts/Gobold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+main {
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+ul,
+ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/*modal css end*/
+/*MODREN CSS end*/
+
+
+.header {
+    position: absolute;
+    width: 100%;
+    margin-top: 10px;
+}
+
+a.nav-link.active {
+    color: #594b30;
+}
+
+.nav_glass a {
+    background-color: #594b30;
+    color: #ffffff;
+    padding: 15px 35px;
+    font-size: 15px;
+    border-radius: 10px;
+    font-family: 'Heebo', sans-serif;
+    margin: 0px 10px;
+}
+
+.nav_glass a:hover {
+    background-color: transparent;
+    color: #594b30;
+    border: 1px solid #594b30;
+}
+
+.nav_user a {
+    background-color: #1e1e2d;
+    color: #ffffff;
+    padding: 15px 20px;
+    font-size: 15px;
+    border-radius: 10px;
+    font-family: 'Heebo', sans-serif;
+    margin: 0px 10px;
+}
+
+.nav_user a:hover {
+    background-color: transparent;
+    color: #1e1e2d;
+    border: 1px solid #1e1e2d;
+}
+
+/* bannar css start */
+.bannar1 {
+    padding-top: 7.5rem;
+    padding-bottom: 1.5rem;
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* .bannar2 {
+  padding: 80px;
+} */
+
+.bannar2 h1 {
+    font-family: 'Heebo', sans-serif;
+    color: #1A1A1A;
+    font-size: 50px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.bannar2 p {
+    color: rgb(26, 26, 26);
+    font-size: 15px;
+    margin-bottom: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.bannar3 {
+    padding: 80px;
+}
+
+.bannar4 .hoverbody {
+    display: none;
+
+}
+
+.tophover {
+    max-width: 35rem;
+    margin: 0 auto;
+}
+
+.bannar4:hover .tophover {
+    display: none;
+}
+
+.bannar4:hover .hoverbody {
+    display: block;
+    max-width: 40rem;
+}
+
+.bannar5 {
+    display: flex;
+    gap: 20px;
+}
+
+.nav_glass1 a {
+    background-color: #594b30;
+    color: #ffffff;
+    padding: 12px 40px;
+    font-size: 15px;
+    border-radius: 10px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.nav_glass1 a:hover {
+    background-color: transparent;
+    color: #594b30;
+    border: 1px solid #594b30;
+}
+
+.nav_user1 a {
+    background-color: #1e1e2d;
+    color: #ffffff;
+    padding: 12px 27px;
+    font-size: 15px;
+    border-radius: 10px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.nav_user1 a:hover {
+    background-color: transparent;
+    color: #1e1e2d;
+    border: 1px solid #1e1e2d;
+}
+
+/* bannar css end */
+
+/* useful css start */
+.useful1 {
+    padding-top: 3.5rem;
+    padding-bottom: 1.5rem;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.useful2 h1 {
+    font-family: 'Heebo', sans-serif;
+    color: #1A1A1A;
+    font-size: 50px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.useful2 p {
+    color: rgb(26, 26, 26);
+    font-size: 15px;
+    margin-bottom: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* useful css end */
+
+/* mobile css start */
+.mobile1 {
+    padding-top: 3.5rem;
+    padding-bottom: 1.5rem;
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.mobile2 {
+    padding: 0px 0px 0px 80px;
+}
+
+.mobile2 h1 {
+    font-family: 'Heebo', sans-serif;
+    color: #1A1A1A;
+    font-size: 50px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.mobile2 p {
+    color: rgb(26, 26, 26);
+    font-size: 15px;
+    margin-bottom: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* mobile css end */
+
+
+/* every one  css start */
+.every1 {
+    padding-top: 3.5rem;
+    padding-bottom: 1.5rem;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.every2 h1 {
+    font-family: 'Heebo', sans-serif;
+    color: #1A1A1A;
+    font-size: 50px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.every2 p {
+    color: rgb(26, 26, 26);
+    font-size: 15px;
+    margin-bottom: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* every one  css start */
+
+/* product css start */
+.product1 {
+    padding-top: 3.5rem;
+    padding-bottom: 1.5rem;
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.product2 {
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+    color: #1A1A1A;
+    font-size: 50px;
+    font-weight: 600;
+}
+
+.product3 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product3 p {
+    color: #000000;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+    position: relative;
+    margin: 0px 10px;
+}
+
+.span1 {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.product3 h6 {
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+}
+
+
+.product4 {
+    color: rgb(231, 92, 91);
+    font-size: 13px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.product5 {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0px;
+}
+
+.product6 {
+    padding: 15px;
+}
+
+.product7 {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 0px;
+    flex: 0 0 auto;
+    width: 19%;
+    margin: 6px;
+}
+
+.nav_glass2 a {
+    background-color: rgb(152, 207, 44);
+    color: rgb(255, 255, 255);
+    padding: 14px 20px;
+    font-size: 12px;
+    border-radius: 10px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.nav_glass2 a:hover {
+    background-color: transparent;
+    color: #98CF2C;
+    border: 1px solid #98CF2C;
+}
+
+.nav_user2 a {
+    background-color: rgb(231, 92, 91);
+    color: rgb(255, 255, 255);
+    padding: 14px 40px;
+    font-size: 12px;
+    border-radius: 10px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.nav_user2 a:hover {
+    background-color: transparent;
+    color: #E75C5B;
+    border: 1px solid #E75C5B;
+}
+
+/* product css end */
+
+
+/* car sec css start */
+.car1 {
+    padding-top: 3.5rem;
+    padding-bottom: 1.5rem;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.car2 {
+    padding: 0px 0px 0px 100px;
+}
+
+.car2 h1 {
+    font-family: 'Heebo', sans-serif;
+    color: #1A1A1A;
+    font-size: 50px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.car2 p {
+    color: rgb(26, 26, 26);
+    font-size: 15px;
+    margin-bottom: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* car sec css end */
+
+
+/* cards css start */
+.cards1 {
+    padding-top: 7.5rem;
+    padding-bottom: 2.5rem;
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.cards2 {
+    text-align: center;
+    color: #10052F;
+    font-size: 50px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cards3 {
+    display: flex;
+    gap: 20px;
+}
+
+.cards4 {
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 29px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    flex: 0 0 auto;
+    width: 23%;
+    margin: 13px;
+}
+
+.cards4 p {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.checked {
+    color: #F4C914;
+}
+
+.cards5 img {
+    margin: -80px 0px 0px -10px;
+    width: 30%;
+}
+
+/* cards css start */
+
+
+/* footer css start */
+.footer {
+    background-image: url();
+    background-size: cover;
+    background-repeat: no-repeat;
+    background: #1e1e2d;
+}
+
+.footer1 p {
+    width: 70%;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 2;
+    margin-top: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.social-box li a {
+    margin: 10px;
+    font-size: 20px;
+    border: 2px solid #574a2f;
+    border-radius: 50%;
+    padding: 10px 13px;
+    color: #574a2f;
+}
+
+.footer2 li a {
+    color: #ffffff;
+    line-height: 35px;
+    font-size: 13px;
+}
+
+.footer3 h6 {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    color: #a58b61;
+}
+
+.links {
+    color: #574a2f;
+}
+
+.footer3 p {
+    font-size: 12px;
+    font-weight: 300;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+}
+
+.footer4 {
+    color: #000000;
+    margin-bottom: 30px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.copyright {
+    color: #ffffff;
+}
+
+.footer5 {
+    margin-top: 100px;
+}
+
+/* footer css end */
+
+
+/* loader css start */
+#button.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#button {
+    display: inline-block;
+    background-color: #a58b61;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    border-radius: 4px;
+    position: fixed;
+    bottom: 30px;
+    cursor: pointer;
+    right: 30px;
+    transition: background-color .3s, opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    font-size: 10px;
+}
+
+#button::after {
+    content: "\f077";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 2em;
+    line-height: 50px;
+    color: #000000;
+}
+
+/* Center the loader */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.consumer {
+    display: flex;
+    padding-top: 10rem;
+    padding-bottom: 5rem;
+}
+
+.business {
+    display: flex;
+    padding-top: 10rem;
+    padding-bottom: 5rem;
+}
+
+.sales-professionals {
+    display: flex;
+    padding-top: 10rem;
+    padding-bottom: 5rem;
+}
+
+/* Style the loader animation */
+.loader-inner {
+    width: 100%;
+    height: 100%;
+    animation: loaderAnimation 5s infinite ease-in-out;
+    opacity: 0.9;
+}
+
+@keyframes loaderAnimation {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0);
+    }
+}
+
+/* loader css start */
+
+/* register css start */
+.reg1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 100px 50px 50px 50px;
+}
+
+.reg2 {
+    border: 1px solid #7070704D;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    padding: 40px 65px;
+    margin-bottom: 30px;
+}
+
+.reg3 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 30px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.reg4 {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+}
+
+.reg5 label {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+}
+
+.reg5 input {
+    padding: 15px 20px;
+    width: 100%;
+}
+
+.reg5 p {
+    font-size: 17px;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+}
+
+.reg5 a {
+    font-size: 17px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+
+.reg6 {
+    width: 100%;
+    background-color: #98CF2C;
+    color: #ffffff;
+    padding: 15px;
+}
+
+.reg6:hover {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #98CF2C;
+}
+
+.reg7 {
+    color: #E75C5B;
+}
+
+/* register css end */
+
+/* sign in css start */
+.sign1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 100px 50px 50px 50px;
+}
+
+.sign2 {
+    border: 1px solid #7070704D;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    padding: 40px 65px;
+    margin-bottom: 30px;
+}
+
+
+.sign3 {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+}
+
+
+.sign4 label {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+}
+
+
+.sign6 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 30px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.sign4 input {
+    padding: 15px 20px;
+    width: 100%;
+}
+
+.sign5 {
+    width: 100%;
+    background-color: #98CF2C;
+    color: #ffffff;
+    padding: 15px;
+}
+
+.sign5:hover {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #98CF2C;
+}
+
+
+/* sign in css end */
+
+/* forgot css start */
+.for1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 100px 50px 50px 50px;
+}
+
+.for2 {
+    border: 1px solid #7070704D;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    padding: 40px 65px;
+    margin-bottom: 30px;
+}
+
+.for3 {
+    font-size: 19px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+}
+
+.for4 h2 {
+    font-size: 35px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 30px;
+    font-family: 'Heebo', sans-serif;
+}
+
+.for5 label {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+}
+
+.for5 input {
+    padding: 15px 20px;
+    width: 100%;
+}
+
+.for5 p {
+    font-size: 17px;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+}
+
+.for6 {
+    color: rgb(231, 92, 91);
+}
+
+
+/* forgot css end */
+
+/* reset css start */
+.reset1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 100px 50px 50px 50px;
+}
+
+.reset2 {
+    border: 1px solid #7070704D;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    padding: 40px 65px;
+    margin-bottom: 30px;
+}
+
+.reset3 {
+    font-size: 19px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+}
+
+
+.reset4 h2 {
+    font-size: 35px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 30px;
+    font-family: 'Heebo', sans-serif;
+}
+
+/* reset css end */
+
+/* about css start */
+.about1 {
+    background-image: url(../images/pic10.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 100px 50px;
+}
+
+.about2 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+}
+
+.about3 {
+    padding: 80px 50px;
+    text-align: center;
+}
+
+.about3 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+    font-family: 'Heebo', sans-serif;
+    margin-bottom: 30px;
+}
+
+.about3 p {
+    font-size: 17px;
+    font-weight: 400;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+}
+
+.about4 {
+    display: flex;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* about css end */
+
+/* rent css start */
+.rent1 {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.rent1 img {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.rent2 {
+    background-image: url(../images/pic10.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 100px 50px;
+}
+
+.rent3 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+}
+
+.rent3 p {
+    font-size: 13px;
+    font-weight: 400;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+.rent4 {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.rent5 input {
+    border: 1px solid rgb(236, 236, 236);
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.rent5 ::placeholder {
+    font-size: 12px;
+    color: #CBCBCB;
+}
+
+.rent6 {
+    justify-content: center;
+    gap: 0px;
+    margin-top: 20px;
+}
+
+.rent7 a {
+    color: rgb(255, 255, 255);
+    background-color: rgb(231, 92, 91);
+    padding: 20px 108px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 5px;
+    width: 100%;
+    display: block;
+    margin-top: 15px;
+}
+
+.rent8 a {
+    color: rgb(255, 255, 255);
+    background-color: rgb(152, 207, 44);
+    padding: 20px 75px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 5px;
+    display: block;
+    margin-top: 15px;
+}
+
+/* rent css end */
+
+/* review css start */
+.rew1 {
+    background-image: url(../images/pic10.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 100px 50px;
+}
+
+
+/* review css end */
+
+/* contact us css start */
+
+.cont1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 50px 50px;
+}
+
+.cont2 {
+    /* border: 1px solid rgba(112, 112, 112, 0.3); */
+    border-radius: 10px;
+    margin: 10px 10px 30px;
+    /* box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 10px; */
+    padding: 40px 65px;
+}
+
+.cont2 h4 {
+    font-size: 30px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+    color: #E75C5B;
+    margin-bottom: 30px;
+}
+
+.cont2 h2 {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+    color: rgb(152, 207, 44);
+    margin-bottom: 10px;
+}
+
+.cont2 p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cont3 {
+    gap: 40px;
+}
+
+
+.form3 {
+    width: 100%;
+}
+
+
+.form3 input {
+    padding: 12px 15px;
+    border: 1px solid #83957D;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cont5 input {
+    width: 100%;
+}
+
+.cont6 {
+    background-color: #98CF2C;
+    width: 100%;
+    color: #ffffff;
+    padding: 12px;
+}
+
+.cont6:hover {
+    background-color: transparent;
+    border: 1px solid #98CF2C;
+    color: #98CF2C;
+}
+
+.cont7 textarea {
+    border-color: #83957D;
+    height: 120px;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* contact us css end */
+
+/* cart css start */
+
+.cart1 {
+    background-color: #ffffff;
+}
+
+.cart2 {
+    padding: 50px;
+}
+
+.cart3 {
+    font-size: 18px;
+    font-weight: bolder;
+    color: #000000;
+}
+
+.cart4 {
+    text-align: left;
+}
+
+.cart5 {
+    font-size: 30px;
+    font-weight: 600;
+    color: #000000;
+}
+
+
+.cart6 {
+    width: 100%;
+    height: 100px;
+    display: flex;
+}
+
+.checkeds {
+    color: rgb(231, 92, 91);
+}
+
+.cart7 {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.cart8 h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.cart8 p {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.cart9 input {
+    width: 20%;
+    text-align: center;
+    margin: 15px;
+}
+
+.cart10 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.cart11 a {
+    background-color: #98CF2C;
+    text-decoration: none;
+    color: #ffffff;
+    padding: 10px 56px;
+}
+
+.cart11 a:hover {
+    background-color: transparent;
+    color: #98CF2C;
+    border: 1px solid #98CF2C;
+}
+
+.cart12 {
+    display: flex;
+    justify-content: right;
+    color: #000000;
+    padding: 20px 30px;
+}
+
+.cart12 h6 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-left: 10px;
+    margin-top: 4px;
+}
+
+.cart12 p {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+.cart13 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 50px 50px;
+}
+
+.cart14 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+}
+
+
+/* cart css end */
+
+/* rent now css start */
+.now1 {
+    background-image: url(../images/pic10.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 50px 50px;
+}
+
+.now2 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+}
+
+.now3 {
+    padding: 3.5rem;
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.now4 {
+    justify-content: center;
+    align-items: center;
+}
+
+.now5 {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    text-align: center;
+}
+
+.now6 p {
+    color: rgb(231, 92, 91);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+    position: relative;
+}
+
+.now6 h6 {
+    color: rgb(0, 0, 0);
+    font-size: 25px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+}
+
+.now6 h4 {
+    color: rgb(152, 207, 44);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+}
+
+.now6 h5 {
+    color: #000000;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+    margin-top: 10px;
+}
+
+.now7 img {
+    width: 15%;
+}
+
+.now8 a {
+    color: rgb(255, 255, 255);
+    background-color: rgb(152, 207, 44);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 10px;
+}
+
+.now9 {
+    margin-top: 40px;
+}
+
+/* rent now css end */
+
+/* view css start */
+.view1 {
+    background-image: url(../images/pic10.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 50px 50px;
+}
+
+.view2 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+}
+
+.view3 {
+    padding: 3.5rem;
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* .view4 {
+  border-radius: 10px;
+  margin: 50px;
+} */
+
+.view6 {
+    margin-top: 35px;
+}
+
+.view6 p {
+    color: rgb(231, 92, 91);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+    position: relative;
+}
+
+.view6 h6 {
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+}
+
+.view7 {
+    display: flex;
+    align-items: center;
+    /* gap: 40px; */
+}
+
+.view7 a {
+    color: #ffffff;
+    background-color: #98CF2C;
+    font-size: 15px;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+
+.view7 h5 {
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+    margin-top: 10px;
+}
+
+.view8 {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 10px;
+}
+
+.view8 a {
+    color: #ffffff;
+    background-color: rgb(231, 92, 91);
+    font-size: 15px;
+    padding: 10px 25px;
+    border-radius: 10px;
+}
+
+.view8 h5 {
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+    margin-top: 10px;
+}
+
+.view9 {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 10px;
+}
+
+.view9 a {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.view9 h5 {
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+    margin-top: 10px;
+}
+
+
+.view10 {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    justify-content: space-between;
+}
+
+.view10 a {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.view10 h5 {
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Heebo, sans-serif;
+    margin-top: 10px;
+}
+
+/* view css end */
+
+/* dashboard css start */
+.dash1 {
+    background-image: url(../images/pic10.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 200px 50px 50px 50px;
+}
+
+.dash2 h2 {
+    font-size: 45px;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+}
+
+/* .dash3 {
+  padding: 3.5rem;
+  background-image: url(../images/pic1.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.dash4 {
+  text-align: center;
+  border: 1px solid rgba(112, 112, 112, 0.3);
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 10px;
+  padding: 50px;
+}
+
+.dash4 i {
+  font-size: 60px;
+  font-weight: 600;
+  line-height: 2;
+}
+
+.dash4 h2 {
+  font-size: 30px;
+  font-weight: 600;
+  color: #1A1A1A;
+  text-align: center;
+  font-family: 'Heebo', sans-serif;
+} */
+
+.dashboard2 {
+    margin-top: 50px;
+}
+
+.dashboard-container {
+    display: flex;
+}
+
+.menu-container {
+    width: 20%;
+    border-right: 1px solid #aeabab;
+    padding-bottom: 100px;
+}
+
+.dashboard1 h6 {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+    font-family: 'Heebo', sans-serif;
+}
+
+.dashboard1 hr {
+    color: #aeabab;
+    height: 2px;
+}
+
+.menu-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-container li a {
+    display: block;
+    text-decoration: none;
+    color: #242424;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+}
+
+.content-container {
+    flex: 1;
+    margin-left: 20px;
+    position: relative;
+}
+
+.wd-my-account-links {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.wd-my-account-links .dashboard-link {
+    display: none;
+}
+
+.wd-my-account-links > div {
+    flex: 1 1 33%;
+    max-width: 25%;
+    width: 25%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+}
+
+.wd-my-account-links a {
+    display: block;
+    padding: 50px 20px;
+    font-weight: 600;
+    text-align: center;
+    color: #555;
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.18);
+}
+
+.content-container h2 {
+    font-size: 20px;
+    font-weight: 400;
+    color: #aeabab;
+    font-family: 'Heebo', sans-serif;
+}
+
+.content-container p {
+    font-size: 17px;
+    font-weight: 400;
+    color: #aeabab;
+    font-family: 'Heebo', sans-serif;
+}
+
+.orders-link i {
+    font-size: 80px;
+}
+
+.downloads-link i {
+    font-size: 80px;
+}
+
+.edit-address-link i {
+    font-size: 80px;
+}
+
+.edit-account-link i {
+    font-size: 80px;
+}
+
+.customer-logout-link i {
+    font-size: 80px;
+}
+
+/* dashboard css start */
+
+/* form product css start */
+.forms1 {
+    justify-content: center;
+}
+
+.forms2 {
+    padding: 30px;
+}
+
+.forms3 h2 {
+    font-size: 35px;
+    font-weight: 600;
+    color: #1A1A1A;
+    font-family: 'Heebo', sans-serif;
+    margin-bottom: 50px;
+}
+
+.control_change {
+    width: 500px;
+}
+
+.forms5 {
+    padding: 25px;
+}
+
+.forms6 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forms7 {
+    margin-top: 30px;
+}
+
+.forms7 a {
+    background-color: #98CF2C;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.forms7 a:hover {
+    background-color: transparent;
+    color: #98CF2C;
+    border: 1px solid #98CF2C;
+}
+
+
+/* form product css end */
+
+/* image upload css strat */
+
+/* .form-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #7b2cbf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+.upload-files-container {
+    background-color: #ffffff;
+    width: 450px;
+    height: 450px;
+    padding: 30px 60px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 20px, rgba(0, 0, 0, 0.28) 0px 6px 6px;
+}
+
+.drag-file-area {
+    border: 2px dashed #98CF2C;
+    border-radius: 40px;
+    margin: 10px 0 15px;
+    padding: 30px 50px;
+    width: 350px;
+    height: 350px;
+    text-align: center;
+}
+
+.drag-file-area .upload-icon {
+    font-size: 35px;
+    line-height: 2;
+}
+
+.drag-file-area h3 {
+    font-size: 19px;
+    line-height: 3;
+}
+
+.drag-file-area label {
+    font-size: 17px;
+    display: block;
+}
+
+.drag-file-area label .browse-files-text {
+    color: #E75C5B;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.browse-files span {
+    position: relative;
+}
+
+.default-file-input {
+    opacity: 0;
+}
+
+.cannot-upload-message {
+    background-color: #ffc6c4;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px 10px 5px 30px;
+    border-radius: 5px;
+    color: #BB0000;
+    display: none;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.cannot-upload-message span,
+.upload-button-icon {
+    padding-right: 10px;
+}
+
+.cannot-upload-message span:last-child {
+    padding-left: 20px;
+    cursor: pointer;
+}
+
+.file-block {
+    color: #f7fff7;
+    background-color: #7b2cbf;
+    transition: all 1s;
+    width: 390px;
+    position: relative;
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0 15px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+}
+
+.file-icon {
+    margin-right: 10px;
+}
+
+.file-name,
+.file-size {
+    padding: 0 3px;
+}
+
+.remove-file-icon {
+    cursor: pointer;
+}
+
+.progress-bar {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 4.5%;
+    width: 0;
+    height: 5px;
+    border-radius: 25px;
+    background-color: #4BB543;
+}
+
+button.upload-button {
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.forms3 {
+    display: flex;
+}
+
+.forms4 {
+    margin-top: 30px;
+}
+
+
+/* image upload css end */
+
+/* order history css start */
+.history1 {
+    display: flex;
+}
+
+.history2 {
+    margin-top: 20px;
+}
+
+.history2 h2 {
+    color: #000000;
+    font-size: 50px;
+    font-weight: 600;
+    font-family: 'Heebo', sans-serif;
+}
+
+.history2 p {
+    color: #000000;
+    font-size: 20px;
+    line-height: 2;
+}
+
+.history2 h6 {
+    color: #98CF2C;
+    font-size: 20px;
+    font-family: 'Heebo', sans-serif;
+}
+
+/* order history css end */
+
+/* account setting css start */
+.setting1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    width: 100%;
+    height: 460px;
+}
+
+.setting2 {
+    margin-top: 100px;
+}
+
+.setting2 h2 {
+    color: #000000;
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 2;
+    font-family: 'Heebo', sans-serif;
+}
+
+.setting2 a {
+    color: #ffffff;
+    background-color: #E75C5B;
+    padding: 10px 30px;
+    border-radius: 5px;
+}
+
+.setting2 a:hover {
+    background-color: transparent;
+    color: #E75C5B;
+    border: 1px solid #E75C5B;
+}
+
+/* account setting css end */
+
+/* change password css start */
+.password1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.password2 {
+    padding: 70px;
+}
+
+/* change password css end */
+
+/* store css start */
+.store1 {
+    background-image: url(../images/pic1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: fit-content;
+}
+
+.store2 {
+    padding: 50px;
+}
+
+/* store css end */
+
+@media only screen and (min-width: 1600px) and (max-width: 1920px) {
+}
+
+@media only screen and (min-width: 1445px) and (max-width: 1599px) {
+}
+
+@media only screen and (min-width: 1400px) and (max-width: 1444px) {
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    section {
+        overflow: hidden;
+    }
+
+    .bannar2 h1 {
+        font-family: 'Heebo', sans-serif;
+        color: #1A1A1A;
+        font-size: 25px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .bannar3 {
+        padding: 50px;
+    }
+
+    .bannar2 p {
+        color: rgb(26, 26, 26);
+        font-size: 8px;
+        margin-bottom: 50px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .nav_glass1 a {
+        background-color: #98CF2C;
+        color: #ffffff;
+        padding: 10px 30px;
+        font-size: 15px;
+        border-radius: 10px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .nav_user1 a {
+        background-color: #E75C5B;
+        color: #ffffff;
+        padding: 10px 20px;
+        font-size: 15px;
+        border-radius: 10px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .useful2 h1 {
+        font-family: 'Heebo', sans-serif;
+        color: #1A1A1A;
+        font-size: 25px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .useful2 p {
+        color: rgb(26, 26, 26);
+        font-size: 10px;
+        margin-bottom: 50px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .mobile2 h1 {
+        font-family: 'Heebo', sans-serif;
+        color: #1A1A1A;
+        font-size: 25px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .mobile2 p {
+        color: rgb(26, 26, 26);
+        font-size: 8px;
+        margin-bottom: 50px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .every2 h1 {
+        font-family: 'Heebo', sans-serif;
+        color: #1A1A1A;
+        font-size: 25px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .every2 p {
+        color: rgb(26, 26, 26);
+        font-size: 10px;
+        margin-bottom: 50px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .product7 {
+        background-color: rgb(255, 255, 255);
+        border-radius: 10px;
+        padding: 0px;
+        flex: 0 0 auto;
+        width: 18%;
+        margin: 6px;
+    }
+
+    .product3 h6 {
+        color: rgb(0, 0, 0);
+        font-size: 8px;
+        font-weight: 600;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .product6 {
+        padding: 8px;
+    }
+
+    .product3 p {
+        color: #000000;
+        font-size: 12px;
+        font-weight: 600;
+        font-family: 'Heebo', sans-serif;
+        position: relative;
+        margin: 0px 10px;
+    }
+
+    .span1 {
+        position: absolute;
+        font-size: 8px;
+        font-weight: 600;
+    }
+
+    .product4 {
+        color: rgb(231, 92, 91);
+        font-size: 10px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .nav_glass2 a {
+        background-color: rgb(152, 207, 44);
+        color: rgb(255, 255, 255);
+        padding: 13px 10px;
+        font-size: 6px;
+        border-radius: 10px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .nav_user2 a {
+        background-color: rgb(231, 92, 91);
+        color: rgb(255, 255, 255);
+        padding: 10px 15px;
+        font-size: 10px;
+        border-radius: 10px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    span.nav_user2 {
+        margin-top: 2px;
+    }
+
+    .product5 {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0px;
+    }
+
+    .car2 h1 {
+        font-family: 'Heebo', sans-serif;
+        color: #1A1A1A;
+        font-size: 25px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+
+    .car2 p {
+        color: rgb(26, 26, 26);
+        font-size: 8px;
+        margin-bottom: 50px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .cards4 {
+        background-color: #ffffff;
+        border: 1px solid #ffffff;
+        padding: 29px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        flex: 0 0 auto;
+        width: 23%;
+        margin: 5px;
+    }
+
+    .checked {
+        color: #F4C914;
+        font-size: 9px;
+    }
+
+    .cards4 {
+        background-color: #ffffff;
+        border: 1px solid #ffffff;
+        padding: 10px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        flex: 0 0 auto;
+        width: 23%;
+        margin: 5px;
+    }
+
+    .cards4 p {
+        margin-top: 10px;
+        font-size: 8px;
+    }
+
+    .cards5 img {
+        margin: -45px 0px 0px 0px;
+        width: 35%;
+    }
+
+    .cards3 {
+        display: flex;
+        gap: 10px;
+    }
+
+    .navbar-collapse {
+        flex-basis: 100%;
+        flex-grow: 1;
+        align-items: center;
+        background-color: #fffcf0;
+        z-index: 1;
+        padding: 35px 15px;
+    }
+
+    .footer4 {
+        color: rgb(0, 0, 0);
+        margin-bottom: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 17px;
+    }
+
+    .footer3 p {
+        font-size: 9px;
+        font-weight: 300;
+        font-family: 'Poppins', sans-serif;
+        color: rgb(0, 0, 0);
+    }
+
+    .copyright {
+        color: rgb(0, 0, 0);
+        text-align: center;
+    }
+
+    .footer2 li a {
+        color: rgb(0, 0, 0);
+        line-height: 35px;
+        font-size: 10px;
+    }
+
+    .footer3 h6 {
+        font-size: 12px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .footer5 {
+        margin-top: 70px;
+    }
+
+    .about3 p {
+        font-size: 9px;
+        font-weight: 400;
+        color: #000000;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .about3 {
+        padding: 50px 25px;
+        text-align: center;
+    }
+
+    .rent7 a {
+        color: rgb(255, 255, 255);
+        background-color: rgb(231, 92, 91);
+        padding: 18px 12px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        border-radius: 5px;
+        width: 100%;
+        display: block;
+        margin-top: 15px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .rent8 a {
+        color: rgb(255, 255, 255);
+        background-color: rgb(152, 207, 44);
+        padding: 18px 12px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        border-radius: 5px;
+        display: block;
+        margin-top: 15px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .rent5 ::placeholder {
+        font-size: 10px;
+        color: #CBCBCB;
+    }
+
+    .rent5 input {
+        border: 1px solid rgb(236, 236, 236);
+        background-color: rgb(255, 255, 255);
+        padding: 15px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+
+    .rent3 h2 {
+        font-size: 40px;
+        font-weight: 600;
+        color: rgb(26, 26, 26);
+        text-align: center;
+        font-family: Heebo, sans-serif;
+    }
+
+    .rent3 p {
+        font-size: 11px;
+        font-weight: 400;
+        color: rgb(0, 0, 0);
+        font-family: Poppins, sans-serif;
+        text-align: center;
+    }
+
+    .rent1 img {
+        width: 12%;
+    }
+
+    .cont2 {
+        border-radius: 10px;
+        margin: 10px 10px 30px;
+        padding: 20px;
+    }
+
+    .form3 input {
+        padding: 12px 15px;
+        border: 1px solid rgb(131, 149, 125);
+        font-size: 10px;
+        font-family: Poppins, sans-serif;
+    }
+
+    .cont7 textarea {
+        border-color: rgb(131, 149, 125);
+        height: 85px;
+        font-family: Poppins, sans-serif;
+    }
+
+    .cart14 h2 {
+        font-size: 35px;
+        font-weight: 600;
+        color: #1A1A1A;
+        text-align: center;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .cart2 {
+        padding: 25px 0px;
+    }
+
+    .cart7 {
+        font-size: 12px;
+        font-weight: 400;
+        display: flex;
+        margin-top: 40px;
+    }
+
+    .cart11 a {
+        background-color: rgb(152, 207, 44);
+        text-decoration: none;
+        color: rgb(255, 255, 255);
+        padding: 10px 25px;
+        font-size: 10px;
+    }
+
+    .cart3 {
+        font-size: 15px;
+        font-weight: bolder;
+        color: rgb(0, 0, 0);
+    }
+
+    .cart10 {
+        font-size: 15px;
+        font-weight: 700;
+        color: rgb(0, 0, 0);
+    }
+
+    .cart6 {
+        width: 50%;
+        display: flex;
+        align-items: center;
+    }
+
+    .cart8 h2 {
+        font-size: 12px;
+        font-weight: 700;
+        color: rgb(0, 0, 0);
+    }
+
+    .cart8 p {
+        font-size: 10px;
+        font-weight: 700;
+        color: rgb(0, 0, 0);
+    }
+
+    .cart9 input {
+        width: 30%;
+        text-align: center;
+        margin: 15px;
+    }
+
+    .sign3 {
+        font-size: 15px;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+        color: rgb(0, 0, 0);
+    }
+
+    .sign6 h2 {
+        font-size: 30px;
+        font-weight: 600;
+        color: #000000;
+        margin-bottom: 30px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .sign4 label {
+        font-size: 15px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        color: rgb(0, 0, 0);
+    }
+
+    a.text-dark {
+        font-size: 12px;
+    }
+
+    .for4 h2 {
+        font-size: 23px;
+        font-weight: 600;
+        color: #000000;
+        margin-bottom: 30px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .for3 {
+        font-size: 12px;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+        color: rgb(0, 0, 0);
+    }
+
+    .for5 label {
+        font-size: 15px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        color: rgb(0, 0, 0);
+    }
+
+    .for5 p {
+        font-size: 15px;
+        font-weight: 400;
+        font-family: 'Poppins', sans-serif;
+        color: rgb(0, 0, 0);
+    }
+
+    .reset4 h2 {
+        font-size: 25px;
+        font-weight: 600;
+        color: #000000;
+        margin-bottom: 30px;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .reset3 {
+        font-size: 15px;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+        color: rgb(0, 0, 0);
+    }
+
+    .upload-files-container {
+        background-color: rgb(255, 255, 255);
+        width: 350px;
+        height: 350px;
+        padding: 30px 60px;
+        border-radius: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 20px, rgba(0, 0, 0, 0.28) 0px 6px 6px;
+    }
+
+
+    .forms1 {
+        justify-content: left;
+    }
+
+    .drag-file-area {
+        border: 2px dashed rgb(152, 207, 44);
+        border-radius: 40px;
+        margin: 10px 0px 15px;
+        padding: 20px 10px;
+        width: 280px;
+        height: 280px;
+        text-align: center;
+    }
+
+    .control_change {
+        width: 260px;
+    }
+
+    .forms6 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .now6 h6 {
+        color: rgb(0, 0, 0);
+        font-size: 12px;
+        font-weight: 600;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .now6 p {
+        color: rgb(231, 92, 91);
+        font-size: 10px;
+        font-weight: 600;
+        font-family: Heebo, sans-serif;
+        position: relative;
+    }
+
+    .now6 h5 {
+        color: #000000;
+        font-size: 10px;
+        font-weight: 600;
+        font-family: Heebo, sans-serif;
+        margin-top: 10px;
+    }
+
+    .now6 h4 {
+        color: rgb(152, 207, 44);
+        font-size: 12px;
+        font-weight: 600;
+        font-family: Heebo, sans-serif;
+    }
+
+    .now7 img {
+        width: 20%;
+    }
+
+    .now9 {
+        margin-top: 10px;
+    }
+
+    .now9 h5 {
+        font-size: 15px;
+    }
+
+    .now9 p {
+        font-size: 10px;
+    }
+
+    .now2 h2 {
+        font-size: 30px;
+        font-weight: 600;
+        color: rgb(26, 26, 26);
+        text-align: center;
+        font-family: Heebo, sans-serif;
+    }
+
+    .about2 h2 {
+        font-size: 30px;
+        font-weight: 600;
+        color: #1A1A1A;
+        text-align: center;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .about1 {
+        background-image: url(../images/pic10.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 200px 50px 50px 50px;
+    }
+
+    .view2 h2 {
+        font-size: 30px;
+        font-weight: 600;
+        color: #1A1A1A;
+        text-align: center;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .view6 {
+        margin-top: 0px;
+    }
+
+    .view6 h6 {
+        color: rgb(0, 0, 0);
+        font-size: 20px;
+        font-weight: 600;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .view7 a {
+        color: #ffffff;
+        background-color: #98CF2C;
+        font-size: 12px;
+        padding: 10px 30px;
+        border-radius: 10px;
+    }
+
+    .view8 a {
+        color: #ffffff;
+        background-color: rgb(231, 92, 91);
+        font-size: 12px;
+        padding: 10px 34px;
+        border-radius: 10px;
+    }
+
+    .view9 a {
+        color: rgb(255, 255, 255);
+        background-color: rgb(0, 0, 0);
+        font-size: 11px;
+        padding: 10px 28px;
+        border-radius: 10px;
+    }
+
+    .content-container h2 {
+        font-size: 14px;
+        font-weight: 400;
+        color: #aeabab;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .content-container p {
+        font-size: 11px;
+        font-weight: 400;
+        color: #aeabab;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .dashboard2 {
+        margin-top: 30px;
+    }
+
+    .dashboard1 h6 {
+        padding: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #000000;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .menu-container li a {
+        display: block;
+        text-decoration: none;
+        color: #242424;
+        padding: 10px;
+        font-size: 10px;
+        font-weight: 600;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .wd-my-account-links > div {
+        flex: 1 1 33%;
+        max-width: 34%;
+        width: 34%;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 20px;
+    }
+
+    .wd-my-account-links a {
+        display: block;
+        padding: 35px 10px;
+        font-weight: 600;
+        text-align: center;
+        color: rgb(85, 85, 85);
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 4px;
+        font-size: 10px;
+    }
+
+    .orders-link i {
+        font-size: 50px;
+    }
+
+    .downloads-link i {
+        font-size: 50px;
+    }
+
+    .edit-address-link i {
+        font-size: 50px;
+    }
+
+    .edit-account-link i {
+        font-size: 50px;
+    }
+
+    .customer-logout-link i {
+        font-size: 50px;
+    }
+
+    .dash2 h2 {
+        font-size: 30px;
+        font-weight: 600;
+        color: #1A1A1A;
+        text-align: center;
+        font-family: 'Heebo', sans-serif;
+    }
+
+    .history2 h6 {
+        color: #98CF2C;
+        font-size: 15px;
+        font-family: 'Heebo', sans-serif;
+    }
+}
+
+@media only screen and (min-width: 520px) and (max-width: 767px) {
+}
+
+@media only screen and (min-width: 300px) and (max-width: 519px) {
+}

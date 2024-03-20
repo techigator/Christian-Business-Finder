@@ -1,0 +1,1920 @@
+{
+	"info": {
+		"_postman_id": "599dda54-fa0d-4f62-afb2-e684ec16c882",
+		"name": "Renterprise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOGQyYWY4ZDNiODY1MjEyOWViN2ZhMmRiMzY5YjgxOTdjOWZkZmRkZTI5ZTRiMDU4NGIzOGM3MDEzMzJiYTcwNmQ3ZTQyZTdjZmM4NWQ5YzMiLCJpYXQiOjE2NzIwNzc2NzguMDEwNzE0MDU0MTA3NjY2MDE1NjI1LCJuYmYiOjE2NzIwNzc2NzguMDEwNzE2OTE1MTMwNjE1MjM0Mzc1LCJleHAiOjE3MDM2MTM2NzguMDAxOTMxOTA1NzQ2NDU5OTYwOTM3NSwic3ViIjoiMzkiLCJzY29wZXMiOltdfQ.aQC9ZqZnpG8AbWBRrSmRzVQgFWUe29LD9_rmN11gcD_6aoPLlNYG8dLwQPyhPZ28WBnvcLeSEBqj4IG-k1cJaHja1nCLvEm8QpTavl07OEWygHnmsY6bwERVDWKM88jtnke8jP5Bqsa2FW3vAasRO3R8o5Dpq4Z-0WmIsoJWl3pdTc4lQHI2KTdCtJp8SOx_addtWa39EaR_UAlIRIURuRWFxoZIdxISGkU1HLtQwjg52dfxDoilHqRBHyjtYGxFIPgyQNJG_ysgLCyPEFXTa3XLEVrVkYluUAUOaJLN87m0MMC3unwpfyIjHq3UkFbWFdXnRjd103oT81f2mcC1RHBULVC-6P0Abl5kmyxkgkrkn7XxXQTSPENPHThkgPY_oNue6sCwO9GmAo7ZxU65zXpmIdqI2vvTYruTaCAn3SMFxkZwtM1SHkGw1QXvL4fisuPA3LMWyIei_RcuGXN2GyQ3gkhnvwdvKXsFXehXkVjsagK6e7uOOivL316m0WTPXFlRs05Rwp5YVyiZTY9AULKv5e1W3oCgI_pZrd8o0poKIJWinqx0DIFjGh6jg_4KVfBE3iUulJs9rlW4yGptudsThGo1YfuPzr08eWUtR9HmrfrKNB8Pw5v9k6qGFjlBmFTwhuDhoXBQJHscTiBg-BTrlHkcWIADFH4FnsAwWEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Test",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "test_1@test.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "default"
+								},
+								{
+									"key": "type",
+									"value": "user",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/register",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SocialMediaRegister",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOGQyYWY4ZDNiODY1MjEyOWViN2ZhMmRiMzY5YjgxOTdjOWZkZmRkZTI5ZTRiMDU4NGIzOGM3MDEzMzJiYTcwNmQ3ZTQyZTdjZmM4NWQ5YzMiLCJpYXQiOjE2NzIwNzc2NzguMDEwNzE0MDU0MTA3NjY2MDE1NjI1LCJuYmYiOjE2NzIwNzc2NzguMDEwNzE2OTE1MTMwNjE1MjM0Mzc1LCJleHAiOjE3MDM2MTM2NzguMDAxOTMxOTA1NzQ2NDU5OTYwOTM3NSwic3ViIjoiMzkiLCJzY29wZXMiOltdfQ.aQC9ZqZnpG8AbWBRrSmRzVQgFWUe29LD9_rmN11gcD_6aoPLlNYG8dLwQPyhPZ28WBnvcLeSEBqj4IG-k1cJaHja1nCLvEm8QpTavl07OEWygHnmsY6bwERVDWKM88jtnke8jP5Bqsa2FW3vAasRO3R8o5Dpq4Z-0WmIsoJWl3pdTc4lQHI2KTdCtJp8SOx_addtWa39EaR_UAlIRIURuRWFxoZIdxISGkU1HLtQwjg52dfxDoilHqRBHyjtYGxFIPgyQNJG_ysgLCyPEFXTa3XLEVrVkYluUAUOaJLN87m0MMC3unwpfyIjHq3UkFbWFdXnRjd103oT81f2mcC1RHBULVC-6P0Abl5kmyxkgkrkn7XxXQTSPENPHThkgPY_oNue6sCwO9GmAo7ZxU65zXpmIdqI2vvTYruTaCAn3SMFxkZwtM1SHkGw1QXvL4fisuPA3LMWyIei_RcuGXN2GyQ3gkhnvwdvKXsFXehXkVjsagK6e7uOOivL316m0WTPXFlRs05Rwp5YVyiZTY9AULKv5e1W3oCgI_pZrd8o0poKIJWinqx0DIFjGh6jg_4KVfBE3iUulJs9rlW4yGptudsThGo1YfuPzr08eWUtR9HmrfrKNB8Pw5v9k6qGFjlBmFTwhuDhoXBQJHscTiBg-BTrlHkcWIADFH4FnsAwWEM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Zee bro",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "zeebro6@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "profile_image",
+									"value": "https://lh3.googleusercontent.com/a/AGNmyxYGdyHc8x4Xw15ezUXwnFyRwdBZUnyLSc8ARWtx=s96-c",
+									"type": "default"
+								},
+								{
+									"key": "type",
+									"value": "user",
+									"type": "default"
+								},
+								{
+									"key": "login_from",
+									"value": "google",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/social-media-register",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"social-media-register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "user05@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "default"
+								},
+								{
+									"key": "fcm_token",
+									"value": "3243rsdfadfdsfadf",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/login",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forget-password-email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "test@test.com",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/forget-password-email",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"forget-password-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check-forget-password-code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "2",
+									"type": "default"
+								},
+								{
+									"key": "code",
+									"value": "2317",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/check-forget-password-code",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"check-forget-password-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidEmail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "test@test.com",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/valid-email",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"valid-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CheckVaildEmailCode",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "2",
+									"type": "default"
+								},
+								{
+									"key": "code",
+									"value": "6114",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/check-valid-email-code",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"check-valid-email-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-forget-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "2",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/update-forget-password",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"update-forget-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change-password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYTM3MzYyMDJkYTM4MjFhM2VkNmE4MzM0Mzg4Yzg4NTcyODVlODViM2JiYWZhODBkOGNhNmViZmE3OTk0YmI0ZGRkYmU0Njk0ZWYyNzA0YjMiLCJpYXQiOjE2NzQ4NTE3ODAuMDc0MDMyMDY4MjUyNTYzNDc2NTYyNSwibmJmIjoxNjc0ODUxNzgwLjA3NDAzODAyODcxNzA0MTAxNTYyNSwiZXhwIjoxNzA2Mzg3NzgwLjA2NDY1MDA1ODc0NjMzNzg5MDYyNSwic3ViIjoiMiIsInNjb3BlcyI6W119.kYZfThtm10bh8KrSSTBi0l9FmjCxtVAoTSAJRXs5oScJmuSBpOpJfZ3Z6JydoMU-_fGbK-x9E3eS_o8YKsoerRmzZVCcXj3WaKOGuaxsCmqS4_zLN3hHijf1amL1AWFCZf7D86BUicAnZhYc3Wj-C9CW1YTymBNfY-H1QznXhHp4FguKbFywwUg3BbrrCDMOjlraE9Ua0xZQH_j076AMfoyhmmKyF3qgBsQTeglrC_CAFtbUp76mrdqkVVo4tcCeFUYpv7OH1l60d2jNJ3Mk3DQ23vhvpZ6QZbRlZ5KKM65wmW1PD767735ZVqTVkfDaRoU6ZugQhaF6lYkxhwueylXhvMUDTQDMHHIcp4_sLFlWBb5OpPjmHNmbb38B1NrGDyqntsZOTXe5gUPXOH8b4Mo1sut4Q7jCif30sATud2tyIfMPU9wzYWA-q6l7Fop0rkmTnzJSlj7WapM9yzhQqc_IZOvzPY5B3m3lrCe0s9cJotBfs4u9P6BCu5OKtIV0-IK7YnQmlnvmOZ0imc0M-mewN1adk3hVn9AKv9OinQ539H704wDSMPIEOijG56cNZ2ycMk8uXLnICZ-2jLuzO7mGNcFkqnLWdM9DwD_jB4d5QwAI-kCdfP6BRmLT1ivlXfqlvBFB2dxXdFNATdCcKs84jQyP3k_zVKlYJJ28YHk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "current_password",
+									"value": "123456789",
+									"type": "default"
+								},
+								{
+									"key": "new_password",
+									"value": "12345678",
+									"type": "default"
+								},
+								{
+									"key": "confirm_new_password",
+									"value": "12345678",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/change-password",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTVjYjhiMDQ5NTdhNDg1NzYxODAxNjU1NzYyY2E3MzA3MzYwNDAyZTI4YmQ5OGNiOTI1NzI0OGEzMTljNzA3MzRiOTA0NzE2YWNlMDRhNDAiLCJpYXQiOjE2Nzc2MTY3NTEuNzcyMDczOTg0MTQ2MTE4MTY0MDYyNSwibmJmIjoxNjc3NjE2NzUxLjc3MjA3NTg5MTQ5NDc1MDk3NjU2MjUsImV4cCI6MTcwOTIzOTE1MS43NjY0NzQ5NjIyMzQ0OTcwNzAzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.gFY-_6bikp33kwgZauwQOftJ1ABpgAStoAsZNkaOiNn83YpPvaYIfYS9tRbCPnGwsR3jI9RnUwIgecTeDEeuQXaKs1eSML6eJ1ZitUSPpzkLqT3Oz-PhkqpZYkUVTK1PrRi053R0b5yyQ5DgiAEbo9hAhSrSBUHICzNolGr0N3YIaan_LgP91OtXzUxk_J2nPGl6u4v6C45tp7QWjEeFGsH0imqPi_ipNuD1qww4AUQInATlqwPFFcVnQ06HOaV4dSk4O0-G0zZyLaVABwuMc4GBtMXfDdXBhZLsen9ne5exxZmOZlRm6Hscsneg_64EKAwzccsBu-jCqoZg0OAuMUX5Y6btvQRYlC4oaRsulheWK6N6Ix6-rekd42oYK1GJv4urWKt4G_GIw0S11kayTKVkTMcAzdvPwEHozeJ053hDzdncV7UgTPKOO_sJvJbDMQQMU7P4mqUhdslVbaTUcj6wAUyHaLUTcnbXQC-kUh3IU2hyIdJtcSOTnUiEJEqzzRrYYPNi2DVNFa61s2unt1olH0xIcw17_huNEZSbfXtBxmmKomKi5_n9ELNJLCUS0Q2de2lCO1azDE_DLQ5uIDvxBnHeIM2EDewpE6b9pPtB0jP4e5vqOk4o8NZYZOssV7PU3SeuIpcvNTgdtKfvLKvMBDMPv0GV7yVyERE1iy0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John David 2",
+									"type": "default"
+								},
+								{
+									"key": "profile_image",
+									"type": "file",
+									"src": "/C:/Users/Admin/Pictures/1.PNG"
+								},
+								{
+									"key": "cover_image",
+									"type": "file",
+									"src": "/C:/Users/Admin/Downloads/faq_banner.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/update-info",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"update-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUser/user_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmU0YmIwZDlhNGVjZmYxOWI5MzEzZWY0ODg2ZmUxN2I4YTExNzdjYjY4ZmJhNWMzNzM4M2ZhMDFhNTNkZDJkZTc0NzgxMTcxMGY4OGE3MTQiLCJpYXQiOjE2ODA2MzM2ODEuNjgxNTQwOTY2MDMzOTM1NTQ2ODc1LCJuYmYiOjE2ODA2MzM2ODEuNjgxNTQ0MDY1NDc1NDYzODY3MTg3NSwiZXhwIjoxNzEyMjU2MDgxLjY2ODQ5NzA4NTU3MTI4OTA2MjUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.Z8E3dcBPHTF_qcqA99wxQz-C4ThnIhE7GguKeaX4xyvk2we9wKKEW0YFPmXG5VjJVP5-pWMV7D-aPIV9gA1a1DrbgUvuK-T3x1T6woQKjxFBu8b58LqGiG0rXwx-FWkIWt8ufhFP5AmUJHViUWHiPTmGcCCf1cAMEDUzPm4RMUTu9zFyje8XUnwDxdo6g_gvWIlnLAo2jBI5XjSPLqA5E4zXDbxvPYpyk19AnpKk6W_U58hwZe4VK1iBAPeI2pMzu20g9mmYOL6kDJnbLUZ8i08b5H4xfawFk7FShnqmWvKjSEbLjzgRYWVZ39pzFHgSKfnuM5ZGZ1WKtNd4Fk2dmNuuwp5w4uezvwae2UL3LJWjwWpF0BnEJaN81hI4cDc_5hjDPVQcv8njhy69L38xg7K4FwlQztSvbphD-MfT1qgimnhC5AGPSWtqY5z5l7uRb9E6RxOhPdC3TMVLnasxPwP8uHLFoFX5VysJ5T7TF63eXNCaqLuanK_VIbbA1Zk4_YL8V27py_pjqdEw1RwXdrqSwMxJAaWPSD4ouoX_u-yBZYHeH_EdKh12ONaYmfFr6pKKhxCapIeS6bu5J70H631hRfLXoaMUbKukX7l6tqx-XOgtM2LHBgAtkSgjAxuQI54FQpo71K5fDjCz22ah8fcOkmDxvZmarHwCQkXs_Cs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/user/13",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"user",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserTypeChange/renterpriserOruser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzUxN2RlNzg2ZmVhNThhMWI2N2Y2OWFmNDkyNGNmNmQ5MDg0NmZhYTdmODg1YmUwMDc4ZjQwMDY5NTk1ZTMwODU4ZDZhZjljMDVkY2Y0N2UiLCJpYXQiOjE2NzQ4NTMyODkuNTIyNTUyOTY3MDcxNTMzMjAzMTI1LCJuYmYiOjE2NzQ4NTMyODkuNTIyNTU1MTEyODM4NzQ1MTE3MTg3NSwiZXhwIjoxNzA2Mzg5Mjg5LjUxNzIwNjkwNzI3MjMzODg2NzE4NzUsInN1YiI6IjMiLCJzY29wZXMiOltdfQ.fjaZy2sDprandW275PMUOXwySnpMwZB9mAMhlVinB_gm_HxTLjg-N2kpiAWBxmash8V4L2-z-vvrYjyzE90Agw3XcO5-b0kBNgMIy1obrW0mrbmPlVt25phVtF8LuIVlNWLMjE9uvjW8x6_aDSdfm4FuEwS98XyJZ4v4f91_N6S07serhIaDrX7HQ6U10sbnCZDE23i3n72-8w-xtyL4edyT_3RMEhtkrkZntkAvt4oMWmlb8FN400ZRkGx4qViESUd-b5-Du9u9nBvi524npHYn1rJUvLpSJeUlJdbHXLalD-JDAe8pMAJqkGodB5uqErLx_ONJsP862wDD2DwicxvfMXGS0PMMkbPqypS6HuihYrSvyNlkVwf3Slhx0keCfa0Av3MUyYkoVLJKWV1Q6Kvwgvi1SC4UmYByvOoN2SK1KP3LXpGMdLd8yRps-7pp2yatP9rpF_iqPtDPLLxKJrupdCeUT-qZC3L--Ol48ebvIYgzH0aBDXAISvwS8qE7BXT3vOPuKSA49KpPd_rL4GI2YzJ6lOA9njMT6x9FIM5bbIjI7eWbkZTu99pwWfhzn1RcPUUTXWUZMBKcnl2Qoi5QbVMHvFBcuUOMgvtxsHwYTSjvBqgt0kEDlXzWnZo23suzQctIoYE3FE3ZOsUzvOo58b2lJxHkvRs03hspG_4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "status",
+									"value": "0",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/user-type-change/user",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"user-type-change",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYTM3MzYyMDJkYTM4MjFhM2VkNmE4MzM0Mzg4Yzg4NTcyODVlODViM2JiYWZhODBkOGNhNmViZmE3OTk0YmI0ZGRkYmU0Njk0ZWYyNzA0YjMiLCJpYXQiOjE2NzQ4NTE3ODAuMDc0MDMyMDY4MjUyNTYzNDc2NTYyNSwibmJmIjoxNjc0ODUxNzgwLjA3NDAzODAyODcxNzA0MTAxNTYyNSwiZXhwIjoxNzA2Mzg3NzgwLjA2NDY1MDA1ODc0NjMzNzg5MDYyNSwic3ViIjoiMiIsInNjb3BlcyI6W119.kYZfThtm10bh8KrSSTBi0l9FmjCxtVAoTSAJRXs5oScJmuSBpOpJfZ3Z6JydoMU-_fGbK-x9E3eS_o8YKsoerRmzZVCcXj3WaKOGuaxsCmqS4_zLN3hHijf1amL1AWFCZf7D86BUicAnZhYc3Wj-C9CW1YTymBNfY-H1QznXhHp4FguKbFywwUg3BbrrCDMOjlraE9Ua0xZQH_j076AMfoyhmmKyF3qgBsQTeglrC_CAFtbUp76mrdqkVVo4tcCeFUYpv7OH1l60d2jNJ3Mk3DQ23vhvpZ6QZbRlZ5KKM65wmW1PD767735ZVqTVkfDaRoU6ZugQhaF6lYkxhwueylXhvMUDTQDMHHIcp4_sLFlWBb5OpPjmHNmbb38B1NrGDyqntsZOTXe5gUPXOH8b4Mo1sut4Q7jCif30sATud2tyIfMPU9wzYWA-q6l7Fop0rkmTnzJSlj7WapM9yzhQqc_IZOvzPY5B3m3lrCe0s9cJotBfs4u9P6BCu5OKtIV0-IK7YnQmlnvmOZ0imc0M-mewN1adk3hVn9AKv9OinQ539H704wDSMPIEOijG56cNZ2ycMk8uXLnICZ-2jLuzO7mGNcFkqnLWdM9DwD_jB4d5QwAI-kCdfP6BRmLT1ivlXfqlvBFB2dxXdFNATdCcKs84jQyP3k_zVKlYJJ28YHk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/logout",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "CreateProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjNhYjM0ZDA4MTI3ZTkzYWZmMDdhOGM3ODY3Zjg0Y2E1NmU2NTgyOGM0MTI3M2IwMmExMjJkYTYxZGQwMTRhODZhZWMxNGMyYTYxOGFkNDgiLCJpYXQiOjE2ODI1MzI1MjcuNzMyNTM0ODg1NDA2NDk0MTQwNjI1LCJuYmYiOjE2ODI1MzI1MjcuNzMyNTQyMDM3OTYzODY3MTg3NSwiZXhwIjoxNzE0MTU0OTI3LjcyNzIyNzkyNjI1NDI3MjQ2MDkzNzUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.OyeosIJQ0g9YiPmOGqLJT7jXeADMQTFdLIVInATsdmp3jYYNZl1S7is1i6DPbGR23jtBrjSHOpzLvEV1KO2VLEmZfnSQX8wTSiRTiHgXYnfC6IIwlq5jFig429o7c21vSQbwGWWOEr9enxw6R-r6Ux1s8Z1hu5pRto4uK-agyLQsts4yE3-x_zq3oXCPTJvhty-WoDteH9_ZqTk2nygaJe6KOYApUDCA1H5iefRTrfPQSz-Q1vwiIZ9r8uBgr1mRYZFszb0XGk6dw-h2szRFyQvGA0MuFc6eqPBOgnhW466kuZG00SLbioSrRGckkQMW9YwwCYiI6zz5KwZRXgBufd1iTtbQuisg5UWsnvq8YWIJNVmB-niGPMTvJTHQKeheHPYVhR5kx4OUGmGiqyt3S78FYnCmwrZXPztln6A60P_aTLgZE8ddaoBO6qm1QS_fzdMuFRPRI2YoRThhYzdQXlV-GCT0agCsvlLMTfCGKMbcU7R13gvGL-xrpLCO70Lp1R1fO9pgewvf167nGdSpbaOKXxniihUoGrFKRXD0k7PzdQ_VC6eDJe52D5tPW4auV2Qv2TdWBqMTfiJEKlUKRBfYyWNf_zzVL7MHhWpg2_TptKahBetrOPy59R7F30oR1hYOb_AP7gUV991SocRwfr66EPb8Mn4LZiLCloHWIEc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image1",
+									"description": "(Optional)",
+									"type": "file",
+									"src": "/C:/Users/Admin/Downloads/images/--faq_banner.jpg"
+								},
+								{
+									"key": "image2",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "image3",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "image4",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "image5",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "Book category",
+									"type": "default"
+								},
+								{
+									"key": "product_name",
+									"value": "test Book product_name",
+									"type": "default"
+								},
+								{
+									"key": "price_type",
+									"value": "day price_type",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "500",
+									"type": "default"
+								},
+								{
+									"key": "condition",
+									"value": "test conditions",
+									"type": "default"
+								},
+								{
+									"key": "location",
+									"value": "test locations",
+									"type": "default"
+								},
+								{
+									"key": "description",
+									"value": "test desc",
+									"type": "default"
+								},
+								{
+									"key": "zip_code",
+									"value": "10001",
+									"type": "default"
+								},
+								{
+									"key": "tag",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "renter_availability",
+									"value": "",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/create-product",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"create-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Hidden in App",
+									"type": "default"
+								},
+								{
+									"key": "image1",
+									"description": "(Optional)",
+									"type": "file",
+									"src": "/C:/Users/Admin/Downloads/images/--faq_banner.jpg"
+								},
+								{
+									"key": "image2",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "image3",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "image4",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "image5",
+									"description": "(Optional)",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "Book1",
+									"type": "default"
+								},
+								{
+									"key": "product_name",
+									"value": "test Book2",
+									"type": "default"
+								},
+								{
+									"key": "price_type",
+									"value": "day3",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "504",
+									"type": "default"
+								},
+								{
+									"key": "condition",
+									"value": "test condition5",
+									"type": "default"
+								},
+								{
+									"key": "location",
+									"value": "test location6",
+									"type": "default"
+								},
+								{
+									"key": "latitude",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "longitude",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "description",
+									"value": "test description7",
+									"type": "default"
+								},
+								{
+									"key": "zip_code",
+									"value": "100022",
+									"type": "default"
+								},
+								{
+									"key": "tag",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "renter_availability",
+									"value": "{\"from\": \"1:05 AM\",  \"to\": \"1:05 PM\"}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/update-product",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"update-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyProduct/user_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/my-product/3",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"my-product",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LatestProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/latest-products",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"latest-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/categories",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category/Slug",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/category/dmVoaWNsZQ==",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"category",
+								"dmVoaWNsZQ=="
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_name",
+									"value": "phone",
+									"type": "default"
+								},
+								{
+									"key": "zip_code",
+									"value": "10001",
+									"type": "default",
+									"disabled": true
+								},
+								{
+									"key": "latitude",
+									"value": "37.42267060086381",
+									"type": "default"
+								},
+								{
+									"key": "longitude",
+									"value": "-122.08498707041144",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/search-products",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"search-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TagSearchProducts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tag",
+									"value": "tes",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/tag-search-products",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"tag-search-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductStatusChange",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "status",
+									"value": "0",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-status-change",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-status-change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductReceived",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "product_received",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-received",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-received"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductReturn",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmU0YmIwZDlhNGVjZmYxOWI5MzEzZWY0ODg2ZmUxN2I4YTExNzdjYjY4ZmJhNWMzNzM4M2ZhMDFhNTNkZDJkZTc0NzgxMTcxMGY4OGE3MTQiLCJpYXQiOjE2ODA2MzM2ODEuNjgxNTQwOTY2MDMzOTM1NTQ2ODc1LCJuYmYiOjE2ODA2MzM2ODEuNjgxNTQ0MDY1NDc1NDYzODY3MTg3NSwiZXhwIjoxNzEyMjU2MDgxLjY2ODQ5NzA4NTU3MTI4OTA2MjUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.Z8E3dcBPHTF_qcqA99wxQz-C4ThnIhE7GguKeaX4xyvk2we9wKKEW0YFPmXG5VjJVP5-pWMV7D-aPIV9gA1a1DrbgUvuK-T3x1T6woQKjxFBu8b58LqGiG0rXwx-FWkIWt8ufhFP5AmUJHViUWHiPTmGcCCf1cAMEDUzPm4RMUTu9zFyje8XUnwDxdo6g_gvWIlnLAo2jBI5XjSPLqA5E4zXDbxvPYpyk19AnpKk6W_U58hwZe4VK1iBAPeI2pMzu20g9mmYOL6kDJnbLUZ8i08b5H4xfawFk7FShnqmWvKjSEbLjzgRYWVZ39pzFHgSKfnuM5ZGZ1WKtNd4Fk2dmNuuwp5w4uezvwae2UL3LJWjwWpF0BnEJaN81hI4cDc_5hjDPVQcv8njhy69L38xg7K4FwlQztSvbphD-MfT1qgimnhC5AGPSWtqY5z5l7uRb9E6RxOhPdC3TMVLnasxPwP8uHLFoFX5VysJ5T7TF63eXNCaqLuanK_VIbbA1Zk4_YL8V27py_pjqdEw1RwXdrqSwMxJAaWPSD4ouoX_u-yBZYHeH_EdKh12ONaYmfFr6pKKhxCapIeS6bu5J70H631hRfLXoaMUbKukX7l6tqx-XOgtM2LHBgAtkSgjAxuQI54FQpo71K5fDjCz22ah8fcOkmDxvZmarHwCQkXs_Cs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "product_return",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-return",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-return"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductDetails/product_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmU0YmIwZDlhNGVjZmYxOWI5MzEzZWY0ODg2ZmUxN2I4YTExNzdjYjY4ZmJhNWMzNzM4M2ZhMDFhNTNkZDJkZTc0NzgxMTcxMGY4OGE3MTQiLCJpYXQiOjE2ODA2MzM2ODEuNjgxNTQwOTY2MDMzOTM1NTQ2ODc1LCJuYmYiOjE2ODA2MzM2ODEuNjgxNTQ0MDY1NDc1NDYzODY3MTg3NSwiZXhwIjoxNzEyMjU2MDgxLjY2ODQ5NzA4NTU3MTI4OTA2MjUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.Z8E3dcBPHTF_qcqA99wxQz-C4ThnIhE7GguKeaX4xyvk2we9wKKEW0YFPmXG5VjJVP5-pWMV7D-aPIV9gA1a1DrbgUvuK-T3x1T6woQKjxFBu8b58LqGiG0rXwx-FWkIWt8ufhFP5AmUJHViUWHiPTmGcCCf1cAMEDUzPm4RMUTu9zFyje8XUnwDxdo6g_gvWIlnLAo2jBI5XjSPLqA5E4zXDbxvPYpyk19AnpKk6W_U58hwZe4VK1iBAPeI2pMzu20g9mmYOL6kDJnbLUZ8i08b5H4xfawFk7FShnqmWvKjSEbLjzgRYWVZ39pzFHgSKfnuM5ZGZ1WKtNd4Fk2dmNuuwp5w4uezvwae2UL3LJWjwWpF0BnEJaN81hI4cDc_5hjDPVQcv8njhy69L38xg7K4FwlQztSvbphD-MfT1qgimnhC5AGPSWtqY5z5l7uRb9E6RxOhPdC3TMVLnasxPwP8uHLFoFX5VysJ5T7TF63eXNCaqLuanK_VIbbA1Zk4_YL8V27py_pjqdEw1RwXdrqSwMxJAaWPSD4ouoX_u-yBZYHeH_EdKh12ONaYmfFr6pKKhxCapIeS6bu5J70H631hRfLXoaMUbKukX7l6tqx-XOgtM2LHBgAtkSgjAxuQI54FQpo71K5fDjCz22ah8fcOkmDxvZmarHwCQkXs_Cs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-details/1",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-details",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductDelete/product_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-delete/1",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product Request",
+			"item": [
+				{
+					"name": "ProductRequest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjNhYjM0ZDA4MTI3ZTkzYWZmMDdhOGM3ODY3Zjg0Y2E1NmU2NTgyOGM0MTI3M2IwMmExMjJkYTYxZGQwMTRhODZhZWMxNGMyYTYxOGFkNDgiLCJpYXQiOjE2ODI1MzI1MjcuNzMyNTM0ODg1NDA2NDk0MTQwNjI1LCJuYmYiOjE2ODI1MzI1MjcuNzMyNTQyMDM3OTYzODY3MTg3NSwiZXhwIjoxNzE0MTU0OTI3LjcyNzIyNzkyNjI1NDI3MjQ2MDkzNzUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.OyeosIJQ0g9YiPmOGqLJT7jXeADMQTFdLIVInATsdmp3jYYNZl1S7is1i6DPbGR23jtBrjSHOpzLvEV1KO2VLEmZfnSQX8wTSiRTiHgXYnfC6IIwlq5jFig429o7c21vSQbwGWWOEr9enxw6R-r6Ux1s8Z1hu5pRto4uK-agyLQsts4yE3-x_zq3oXCPTJvhty-WoDteH9_ZqTk2nygaJe6KOYApUDCA1H5iefRTrfPQSz-Q1vwiIZ9r8uBgr1mRYZFszb0XGk6dw-h2szRFyQvGA0MuFc6eqPBOgnhW466kuZG00SLbioSrRGckkQMW9YwwCYiI6zz5KwZRXgBufd1iTtbQuisg5UWsnvq8YWIJNVmB-niGPMTvJTHQKeheHPYVhR5kx4OUGmGiqyt3S78FYnCmwrZXPztln6A60P_aTLgZE8ddaoBO6qm1QS_fzdMuFRPRI2YoRThhYzdQXlV-GCT0agCsvlLMTfCGKMbcU7R13gvGL-xrpLCO70Lp1R1fO9pgewvf167nGdSpbaOKXxniihUoGrFKRXD0k7PzdQ_VC6eDJe52D5tPW4auV2Qv2TdWBqMTfiJEKlUKRBfYyWNf_zzVL7MHhWpg2_TptKahBetrOPy59R7F30oR1hYOb_AP7gUV991SocRwfr66EPb8Mn4LZiLCloHWIEc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "product_user_id",
+									"value": "15",
+									"type": "default"
+								},
+								{
+									"key": "start_date",
+									"value": "2023-03-27 16:43:17",
+									"type": "default"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-03-29 16:43:17",
+									"type": "default"
+								},
+								{
+									"key": "total_rent",
+									"value": "30",
+									"type": "default"
+								},
+								{
+									"key": "latitude",
+									"value": "90.000",
+									"type": "default"
+								},
+								{
+									"key": "longitude",
+									"value": "72.36",
+									"type": "default"
+								},
+								{
+									"key": "pickup_time",
+									"value": "2023-03-29 16:43:17",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-request",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductRequest/ProductRequest_id/AcceptOrReject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-request/22/Accept",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-request",
+								"22",
+								"Accept"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyProductRequest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmU0YmIwZDlhNGVjZmYxOWI5MzEzZWY0ODg2ZmUxN2I4YTExNzdjYjY4ZmJhNWMzNzM4M2ZhMDFhNTNkZDJkZTc0NzgxMTcxMGY4OGE3MTQiLCJpYXQiOjE2ODA2MzM2ODEuNjgxNTQwOTY2MDMzOTM1NTQ2ODc1LCJuYmYiOjE2ODA2MzM2ODEuNjgxNTQ0MDY1NDc1NDYzODY3MTg3NSwiZXhwIjoxNzEyMjU2MDgxLjY2ODQ5NzA4NTU3MTI4OTA2MjUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.Z8E3dcBPHTF_qcqA99wxQz-C4ThnIhE7GguKeaX4xyvk2we9wKKEW0YFPmXG5VjJVP5-pWMV7D-aPIV9gA1a1DrbgUvuK-T3x1T6woQKjxFBu8b58LqGiG0rXwx-FWkIWt8ufhFP5AmUJHViUWHiPTmGcCCf1cAMEDUzPm4RMUTu9zFyje8XUnwDxdo6g_gvWIlnLAo2jBI5XjSPLqA5E4zXDbxvPYpyk19AnpKk6W_U58hwZe4VK1iBAPeI2pMzu20g9mmYOL6kDJnbLUZ8i08b5H4xfawFk7FShnqmWvKjSEbLjzgRYWVZ39pzFHgSKfnuM5ZGZ1WKtNd4Fk2dmNuuwp5w4uezvwae2UL3LJWjwWpF0BnEJaN81hI4cDc_5hjDPVQcv8njhy69L38xg7K4FwlQztSvbphD-MfT1qgimnhC5AGPSWtqY5z5l7uRb9E6RxOhPdC3TMVLnasxPwP8uHLFoFX5VysJ5T7TF63eXNCaqLuanK_VIbbA1Zk4_YL8V27py_pjqdEw1RwXdrqSwMxJAaWPSD4ouoX_u-yBZYHeH_EdKh12ONaYmfFr6pKKhxCapIeS6bu5J70H631hRfLXoaMUbKukX7l6tqx-XOgtM2LHBgAtkSgjAxuQI54FQpo71K5fDjCz22ah8fcOkmDxvZmarHwCQkXs_Cs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/my-product-requests",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"my-product-requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyProductRequestNotifications",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjkwNWI2N2FiZjkyNzFhMjVlMGQxN2I2MjM0NzAzYTE2NmYwYmE5ZWE1Mzg1NzJlYTI2MTQ5OWNmYTM2ZjhjZTBjNzY2ODEzOTQ4ZWI4ZjAiLCJpYXQiOjE2Nzk1MDM3NjUuNjIxNTI2OTU2NTU4MjI3NTM5MDYyNSwibmJmIjoxNjc5NTAzNzY1LjYyMTUzMDA1NTk5OTc1NTg1OTM3NSwiZXhwIjoxNzExMTI2MTY1LjYxMjMwNjExODAxMTQ3NDYwOTM3NSwic3ViIjoiMTQiLCJzY29wZXMiOltdfQ.KkMuBbRLuPB1AOwXnqT_Vro_T33MytkYSs1kZsQtxvzQqOXfb9x1O99XoEgKc4eBYpPR2QUDa2w1bPwIU8Cnjb4-3i0ZUBHCsJ_7DzBqNYSdd01UsIBTH4zkDXtHTbmLlzACBHkBgGknwMZIr9WqnkBgBrXTKHfnX7fnU-32sqsQYdYK8zdcpB922kUfr1spdQzx1AyOySI5s1vCxEQo8bw9AT0UwVXpa8e98tUwggvVusMdZoG5ZEsfk0mdE5n07wd-26eGU_oWY3muFktINpaQzN3qhRjPUevEnHn8ITLbGnkza9Wm8njrjiVJvRFrqbxzVSoAz3Bxodwy3bwIBE0p5Ez8yKDHwitrYVOIJ5OTcPWMnh8f9XQs-DicqaW-ueDLpwuAfh2rgjbV6m25LW8EthWdgcjhYcIGkAQ83j5nQ0mUTF2kj5r2Sp24Cpe-4kb_Bm64aYQvVVrfi2bJWpY9KPbtlCFrkD6gDasIoXG_3tALqAkGZ8cNp_0sQnp12hBg7zG5gNYey9XK7ioMq_0WW5ZYp3awpRx0fLInE9i7fd8mGV3mTl2kUk2FR4ztK7iXl_ZLPHkw9G6tyIMZ4MrdEBOFV4ORIsjX0Iv6dnQny2l0_nGifPPZxZo7694tuxr0POd00Zb0MTs0XDXUjAIRjZHhWJ8fDSrWfOtsm_Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/my-product-requests-notifications",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"my-product-requests-notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyProductRequestNotifications/notification_id/1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/my-product-requests-notifications/1/1",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"my-product-requests-notifications",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductRequestDelete/product_request_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzllYWU3OTYyNDk1YmM0ZDZiMDc3ODc2MmJjZjE4ZDlmYzNiNDkyMWUwNDkxZDIwYmZkYzgxNDQxMjVhNjc3YmY3MDY0OTNhMjc3MzkyMDkiLCJpYXQiOjE2ODMxNDYwNTguNjk0MDU2OTg3NzYyNDUxMTcxODc1LCJuYmYiOjE2ODMxNDYwNTguNjk0MDYwMDg3MjAzOTc5NDkyMTg3NSwiZXhwIjoxNzE0NzY4NDU4LjY4NTA3Mjg5ODg2NDc0NjA5Mzc1LCJzdWIiOiI5Iiwic2NvcGVzIjpbXX0.jCkQecWfFW_4UNiUo4oGZq2Ocu7EQKkrlnQRR5jVldBNQ675JUQ9_wswmPWc_9M03KkAhrUKAVL6m4JJJdw2yoFajoaqTjpedMPw_7zcvQjA30FPUuZnjwPWhF9BLLLegKHwJXcNv7wAgokKO5gTxgBdv-Q1Ksjo-N3QOxvWRGounzHDpj45p9-LyUWHGLrZCW9IzoOBsC2yXCa6YqTeQlHVywBDtjXjZG3JkocWQuPC55qtOyALZICSmhX7JobtoB9lbBJks8EpXgSMM2gIvp9wlEBF1-ledtQSTJ7t38Jj1zmssW2fnoLFUK-u2oG8JjAIrWOc1QTpNKaYSVVC-BVwG92ADXsZThDVWBIRFnDdcBh9s1J9SuJqF9yAdu-mLFFxhJbGYzVtBpFBCM56zv_VhDyWmLJ8v6VjmNjRnql3M3a3mRenmEAOpAIJpyhXZvzIfwRjc-RKhQhnoKSfDtLUzpKB7ZD0Z3HhLfpg_auvOfZu6eIsGD38O9wsqZ2zwuv5VgiLtq6XAnZm5Uwj2ikR3Y6vVeyiItzwfWUbbrF8RGZ_uu-5FgmhrbcP1U74wS9wypAO1S7Qri-aeh8XG3bXVj_PD7undLS4v9JPcrPjIcyulVaLxHh3caKMeTYQIcHXVxXw2ahV1daBNL2nzK5_qTcKaYPGlvBydKkhzqU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-request-delete/2",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-request-delete",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NotificationDelete/notification_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmU0YmIwZDlhNGVjZmYxOWI5MzEzZWY0ODg2ZmUxN2I4YTExNzdjYjY4ZmJhNWMzNzM4M2ZhMDFhNTNkZDJkZTc0NzgxMTcxMGY4OGE3MTQiLCJpYXQiOjE2ODA2MzM2ODEuNjgxNTQwOTY2MDMzOTM1NTQ2ODc1LCJuYmYiOjE2ODA2MzM2ODEuNjgxNTQ0MDY1NDc1NDYzODY3MTg3NSwiZXhwIjoxNzEyMjU2MDgxLjY2ODQ5NzA4NTU3MTI4OTA2MjUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.Z8E3dcBPHTF_qcqA99wxQz-C4ThnIhE7GguKeaX4xyvk2we9wKKEW0YFPmXG5VjJVP5-pWMV7D-aPIV9gA1a1DrbgUvuK-T3x1T6woQKjxFBu8b58LqGiG0rXwx-FWkIWt8ufhFP5AmUJHViUWHiPTmGcCCf1cAMEDUzPm4RMUTu9zFyje8XUnwDxdo6g_gvWIlnLAo2jBI5XjSPLqA5E4zXDbxvPYpyk19AnpKk6W_U58hwZe4VK1iBAPeI2pMzu20g9mmYOL6kDJnbLUZ8i08b5H4xfawFk7FShnqmWvKjSEbLjzgRYWVZ39pzFHgSKfnuM5ZGZ1WKtNd4Fk2dmNuuwp5w4uezvwae2UL3LJWjwWpF0BnEJaN81hI4cDc_5hjDPVQcv8njhy69L38xg7K4FwlQztSvbphD-MfT1qgimnhC5AGPSWtqY5z5l7uRb9E6RxOhPdC3TMVLnasxPwP8uHLFoFX5VysJ5T7TF63eXNCaqLuanK_VIbbA1Zk4_YL8V27py_pjqdEw1RwXdrqSwMxJAaWPSD4ouoX_u-yBZYHeH_EdKh12ONaYmfFr6pKKhxCapIeS6bu5J70H631hRfLXoaMUbKukX7l6tqx-XOgtM2LHBgAtkSgjAxuQI54FQpo71K5fDjCz22ah8fcOkmDxvZmarHwCQkXs_Cs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/notification-delete/1",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"notification-delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductRequestPickupTimeChange",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDNjOGFhODcwNGY4Y2E2NTQxMzViMTc4YzIyNDgxMjUwYTIyM2YwMDUwMDMxNzBiOGQyZTNkOWZjNWRmNjgzYWIwNmJlYWUyZjFiYjgyOWQiLCJpYXQiOjE2NzY5MTkxODcuMTExODIxODg5ODc3MzE5MzM1OTM3NSwibmJmIjoxNjc2OTE5MTg3LjExMTgyNDk4OTMxODg0NzY1NjI1LCJleHAiOjE3MDg0NTUxODcuMTAzNzIyMDk1NDg5NTAxOTUzMTI1LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XWWUPvOqWpzzIrVBUIKJgV1O_PR9WanmXzGKNMNi3QiGXdC2__mrKCZyJg89DdQLFbisd3lk4OQmBFbv_jD18LK3E4HgS6XUjSaptWnyS75ZjMZG2Ak53o4miIivi2ULrkIRCk4Q0ymBG8DvfyYD2wXuwaJf5ljIVyYTqRpakJEXB_SNhELdzMByvcTj0Wu8NZ9nUHsrvxrikAPptdyWQx6kzZTg9GVEhOIIXY0R6ljD5dSyHyRPljehrdD72xajuLfBDSZZ-oX0bQL1Hcr2f947F32NQxIh7RV_tm46_rhycKdKuqIxxc3kXkWswloCRRZ-jkjhXOh34LEABKqzWIjvdUozkkNOgZRYH8SH8Q0JvEQiE06pu06cYMkK1MkC8ALiHi7IaWIjKqrYQfiuDJLzNW6_UAsZ7ksMwsmaYsmmys4YSZxBWPL2JZs1k-1QV9LijZHx8f1fAMM1qKQJdO-VLdf4LpM04Ed1rwldTGL5RekMShPnvkjg3GyJ_DjSAgkxzkpMo51lk46zHA4O3xUJfUmzfWSV7Dt6XIXFTymkD4E2h9hQRjjmTyUvvnDIjPZtJYOSdX9n6gcIeYyrE-W13bzd3sEtzSV6mOU-06KPVDH6yPzlxrbnLvW4eICjbzRndrKyrp3q8Bs3qQQduJIIIkS07gX1ygVsksDemBs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "pickup_time",
+									"value": "April 27, 2023, 3:58 AM",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-request-pickup-time-edit",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-request-pickup-time-edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyOrderProductRequests",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZGI5MjJjNjNlMWI4ZjgzZDYzYmI1NTFiYzg0OTcxNzIyYjVlMDhjNzlmMGE1OGJlZTg3YTllZjI5YTNhMTczZGUyMjg3MDk3ZjdhYTgyZWYiLCJpYXQiOjE2ODMwNTk5NzYuNzkyMzAzMDg1MzI3MTQ4NDM3NSwibmJmIjoxNjgzMDU5OTc2Ljc5MjMwNDk5MjY3NTc4MTI1LCJleHAiOjE3MTQ2ODIzNzYuNzg2MDUxMDM0OTI3MzY4MTY0MDYyNSwic3ViIjoiMTQiLCJzY29wZXMiOltdfQ.RQj__Sc4z9ENCso5WJJ6o5D2NNg-m7OzUqtUNmoISBem8XBBSA0tqsBnFkzdlAsviZM2z1UMQspL5hNbf_tnFpjMyBT001NyFubihYRQ8CMyzhTG-Hhe3KJmi5UvPXFiz5jwqjfuwtx_ZIGYfVPkc4PAoaOkurXj26LljEWfcL_tpVZdkvIGuMCu_GZEAE1YivyjlmsVNkv07ItSnGa2kZSdwvzF9iydOB5rUyN77ycgr4N5mffyRRqG9xpu-j81Kpd9r10ReQY1fdUTu2a_3be8rQuDNi-MvXy6V3NSTzCzq9i2MvXx-8j77Fvzw6cT05AuseFsk8HWHbx2CpC3_G859pEyed49UI4zRkrkzmpfVTBFmUf1ifDWpI-ED3nEtWZaU9LSj2FyakDiuL0i3-MCd7Fh9sJkSWJqFHTYSrFon0U9mVucXTRCx4OQdg06ddgGCgWHYYWWGAIhLPhtYPt9x9glm968f9YcaB8GhGZg-7DPsqBPlKlVL-FQnpi4EzZw8q3jtRksDUTCwCnT9DU4d0N1oo-CE6b55x4G4lu5m4HS4BKn0l-usKZR_KKgc3pQiMGhkPEfUQNc-tImcmUjRxJSf9FhlI_k4goLL3cKi9MBY44GYiggnGtxxpPZxJpY9c4tFW_52ubqJwENbaEK7Hhj2MS-wEyMXlDYBj0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "pickup_time",
+									"value": "April 27, 2023, 3:58 AM",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/my-order-product-requests",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"my-order-product-requests"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "CreateReview",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmU0YmIwZDlhNGVjZmYxOWI5MzEzZWY0ODg2ZmUxN2I4YTExNzdjYjY4ZmJhNWMzNzM4M2ZhMDFhNTNkZDJkZTc0NzgxMTcxMGY4OGE3MTQiLCJpYXQiOjE2ODA2MzM2ODEuNjgxNTQwOTY2MDMzOTM1NTQ2ODc1LCJuYmYiOjE2ODA2MzM2ODEuNjgxNTQ0MDY1NDc1NDYzODY3MTg3NSwiZXhwIjoxNzEyMjU2MDgxLjY2ODQ5NzA4NTU3MTI4OTA2MjUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.Z8E3dcBPHTF_qcqA99wxQz-C4ThnIhE7GguKeaX4xyvk2we9wKKEW0YFPmXG5VjJVP5-pWMV7D-aPIV9gA1a1DrbgUvuK-T3x1T6woQKjxFBu8b58LqGiG0rXwx-FWkIWt8ufhFP5AmUJHViUWHiPTmGcCCf1cAMEDUzPm4RMUTu9zFyje8XUnwDxdo6g_gvWIlnLAo2jBI5XjSPLqA5E4zXDbxvPYpyk19AnpKk6W_U58hwZe4VK1iBAPeI2pMzu20g9mmYOL6kDJnbLUZ8i08b5H4xfawFk7FShnqmWvKjSEbLjzgRYWVZ39pzFHgSKfnuM5ZGZ1WKtNd4Fk2dmNuuwp5w4uezvwae2UL3LJWjwWpF0BnEJaN81hI4cDc_5hjDPVQcv8njhy69L38xg7K4FwlQztSvbphD-MfT1qgimnhC5AGPSWtqY5z5l7uRb9E6RxOhPdC3TMVLnasxPwP8uHLFoFX5VysJ5T7TF63eXNCaqLuanK_VIbbA1Zk4_YL8V27py_pjqdEw1RwXdrqSwMxJAaWPSD4ouoX_u-yBZYHeH_EdKh12ONaYmfFr6pKKhxCapIeS6bu5J70H631hRfLXoaMUbKukX7l6tqx-XOgtM2LHBgAtkSgjAxuQI54FQpo71K5fDjCz22ah8fcOkmDxvZmarHwCQkXs_Cs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "renterpriser_id",
+									"value": "13",
+									"type": "default"
+								},
+								{
+									"key": "message",
+									"value": "Test Message",
+									"type": "default"
+								},
+								{
+									"key": "star",
+									"value": "4",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/review",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllReview/user_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmU0YmIwZDlhNGVjZmYxOWI5MzEzZWY0ODg2ZmUxN2I4YTExNzdjYjY4ZmJhNWMzNzM4M2ZhMDFhNTNkZDJkZTc0NzgxMTcxMGY4OGE3MTQiLCJpYXQiOjE2ODA2MzM2ODEuNjgxNTQwOTY2MDMzOTM1NTQ2ODc1LCJuYmYiOjE2ODA2MzM2ODEuNjgxNTQ0MDY1NDc1NDYzODY3MTg3NSwiZXhwIjoxNzEyMjU2MDgxLjY2ODQ5NzA4NTU3MTI4OTA2MjUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.Z8E3dcBPHTF_qcqA99wxQz-C4ThnIhE7GguKeaX4xyvk2we9wKKEW0YFPmXG5VjJVP5-pWMV7D-aPIV9gA1a1DrbgUvuK-T3x1T6woQKjxFBu8b58LqGiG0rXwx-FWkIWt8ufhFP5AmUJHViUWHiPTmGcCCf1cAMEDUzPm4RMUTu9zFyje8XUnwDxdo6g_gvWIlnLAo2jBI5XjSPLqA5E4zXDbxvPYpyk19AnpKk6W_U58hwZe4VK1iBAPeI2pMzu20g9mmYOL6kDJnbLUZ8i08b5H4xfawFk7FShnqmWvKjSEbLjzgRYWVZ39pzFHgSKfnuM5ZGZ1WKtNd4Fk2dmNuuwp5w4uezvwae2UL3LJWjwWpF0BnEJaN81hI4cDc_5hjDPVQcv8njhy69L38xg7K4FwlQztSvbphD-MfT1qgimnhC5AGPSWtqY5z5l7uRb9E6RxOhPdC3TMVLnasxPwP8uHLFoFX5VysJ5T7TF63eXNCaqLuanK_VIbbA1Zk4_YL8V27py_pjqdEw1RwXdrqSwMxJAaWPSD4ouoX_u-yBZYHeH_EdKh12ONaYmfFr6pKKhxCapIeS6bu5J70H631hRfLXoaMUbKukX7l6tqx-XOgtM2LHBgAtkSgjAxuQI54FQpo71K5fDjCz22ah8fcOkmDxvZmarHwCQkXs_Cs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/review/13",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"review",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateProductReview",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjNhYjM0ZDA4MTI3ZTkzYWZmMDdhOGM3ODY3Zjg0Y2E1NmU2NTgyOGM0MTI3M2IwMmExMjJkYTYxZGQwMTRhODZhZWMxNGMyYTYxOGFkNDgiLCJpYXQiOjE2ODI1MzI1MjcuNzMyNTM0ODg1NDA2NDk0MTQwNjI1LCJuYmYiOjE2ODI1MzI1MjcuNzMyNTQyMDM3OTYzODY3MTg3NSwiZXhwIjoxNzE0MTU0OTI3LjcyNzIyNzkyNjI1NDI3MjQ2MDkzNzUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.OyeosIJQ0g9YiPmOGqLJT7jXeADMQTFdLIVInATsdmp3jYYNZl1S7is1i6DPbGR23jtBrjSHOpzLvEV1KO2VLEmZfnSQX8wTSiRTiHgXYnfC6IIwlq5jFig429o7c21vSQbwGWWOEr9enxw6R-r6Ux1s8Z1hu5pRto4uK-agyLQsts4yE3-x_zq3oXCPTJvhty-WoDteH9_ZqTk2nygaJe6KOYApUDCA1H5iefRTrfPQSz-Q1vwiIZ9r8uBgr1mRYZFszb0XGk6dw-h2szRFyQvGA0MuFc6eqPBOgnhW466kuZG00SLbioSrRGckkQMW9YwwCYiI6zz5KwZRXgBufd1iTtbQuisg5UWsnvq8YWIJNVmB-niGPMTvJTHQKeheHPYVhR5kx4OUGmGiqyt3S78FYnCmwrZXPztln6A60P_aTLgZE8ddaoBO6qm1QS_fzdMuFRPRI2YoRThhYzdQXlV-GCT0agCsvlLMTfCGKMbcU7R13gvGL-xrpLCO70Lp1R1fO9pgewvf167nGdSpbaOKXxniihUoGrFKRXD0k7PzdQ_VC6eDJe52D5tPW4auV2Qv2TdWBqMTfiJEKlUKRBfYyWNf_zzVL7MHhWpg2_TptKahBetrOPy59R7F30oR1hYOb_AP7gUV991SocRwfr66EPb8Mn4LZiLCloHWIEc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "product_id",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "message",
+									"value": "Test Message2",
+									"type": "default"
+								},
+								{
+									"key": "star",
+									"value": "4",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-review",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllProductReview/product_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjNhYjM0ZDA4MTI3ZTkzYWZmMDdhOGM3ODY3Zjg0Y2E1NmU2NTgyOGM0MTI3M2IwMmExMjJkYTYxZGQwMTRhODZhZWMxNGMyYTYxOGFkNDgiLCJpYXQiOjE2ODI1MzI1MjcuNzMyNTM0ODg1NDA2NDk0MTQwNjI1LCJuYmYiOjE2ODI1MzI1MjcuNzMyNTQyMDM3OTYzODY3MTg3NSwiZXhwIjoxNzE0MTU0OTI3LjcyNzIyNzkyNjI1NDI3MjQ2MDkzNzUsInN1YiI6IjE0Iiwic2NvcGVzIjpbXX0.OyeosIJQ0g9YiPmOGqLJT7jXeADMQTFdLIVInATsdmp3jYYNZl1S7is1i6DPbGR23jtBrjSHOpzLvEV1KO2VLEmZfnSQX8wTSiRTiHgXYnfC6IIwlq5jFig429o7c21vSQbwGWWOEr9enxw6R-r6Ux1s8Z1hu5pRto4uK-agyLQsts4yE3-x_zq3oXCPTJvhty-WoDteH9_ZqTk2nygaJe6KOYApUDCA1H5iefRTrfPQSz-Q1vwiIZ9r8uBgr1mRYZFszb0XGk6dw-h2szRFyQvGA0MuFc6eqPBOgnhW466kuZG00SLbioSrRGckkQMW9YwwCYiI6zz5KwZRXgBufd1iTtbQuisg5UWsnvq8YWIJNVmB-niGPMTvJTHQKeheHPYVhR5kx4OUGmGiqyt3S78FYnCmwrZXPztln6A60P_aTLgZE8ddaoBO6qm1QS_fzdMuFRPRI2YoRThhYzdQXlV-GCT0agCsvlLMTfCGKMbcU7R13gvGL-xrpLCO70Lp1R1fO9pgewvf167nGdSpbaOKXxniihUoGrFKRXD0k7PzdQ_VC6eDJe52D5tPW4auV2Qv2TdWBqMTfiJEKlUKRBfYyWNf_zzVL7MHhWpg2_TptKahBetrOPy59R7F30oR1hYOb_AP7gUV991SocRwfr66EPb8Mn4LZiLCloHWIEc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/product-review/1",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"product-review",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "StripIntentResponds",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZGI2M2VlMzM0ZDNhOGQwYTVjZmM2ZmQzNmY0M2U2Yjc5ZDRiZTAzMDNmMDQ2ZmNkMjUyMjkzOGI5NjViYmMyOTkyMGVmOGRjZDIxYTQ3MmMiLCJpYXQiOjE2ODQ4NjE4ODguMzg1NTAwOTA3ODk3OTQ5MjE4NzUsIm5iZiI6MTY4NDg2MTg4OC4zODU1MDU5MTQ2ODgxMTAzNTE1NjI1LCJleHAiOjE3MTY0ODQyODguMzY2NTk3ODkwODUzODgxODM1OTM3NSwic3ViIjoiMTQiLCJzY29wZXMiOltdfQ.HqmnTxCkNVri4CdNrp-TFnq4tJXaZtbXMK6bw3vvqNpy_1M_ANW7N1y5KDvWHGd5Imu6XArxLhPYvBP1To49FIOZpPWGjdDn4Qbnl-4aWi6zCj9hLiwHZh88KXsvPU-b9STLvHxQooPZxhi1AcrJZubm64hC1lL8R-XOe8R9Jng65e_UhhL_fDgEKGgx5AeDq6M1n-Qu_OXYvLZu6iWFTq7jx-OcSOE8foZa6U33u9VfQFaCYCc5shURo7rnh3Kfgwf_sklIVVvNePlijRYTEP5ArYzYgzLMEEV_1r8Rl4JCRGLeqhaEfAzMOfxlzw-l_7SyBeUORUbHX47NQx8N7ov9SlXtItZ-44gLt5_pJVCOtf5bTCxhuV8Oj85xcXehVhNBTm6tPsOKG2ezycTegRhpax2MtwAX9ILQc3_aHCKHmGAI4Xu9q4VkfyeyAk8Z5Bvyf496Yq9cCuMprlFm2OAGiYvJ1jxjk5nO7tcVFMXMSD2gdr7dn829pP5dDzmweDiaNJBmcwQPLW6TYhWfdy72nN012bq0_JPeinGpyjeMBeqaY2xPzHE84f5UxcVdSAvoHexMbIaUGbuH-pgwnciFRn4Mg7loiSWo1SozJzEk37IpVyt3RRUoIB4EeixMbwxzjN5EYiDvZPcRQhZ2ECKgT8cWE4USx7ArhKBC6YY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "amount",
+									"value": "1099",
+									"type": "default"
+								},
+								{
+									"key": "currency",
+									"value": "usd",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://customdemo.website/apps/renterprise/public/api/strip-intent-responds",
+							"protocol": "https",
+							"host": [
+								"customdemo",
+								"website"
+							],
+							"path": [
+								"apps",
+								"renterprise",
+								"public",
+								"api",
+								"strip-intent-responds"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
