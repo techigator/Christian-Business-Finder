@@ -107,15 +107,15 @@
                                             @foreach ($businesses as $business)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $business->category->name }}</td>
-                                                    <td>{{ $business->name }}</td>
-                                                    <td>{{ $business->state }}</td>
-                                                    <td>{{ $business->ratings }}</td>
-                                                    <td>{{ $business->opening_hours }}</td>
-                                                    <td>{{ strip_tags($business->details) }}</td>
-                                                    <td>{{ $business->location }}</td>
-                                                    <td>{{ $business->longitude }}</td>
-                                                    <td>{{ $business->latitude }}</td>
+                                                    <td>{{ $business->category->name ?? 'Business' }}</td>
+                                                    <td>{{ $business->name ?? 'Koelpin, Hahn and Fay' }}</td>
+                                                    <td>{{ $business->state ?? 'Colorado' }}</td>
+                                                    <td>{{ $business->ratings ?? '0' }}</td>
+                                                    <td>{{ $business->opening_hours ?? '00:00' }}</td>
+                                                    <td>{{ strip_tags($business->details ?? 'Upgradable Uniform Securedline') }}</td>
+                                                    <td>{{ $business->location ?? '65579 Marley Neck' }}</td>
+                                                    <td>{{ $business->longitude ?? '39.169680' }}</td>
+                                                    <td>{{ $business->latitude ?? '-76.574990' }}</td>
                                                     <td>
                                                         <form action="{{ route('business.destroy', $business->id) }}"
                                                               method="DELETE" class="form-delete">
@@ -225,6 +225,7 @@
 <style>
 
 </style>
+<!-- Add Modal start -->
 <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -428,7 +429,7 @@
                                            class="form-control mt-2 mb-2" placeholder="Opening Hours" id="edit-hour"
                                            required/>
                                     <strong>Edit Detail</strong>
-                                    <textarea class="form-control" name="details"
+                                    <textarea class="form-control my-2" name="details"
                                               id="myTextarea2"></textarea>
                                     <strong>Edit Location</strong>
                                     <input type="text" name="location" value="" id="edit-search-input"
@@ -457,7 +458,7 @@
         </div>
     </div>
 </div>
-<!-- Edit Modal start -->
+<!-- Edit Modal end -->
 
 @section('js')
     <script
@@ -648,7 +649,14 @@
     <script>
         const isEditing = true;
         $.noConflict()
+
+        $(document).ready(function() {
+
+        });
+
         $(document).ready(function () {
+            var ckeditorInitialized = false;
+
             $(".edit-modal-btn").on("click", function () {
                 var id = $(this).data("id");
                 var url = '{{ route('business.edit') }}/' + id;
@@ -669,36 +677,44 @@
                         user_type = user_type.charAt(0).toUpperCase() + user_type.slice(1);
                         $("#edit-id").val(data.id);
                         $("#edit-type").val(user_type);
-                        $("#edit-name").val(data.name);
+                        $("#edit-name").val(data.name ?? 'Koelpin, Hahn and Fay');
                         selectedUserIds.forEach(function(userId) {
                             $("#edit-customized-users option[value='" + userId + "']").prop("selected", true);
                         });
                         $("#edit-customized-users").trigger("change");
                         $("#edit-category").val(data.category_id);
-                        $("#edit-state").val(data.state);
-                        $("#edit-ratings").val(data.ratings);
+                        $("#edit-state").val(data.state ?? 'Colorado');
+                        $("#edit-ratings").val(data.ratings ?? '0');
                         // $("#images").val(data.images);
-                        $("#edit-hour").val(data.opening_hours);
-                        $("#edit-search-input").val(data.location);
-                        $("#edit-longitude").val(data.longitude);
-                        $("#edit-latitude").val(data.latitude);
+                        $("#edit-hour").val(data.opening_hours ?? '00:00');
+                        $("#edit-search-input").val(data.location ?? '65579 Marley Neck');
+                        $("#edit-longitude").val(data.longitude ?? '39.169680');
+                        $("#edit-latitude").val(data.latitude ?? '-76.574990');
 
-                        ClassicEditor
-                            .create(document.querySelector('#myTextarea2'))
-                            .then(editor => {
-
-                                editor.setData(user_detail);
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
+                        if (!ckeditorInitialized) {
+                            ClassicEditor
+                                .create(document.querySelector('#myTextarea2'))
+                                .then(editor => {
+                                    editor.setData(user_detail);
+                                })
+                                .catch(error => {
+                                    console.error(error);
+                                });
+                            // Set the flag to true to indicate CKEditor is initialized
+                            ckeditorInitialized = true;
+                        }
 
                         // Set the image source
-                        var imageUrl = '{{ asset('') }}/uploads/business/';
-                        if (data.images) {
-                            imageUrl += data.images;
+                        var imageUrlBase  = '{{ asset('') }}/uploads/business/';
+                        if (data.images && data.images.length > 0) {
+                            var imageUrl = imageUrlBase + data.images;
+
+                            $("#edit-image").attr("src", imageUrl);
+                        } else {
+                            var emptyImageUrl = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
+
+                            $("#edit-image").attr("src", emptyImageUrl);
                         }
-                        $("#edit-image").attr("src", imageUrl);
 
                         $("#edit-modal").modal("show");
                     },

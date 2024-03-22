@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 class BusinessController extends Controller
 {
     // use PHPCustomMail;
-    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -26,11 +26,12 @@ class BusinessController extends Controller
     {
         $menu = 'business';
         $loggedInUser = Auth::user();
+//        dd($loggedInUser);
         $loggedInUserId = $loggedInUser->id;
         $categories = category::all();
-        
+
         if ($loggedInUser->type === 'sales_person') {
-            $users = User::where(['type' => 'user', 'created_by' => $loggedInUser->id])->get();
+             $users = User::where(['type' => 'user', 'created_by' => $loggedInUser->id])->get();
             $userIds = User::where(['type' => 'user', 'created_by' => $loggedInUser->id])
                 ->pluck('id')
                 ->toArray();
@@ -49,7 +50,7 @@ class BusinessController extends Controller
             $businesses = Buisness::with('category')->orderBy('created_at', 'desc')->latest()->paginate(20);
             $users = User::where('type', 'user')->get();
         }
-        
+
         return view('business.index', compact('businesses', "menu", 'categories', 'users'))
             ->with('i', (request()->input('page', 1) - 1) * 100);
     }
@@ -83,7 +84,7 @@ class BusinessController extends Controller
         $customized_users = $request->input('customized_users');
         $serialized_users = serialize($customized_users);
         $business->customized_users = $serialized_users;
-        
+
         $business->user_id = $request->input('user_id');
         $business->type = $request->input('user_type');
         $business->category_id = $request->input('category');
@@ -98,7 +99,7 @@ class BusinessController extends Controller
         $business->longitude = $request->input('longitude');
         $business->latitude = $request->input('latitude');
         $business->save();
-        
+
         if (Auth::user()->type === 'admin') {
             return redirect()->route('business.index')
                 ->with('success', 'Business created successfully.');
@@ -126,7 +127,7 @@ class BusinessController extends Controller
         } else {
             $users = User::where('type', 'user')->get();
         }
-        
+
         $data =  [
             'id' => $business->id,
             'user_id' => $business->user_id,
@@ -143,7 +144,7 @@ class BusinessController extends Controller
             'longitude' => $business->longitude,
             'latitude' => $business->latitude,
         ];
-        
+
         return response()->json($data);
     }
 
@@ -188,7 +189,7 @@ class BusinessController extends Controller
         }
 
         $business = Buisness::where('id', $id)->update($data);
-        
+
         if (Auth::user()->type === 'admin') {
             return redirect()->route('business.index')
                 ->with('success', 'Business updated successfully.');
@@ -213,7 +214,7 @@ class BusinessController extends Controller
         $business->save();
         return response()->json(['success' => 'Status change successfully.']);
     }
-    
+
     function send_mail($to, $subject, $string): bool
     {
         $from = 'no-reply@christian-business-finder.com';
@@ -246,11 +247,11 @@ class BusinessController extends Controller
     public function customizedMembersSendMail($id)
     {
         $business = Buisness::find($id);
-        
+
         if (is_null($business->customized_users)) {
             return redirect()->back()->with('error', 'Members Not Found In This Business');
         }
-        
+
         $unserializedUsers = unserialize($business->customized_users);
         $customized_users = User::whereIn('id', $unserializedUsers)->get();
         // dd($customized_users);
@@ -270,7 +271,7 @@ class BusinessController extends Controller
 
         return redirect()->back()->with('success', 'Email send to members');
     }
-    
+
     public function exportBusinesses()
     {
         $loggedInUser = Auth::user();

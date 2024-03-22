@@ -28,14 +28,16 @@ Route::get('/clear', function () {
 // Route::post('add-notifications', [UserController::class, 'addNotifications']);
 // Route::get('get-suggestion', [UserController::class, 'getSuggestion']);
 
+// google-map
+Route::post('search-places', [UserController::class, 'searchPlaces']);
 
 // category
 Route::get('get-category', [UserController::class, 'getCategory']);
 
-// Buisness
-Route::post('add-buisness', [UserController::class, 'addBuisness']);
-Route::get('get-buisness/{id}', [UserController::class, 'getBusiness']);
-Route::get('get-business-by-category/{id}', [UserController::class, 'getBuisnessByCategory']);
+// Business
+Route::post('add-buisness', [UserController::class, 'addBusiness']);
+Route::get('get-business-by-category/{id}', [UserController::class, 'getBusiness']);
+//Route::get('get-business-by-category/{id}', [UserController::class, 'getBusinessByCategory']);
 
 // comment by adil
 // Route::get('get-buisness-by-id/{id?}', [UserController::class, 'getBuisnessById']);
@@ -59,9 +61,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('user-type-change/{user_type}', [UserController::class, 'UserTypeChange']);
     Route::get('logout', [UserController::class, 'logout']);
     Route::post('update-profile', [UserController::class, 'updateProfileImage']);
-    
-// business get with rating or user flag    
-    Route::get('get-buisness-by-id/{id?}', [UserController::class, 'getBuisnessById']);
+
+// business get with rating or user flag
+    Route::get('get-buisness-by-id/{id?}', [UserController::class, 'getBusinessById']);
 
 // Church
     Route::post('add-church', [UserController::class, 'addChurch']);
