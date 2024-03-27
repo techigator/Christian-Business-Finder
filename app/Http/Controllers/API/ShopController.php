@@ -925,7 +925,7 @@ class ShopController extends Controller
                 $currentImages = $business->images;
                 if ($request->file('images')) {
                     $newFilename = $request->images->getClientOriginalName();
-                    $request->images->move(public_path() . '/uploads/', $newFilename);
+                    $request->images->move(public_path() . '/uploads/business/', $newFilename);
                 }
 
                 if (!empty($currentImages)) {
@@ -936,10 +936,12 @@ class ShopController extends Controller
 
                 $business->images = $currentImages;
                 $business->save();
+
+                $images = explode(',', $business->images);
                 return response()->json([
                     'success' => true,
-                    'message' => 'Image added to the column successfully',
-                    'data' => $business
+                    // 'message' => 'Image added to the column successfully',
+                    'data' => $images
                 ]);
             } else {
                 return response()->json([

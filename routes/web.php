@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthenticationController;
@@ -223,7 +224,7 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::any('/export-business-file', [BusinessController::class, 'exportBusinesses'])->name('export.business.report');
         Route::get('/status-business', [BusinessController::class, 'businessStatus'])->name('business.status');
         Route::any('/customized-members-send-mail/{id?}', [BusinessController::class, 'customizedMembersSendMail'])->name('customized.members.send.mail');
-        
+
         // user
         Route::get('/user-listing', [UserController::class, 'userIndex'])->name('user.sales.index');
         // Route::post('/store-user/{id?}', [UserController::class, 'userStore'])->name('user.store');
@@ -247,6 +248,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('banner/{id}/delete', [AdminBannerController::class, 'delete']);
     Route::post('banner/status/{id}', [AdminBannerController::class, 'update_status']);
     /**** Banner routes /*****/
-    // Route::get('logout', [AdminHomeController::class, 'logout']);    
+    // Route::get('logout', [AdminHomeController::class, 'logout']);
     // logo
 });
+Route::get('get-messages', [MessageController::class, 'index']);
+Route::post('send-message', [MessageController::class, 'sendMessage'])->name('send.message');
+Route::post('pusher/send-message', [MessageController::class, 'sendMessage'])->name('pusher.send.message');
+
+Route::get('message-index', [MessageController::class, 'index']);
+Route::post('broadcast', [MessageController::class, 'broadcast'])->name('broadcast.message');
+Route::post('receive', [MessageController::class, 'receive'])->name('receive.message');

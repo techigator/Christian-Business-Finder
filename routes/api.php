@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
@@ -53,6 +54,13 @@ Route::post('update-forget-password', [UserController::class, 'updateForgetPassw
 
 
 Route::middleware(['auth:api'])->group(function () {
+// manage-business
+    Route::get('manage-business/{user_id}', [UserController::class, 'manageBusiness']);
+    Route::post('update-manage-business/{business_id}', [UserController::class, 'updateManageBusiness']);
+    Route::post('update-manage-business-thumbnail/{business_id}', [UserController::class, 'updateManageBusinessThumbnail']);
+
+// chat
+    Route::post('send-message', [MessageController::class, 'sendMessage']);
 
 // User
     Route::post('update-info', [UserController::class, 'updateProfileInfo']);

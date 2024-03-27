@@ -105,6 +105,28 @@
                                             </thead>
                                             <tbody>
                                             @foreach ($businesses as $business)
+                                                @php
+                                                    if (is_string($business->location) && strpos($business->location, 's:') === 0) {
+                                                        $location = unserialize($business->location);
+                                                        $location = is_array($location) ? $location : [$location];
+                                                    } else {
+                                                        $location = $business->location ? explode(', ', $business->location) : ['65579 Marley Neck'];
+                                                    }
+
+                                                    if (is_string($business->longitude) && strpos($business->longitude, 's:') === 0) {
+                                                        $longitude = unserialize($business->longitude);
+                                                        $longitude = is_array($longitude) ? $longitude : [$longitude];
+                                                    } else {
+                                                        $longitude = $business->longitude ? explode(', ', $business->longitude) : ['39.169680'];
+                                                    }
+
+                                                    if (is_string($business->latitude) && strpos($business->latitude, 's:') === 0) {
+                                                        $latitude = unserialize($business->latitude);
+                                                        $latitude = is_array($latitude) ? $latitude : [$latitude];
+                                                    } else {
+                                                        $latitude = $business->latitude ? explode(', ', $business->latitude) : ['-76.574990'];
+                                                    }
+                                                @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $business->category->name ?? 'Business' }}</td>
@@ -113,17 +135,19 @@
                                                     <td>{{ $business->ratings ?? '0' }}</td>
                                                     <td>{{ $business->opening_hours ?? '00:00' }}</td>
                                                     <td>{{ strip_tags($business->details ?? 'Upgradable Uniform Securedline') }}</td>
-                                                    <td>{{ $business->location ?? '65579 Marley Neck' }}</td>
-                                                    <td>{{ $business->longitude ?? '39.169680' }}</td>
-                                                    <td>{{ $business->latitude ?? '-76.574990' }}</td>
+                                                    <td>{{ htmlspecialchars(implode(', ', $location)) }}</td>
+                                                    <td>{{ htmlspecialchars(implode(', ', $longitude)) }}</td>
+                                                    <td>{{ htmlspecialchars(implode(', ', $latitude)) }}</td>
                                                     <td>
                                                         <form action="{{ route('business.destroy', $business->id) }}"
                                                               method="DELETE" class="form-delete">
                                                             <!-- <a class="btn btn-info showModalBtn" href="#" data-toggle="modal" data-showid="{!! $business->id !!}">Show</a> -->
-                                                            <a title="send-mail" class="btn btn-success" href="{{ route('customized.members.send.mail', $business->id) }}">
-                                                            <i class="fas fa-solid fa-share"></i>
+                                                            <a title="send-mail" class="btn btn-success"
+                                                               href="{{ route('customized.members.send.mail', $business->id) }}">
+                                                                <i class="fas fa-solid fa-share"></i>
                                                             </a>
-                                                            <a class="btn btn-primary edit-modal-btn" href="javascript:;"
+                                                            <a class="btn btn-primary edit-modal-btn"
+                                                               href="javascript:;"
                                                                data-toggle="modal"
                                                                data-id="{!! $business->id !!}"><i
                                                                     class="fas fa-solid fa-edit"></i></a>
@@ -270,7 +294,7 @@
                                     @endif
                                     <strong>Members</strong>
                                     <select class="js-example-basic-multiple form-control" name="customized_users[]"
-                                        multiple="multiple">
+                                            multiple="multiple">
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                                         @endforeach
@@ -386,9 +410,9 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <!--<strong>Created by</strong>-->
-                                    <input type="hidden" id="edit-type" name="user_type" value=""
-                                           class="form-control mt-2 mb-2" placeholder="Name" disabled>
+                                    <strong>Created by</strong>
+                                    <input type="text" id="edit-type" name="user_type" value=""
+                                           class="form-control mt-2 mb-2" placeholder="Name" readonly>
                                     <strong>Edit Members</strong>
                                     <select class="js-example-basic-multiple form-control" id="edit-customized-users"
                                             name="customized_users[]" multiple="multiple">
@@ -414,7 +438,7 @@
                                     <input type="text" name="ratings" value=""
                                            class="form-control mt-2 mb-2" placeholder="Rating" id="edit-ratings"
                                            required/>
-                                    <div class="form-group">
+                                    <div class="form-group image-div">
                                         <strong>Edit Image:</strong>
                                         <br/>
                                         <img src="{{ asset('images/no-img-avalible.png') }}" width="150px"
@@ -431,18 +455,21 @@
                                     <strong>Edit Detail</strong>
                                     <textarea class="form-control my-2" name="details"
                                               id="myTextarea2"></textarea>
-                                    <strong>Edit Location</strong>
-                                    <input type="text" name="location" value="" id="edit-search-input"
-                                           class="form-control mt-2 mb-2" placeholder="Location" required>
-                                    <div id="edit-suggestions"></div>
-                                    <strong>Edit Longitude</strong>
-                                    <input type="text" name="longitude" value=""
-                                           class="form-control mt-2 mb-2" placeholder="Longitude" id="edit-longitude"
-                                           required readonly>
-                                    <strong>Edit Latitude</strong>
-                                    <input type="text" name="latitude" value=""
-                                           class="form-control mt-2 mb-2" placeholder="Latitude" id="edit-latitude"
-                                           required readonly>
+                                    <div class="edit-multi-location">
+                                        {{--<strong>Edit Location</strong>
+                                        <input type="text" name="location" value="" id="edit-search-input"
+                                               class="form-control mt-2 mb-2" placeholder="Location" required>
+                                        <div id="edit-suggestions"></div>
+                                        <strong>Edit Longitude</strong>
+                                        <input type="text" name="longitude" value=""
+                                               class="form-control mt-2 mb-2" placeholder="Longitude"
+                                               id="edit-longitude"
+                                               required readonly>
+                                        <strong>Edit Latitude</strong>
+                                        <input type="text" name="latitude" value=""
+                                               class="form-control mt-2 mb-2" placeholder="Latitude" id="edit-latitude"
+                                               required readonly>--}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -573,6 +600,10 @@
                 autocompleteService = new google.maps.places.AutocompleteService();
             }
 
+            if (!searchInput) {
+                return;
+            }
+
             searchInput.addEventListener('input', function () {
                 const query = this.value;
                 suggestionsContainer.innerHTML = '';
@@ -609,6 +640,59 @@
             });
         }
 
+        function initMultiMap(isEditing, index) {
+            let searchInput, longitudeInput, latitudeInput, suggestionsContainer, autocompleteService;
+
+            if (isEditing) {
+                // Edit Business Modal
+                searchInput = document.getElementById('edit-search-input-' + index);
+                longitudeInput = document.getElementById('edit-longitude-' + index);
+                latitudeInput = document.getElementById('edit-latitude-' + index);
+                suggestionsContainer = document.getElementById('edit-suggestions-' + index);
+                autocompleteService = new google.maps.places.AutocompleteService();
+            }
+
+            if (!searchInput) {
+                return;
+            }
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value;
+                suggestionsContainer.innerHTML = '';
+
+                if (query) {
+                    autocompleteService.getPlacePredictions({ input: query }, function(predictions, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            predictions.forEach(function(prediction) {
+                                const suggestionElement = document.createElement('div');
+                                suggestionElement.classList.add('suggestion');
+                                suggestionElement.textContent = prediction.description;
+
+                                suggestionElement.addEventListener('click', function() {
+                                    searchInput.value = prediction.description;
+                                    suggestionsContainer.innerHTML = '';
+
+                                    // Fetch additional details for the selected place
+                                    const placeService = new google.maps.places.PlacesService(document.createElement('div'));
+                                    placeService.getDetails({ placeId: prediction.place_id }, function(place, status) {
+                                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                            const selectedLatitude = place.geometry.location.lat();
+                                            const selectedLongitude = place.geometry.location.lng();
+                                            latitudeInput.value = selectedLatitude;
+                                            longitudeInput.value = selectedLongitude;
+                                        }
+                                    });
+                                });
+
+                                suggestionsContainer.appendChild(suggestionElement);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        initMultiMap(false);
         initMap(false);
     </script>
 
@@ -650,7 +734,7 @@
         const isEditing = true;
         $.noConflict()
 
-        $(document).ready(function() {
+        $(document).ready(function () {
 
         });
 
@@ -668,58 +752,142 @@
                     },
                     success: function (data) {
                         console.log('data', data)
-                        initMap(true);
-
-                        const selectedUserIds = data.customized_users;
-                        const user_detail = data.details;
-                        var user_type = data.type;
-                        user_type = user_type.replace(/_/g, ' ');
-                        user_type = user_type.charAt(0).toUpperCase() + user_type.slice(1);
-                        $("#edit-id").val(data.id);
-                        $("#edit-type").val(user_type);
-                        $("#edit-name").val(data.name ?? 'Koelpin, Hahn and Fay');
-                        selectedUserIds.forEach(function(userId) {
-                            $("#edit-customized-users option[value='" + userId + "']").prop("selected", true);
-                        });
-                        $("#edit-customized-users").trigger("change");
-                        $("#edit-category").val(data.category_id);
-                        $("#edit-state").val(data.state ?? 'Colorado');
-                        $("#edit-ratings").val(data.ratings ?? '0');
-                        // $("#images").val(data.images);
-                        $("#edit-hour").val(data.opening_hours ?? '00:00');
-                        $("#edit-search-input").val(data.location ?? '65579 Marley Neck');
-                        $("#edit-longitude").val(data.longitude ?? '39.169680');
-                        $("#edit-latitude").val(data.latitude ?? '-76.574990');
-
-                        if (!ckeditorInitialized) {
-                            ClassicEditor
-                                .create(document.querySelector('#myTextarea2'))
-                                .then(editor => {
-                                    editor.setData(user_detail);
-                                })
-                                .catch(error => {
-                                    console.error(error);
-                                });
-                            // Set the flag to true to indicate CKEditor is initialized
-                            ckeditorInitialized = true;
-                        }
-
-                        // Set the image source
-                        var imageUrlBase  = '{{ asset('') }}/uploads/business/';
-                        if (data.images && data.images.length > 0) {
-                            var imageUrl = imageUrlBase + data.images;
-
-                            $("#edit-image").attr("src", imageUrl);
-                        } else {
-                            var emptyImageUrl = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
-
-                            $("#edit-image").attr("src", emptyImageUrl);
-                        }
+                        populateModal(data);
 
                         $("#edit-modal").modal("show");
                     },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching business data:", error);
+                    }
                 });
             });
+
+            function populateModal(data) {
+                // Populate basic fields
+                const selectedUserIds = data.customized_users;
+                const user_detail = data.details;
+                var user_type = data.type;
+                user_type = user_type.replace(/_/g, ' ');
+                user_type = user_type.charAt(0).toUpperCase() + user_type.slice(1);
+                $("#edit-id").val(data.id);
+                $("#edit-type").val(user_type);
+                $("#edit-name").val(data.name ?? 'Koelpin, Hahn and Fay');
+
+                selectedUserIds.forEach(function (userId) {
+                    $("#edit-customized-users option[value='" + userId + "']").prop("selected", true);
+                });
+
+                $("#edit-customized-users").trigger("change");
+                $("#edit-category").val(data.category_id);
+                $("#edit-state").val(data.state ?? 'Colorado');
+                $("#edit-ratings").val(data.ratings ?? '0');
+                // $("#images").val(data.images);
+                $("#edit-hour").val(data.opening_hours ?? '00:00');
+
+                // Initialize CKEditor if not already initialized
+                if (!ckeditorInitialized) {
+                    initializeCKEditor(user_detail);
+                    ckeditorInitialized = true;
+                }
+
+                // Populate location fields
+                if (Array.isArray(data.location)) {
+                    populateMultiLocationFields(data);
+                } else {
+                    populateSingleLocationFields(data);
+                }
+
+                // Populate image fields
+                populateImageFields(data.images);
+            }
+
+            function initializeCKEditor(initialContent) {
+                ClassicEditor
+                    .create(document.querySelector('#myTextarea2'))
+                    .then(editor => {
+                        editor.setData(initialContent);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+
+            function populateMultiLocationFields(data) {
+                var editMultiLocation = $('.edit-multi-location');
+                editMultiLocation.empty();
+
+                data.location.forEach(function(location, index) {
+                    var longitude = data.longitude[index];
+                    var latitude = data.latitude[index];
+
+                    var locationElement = $(
+                        '<div>' +
+                        '<strong>Edit Location</strong>' +
+                        '<input type="text" name="location" value="'+ location +'" class="form-control mt-2 mb-2" id="edit-search-input-'+ index +'" placeholder="Location" required>' +
+                        '<div id="edit-suggestions-'+ index +'"></div>' +
+                        '<strong>Edit Longitude</strong>' +
+                        '<input type="text" name="longitude" value="'+ longitude +'" class="form-control mt-2 mb-2" id="edit-longitude-'+ index +'" placeholder="Longitude" required readonly>' +
+                        '<strong>Edit Latitude</strong>' +
+                        '<input type="text" name="latitude" value="'+ latitude +'" class="form-control mt-2 mb-2" id="edit-latitude-'+ index +'" placeholder="Latitude" required readonly>' +
+                        '</div>'
+                    );
+
+                    editMultiLocation.append(locationElement);
+                    initMultiMap(true, index);
+                });
+            }
+
+            function populateSingleLocationFields(data) {
+
+                var editMultiLocation = $('.edit-multi-location');
+                editMultiLocation.empty();
+
+                var locationValue = data.location ? data.location : '65579 Marley Neck';
+                var longitudeValue = data.longitude ? data.longitude : '39.169680';
+                var latitudeValue = data.latitude ? data.latitude : '-76.574990';
+
+                var locationElement = $(
+                    '<div>' +
+                    '<strong>Edit Location</strong>' +
+                    '<input type="text" name="location" value="'+ locationValue +'" class="form-control mt-2 mb-2" id="edit-search-input" placeholder="Location" required>' +
+                    '<div id="edit-suggestions"></div>' +
+                    '<strong>Edit Longitude</strong>' +
+                    '<input type="text" name="longitude" value="'+ longitudeValue +'" class="form-control mt-2 mb-2" id="edit-longitude" placeholder="Longitude" required readonly>' +
+                    '<strong>Edit Latitude</strong>' +
+                    '<input type="text" name="latitude" value="'+ latitudeValue +'" class="form-control mt-2 mb-2" id="edit-latitude" placeholder="Latitude" required readonly>' +
+                    '</div>'
+                );
+
+                editMultiLocation.append(locationElement);
+
+                initMap(true);
+            }
+
+            function populateImageFields(images) {
+                var imageUrlBase = '{{ asset('') }}/uploads/business/';
+                var imageDiv = $('.image-div');
+
+                if (images && images.length > 0) {
+                    if (images.length > 1) {
+                        imageDiv.empty();
+
+                        images.forEach(function (image) {
+                            var imageElement = $(
+                                '<strong>Edit Image:</strong><br/>' +
+                                '<img src="' + imageUrlBase + image + '" width="150px" alt="business"/>' +
+                                '<input type="file" name="image" value="" class="form-control mt-2 mb-2"/>'
+                            );
+                            imageDiv.append(imageElement);
+                        });
+                    } else {
+                        var imageUrl = imageUrlBase + images[0];
+                        $("#edit-image").attr("src", imageUrl);
+                    }
+                } else {
+                    var emptyImageUrl = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
+                    $("#edit-image").attr("src", emptyImageUrl);
+                }
+            }
 
             $(".send-mail").on("click", function () {
                 var id = $(this).data("id");

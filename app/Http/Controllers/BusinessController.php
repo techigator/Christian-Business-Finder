@@ -128,6 +128,24 @@ class BusinessController extends Controller
             $users = User::where('type', 'user')->get();
         }
 
+        if (strpos($business->location, 's:') === 0) {
+            $location = explode(', (seperate)', unserialize($business->location));
+        } else {
+            $location = $business->location;
+        }
+
+        if (strpos($business->longitude, 's:') === 0) {
+            $longitude = explode(',', unserialize($business->longitude));
+        } else {
+            $longitude = $business->longitude;
+        }
+
+        if (strpos($business->latitude, 's:') === 0) {
+            $latitude = explode(',', unserialize($business->latitude));
+        } else {
+            $latitude = $business->latitude;
+        }
+
         $data =  [
             'id' => $business->id,
             'user_id' => $business->user_id,
@@ -137,12 +155,12 @@ class BusinessController extends Controller
             'name' => $business->name,
             'state' => $business->state,
             'ratings' => $business->ratings,
-            'images' => $business->images,
+            'images' => explode(',', $business->images),
             'opening_hours' => $business->opening_hours,
             'details' => $business->details,
-            'location' => $business->location,
-            'longitude' => $business->longitude,
-            'latitude' => $business->latitude,
+            'location' => $location,
+            'longitude' => $longitude,
+            'latitude' => $latitude,
         ];
 
         return response()->json($data);

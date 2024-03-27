@@ -7,6 +7,8 @@
     <title>@yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="shortcut icon" href="{{ asset('public/uploads/logo/_2027741229_549912809.Group 1091.png') }}">
@@ -66,7 +68,7 @@
             padding: 0 5px 0.4rem;
             width: 100%;
         }
-        
+
         [class*=sidebar-dark-] {
             background-color: #1e1e2d;
         }
@@ -131,7 +133,7 @@
             background-color: #8B4513;
         }
 
-        .pagination .page-link:focus{
+        .pagination .page-link:focus {
             background-color: #8B4513;
         }
 
@@ -191,6 +193,31 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
+        }
+
+        #chatBox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            display: none;
+        }
+
+        #chatMessages {
+            padding: 10px;
+        }
+
+        #messageForm {
+            position: fixed;
+            bottom: 0;
+            right: 20px;
+            width: 300px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-top: 1px solid #ccc;
         }
     </style>
 </head>
@@ -409,7 +436,7 @@
                                 </p>
                             </a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a href="{{ route('user.sales.index') }}" class="nav-link">
                                 <i class="nav-icon fa fa-user"></i>
@@ -1013,6 +1040,22 @@
     <!-- /.control-sidebar -->
 </div>
 
+
+<div id="chatBox">
+    <div id="chatMessages"></div>
+</div>
+
+<div id="messageForm">
+    <form id="sendMessageForm">
+        <input type="hidden" name="sender_id" value="1">
+        <input type="hidden" name="recipient_id" value="39">
+        <input type="text" name="message" placeholder="Type your message...">
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<button id="chatToggle">Open Chat</button>
+
 <script src="{{asset('assets/backend_assets/plugins/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('assets/backend_assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('assets/backend_assets/dist/js/adminlte.min.js')}}"></script>
@@ -1032,8 +1075,59 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.0/js/select2.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+
 
 @include('layouts.scripts') @yield('js')
+<script>
+    $(document).ready(function () {
+        $('#chatToggle').on('click', function () {
+            $('#chatBox').toggle();
+        });
+
+        $('#sendMessageForm').submit(function (e) {
+            e.preventDefault();
+
+            var sender_id = $('input[name="sender_id"]').val();
+            var recipient_id = $('input[name="recipient_id"]').val();
+            var message = $('input[name="message"]').val();
+
+            console.log(
+                'sender_id', sender_id,
+                'recipient_id', recipient_id,
+                'message', message,
+            )
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                dataType: 'json',
+                url: '{{ route("send.message") }}',
+                data: {
+                    message: message,
+                    sender_id: sender_id,
+                    recipient_id: recipient_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (result) {
+                    if (result.response_code == 1) {
+                        alert("Message has been sent");
+                    } else {
+                        alert("Fail to send message");
+                    }
+
+                },
+                error: function () {
+                    alert("Something went wrong please try again later");
+                }
+            });
+        });
+    });
+</script>
 <script>
     var start = moment().subtract(29, "days");
     var end = moment();

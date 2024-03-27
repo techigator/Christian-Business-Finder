@@ -22,6 +22,17 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'number',
+        'date_of_birth',
+        'gender',
+        'city',
+        'state',
+        'country',
+        'home_church_name',
+        'home_church_address',
+        'denomination',
+        'view_as',
+        'web_link',
     ];
 
     /**
@@ -43,5 +54,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    
+    public function business()
+    {
+        return $this->hasMany(Buisness::class);
+    }
 }

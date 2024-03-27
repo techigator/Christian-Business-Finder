@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Buisness;
+use App\Models\BuisnessTiming;
 use App\Models\category;
 use App\Models\Church;
 use App\Models\Like;
@@ -89,8 +90,12 @@ class UserController extends Controller
             $user->type = $user_type;
             $user->number = $request->number;
             $user->profile_image = 'user-img.png';
+            $user->view_as = $request->view_as;
 
             $business = new Buisness();
+            $business->image = 'No_Image_Available.jpg';
+            $business->thumbnail = 'No_Image_Available.jpg';
+            $business->opening_hours = '00:00';
 
             if ($user_type == 'business') {
                 $user->buisness_name = $request->buisness_name;
@@ -99,16 +104,12 @@ class UserController extends Controller
                 $user->latitude = $request->latitude;
                 $user->longitude = $request->longitude;
                 $user->web_link = $web_link;
-                $user->view_as = $request->view_as;
-                // $user->number = $request->number;
             } elseif ($user_type == 'consumer') {
                 $user->country = $request->country;
                 $user->city = $request->city;
                 $user->state = $request->state;
-                $user->view_as = $request->view_as;
             } elseif ($user_type == 'paid_member') {
                 $user->buisness_name = $request->buisness_name;
-                // $user->number = $request->number;
                 $user->buisness_description = $request->buisness_description;
                 $user->buisness_categories = $request->buisness_categories;
                 $user->latitude = $request->latitude;
@@ -154,9 +155,9 @@ class UserController extends Controller
 
                 if ($location) {
                     if (strpos($location, '(seperate)') !== false) {
-                        $locations = explode(' (seperate)', $location);
+                        $locations = explode('(seperate)', $location);
 
-                        $serialize_location = serialize(implode(', (seperate)', $locations));
+                        $serialize_location = serialize(implode('(seperate)', $locations));
                         $serialize_longitude = serialize($longitude);
                         $serialize_latitude = serialize($latitude);
                         $business->location = $serialize_location;
@@ -175,10 +176,37 @@ class UserController extends Controller
             }
             $business->save();
 
+            $userData = $user->only([
+                'id',
+                'type',
+                'name',
+                'email',
+                'profile_image',
+                'date_of_birth',
+                'number',
+                'gender',
+                'city',
+                'state',
+                'country',
+                'home_church_name',
+                'home_church_address',
+                'denomination',
+                'view_as',
+                'fcm_token',
+            ]);
+
+            if ($userData) {
+                foreach ($userData as $key => $value) {
+                    if (is_null($value)) {
+                        $userData[$key] = "";
+                    }
+                }
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'User created successfully',
-                'user' => $user->id,
+                'response' => $userData,
                 'token' => $user_login_token,
             ]);
         } catch (\Exception $e) {
@@ -248,28 +276,45 @@ class UserController extends Controller
             ]);
         }
         if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
-            //generate the token for the user
             $user_login_token = auth()->user()->createToken('renterprise')->accessToken;
             $user = User::select('id', 'name', 'email', 'type')->where('id', auth()->user()->id)->first();
             $user->fcm_token = $request->fcm_token ?? "";
             $user->save();
 
-            // if($user->email_verified==0){
-            //  return response()->json([
-            //     'success'      => false,
-            //     'message' => 'You are required to verify your email address.'
-            // ]);
-            // }else{
+            $userData = User::find(auth()->user()->id);
+            if ($userData) {
+                foreach ($userData->getAttributes() as $key => $value) {
+                    if (is_null($value)) {
+                        $userData->{$key} = "";
+                    }
+                }
+            }
+
+            $userData = $userData->only([
+                'id',
+                'type',
+                'name',
+                'email',
+                'profile_image',
+                'date_of_birth',
+                'number',
+                'gender',
+                'city',
+                'state',
+                'country',
+                'home_church_name',
+                'home_church_address',
+                'denomination',
+                'view_as',
+                'fcm_token',
+            ]);
 
             return response()->json([
                 'success' => true,
-                'data' => $user,
+                'response' => $userData,
                 'token' => $user_login_token,
             ])->withCookie(cookie('token', $user_login_token, $minutes));
-            // }
-
         } else {
-            //wrong login credentials, return, user not authorised to our system, return error code 401
             return response()->json([
                 'success' => false,
                 'Errors' => ['invalid' => ['Invalid Credentials']]
@@ -459,23 +504,6 @@ class UserController extends Controller
     {
         try {
             $user = User::find(auth()->user()->id);
-            $name = $request->input('name');
-            $number = $request->input('number');
-            $date_of_birth = $request->input('date_of_birth');
-            $gender = $request->input('gender');
-            $home_church_address = $request->input('home_church_address');
-            $denomination = $request->input('denomination');
-            $business_name = $request->input('buisness_name');
-            $business_description = $request->input('business_description');
-            $business_categories = $request->input('buisness_categories');
-            $view_as = $request->input('view_as');
-            $country = $request->input('country');
-            $city = $request->input('city');
-            $state = $request->input('state');
-            $want_to_see = $request->input('want_to_see');
-            $location_1 = $request->input('location_1');
-            $location_2 = $request->input('location_2');
-            $web_link = $request->input('web_link');
 
             if (is_null($user)) {
                 return response()->json([
@@ -484,50 +512,76 @@ class UserController extends Controller
                 ], 404);
             }
 
+            $name = $request->input('name');
+            $number = $request->input('number');
+            $date_of_birth = $request->input('date_of_birth');
+            $gender = $request->input('gender');
+            $city = $request->input('city');
+            $state = $request->input('state');
+            $country = $request->input('country');
+            $home_church_name = $request->input('home_church_name');
+            $home_church_address = $request->input('home_church_address');
+            $denomination = $request->input('denomination');
+            $view_as = $request->input('view_as');
+
             $profileUpdate = array_filter([
                 'name' => $name,
                 'number' => $number,
                 'date_of_birth' => $date_of_birth,
                 'gender' => $gender,
+                'city' => $city,
+                'state' => $state,
+                'country' => $country,
+                'home_church_name' => $home_church_name,
                 'home_church_address' => $home_church_address,
                 'denomination' => $denomination,
+                'view_as' => $view_as,
             ]);
 
+            $updateStatus = $user->update($profileUpdate);
 
-            if ($user->type == 'buisness') {
-                $profileUpdate = array_filter([
-                    'buisness_name' => $business_name,
-                    'buisness_description' => $business_description,
-                    'buisness_categories' => $business_categories,
-                    'view_as' => $view_as,
+            if ($updateStatus) {
+                $user->refresh();
+
+                foreach ($user->getAttributes() as $key => $value) {
+                    if ($value === null) {
+                        $user->{$key} = "";
+                    }
+                }
+
+                $user = $user->only([
+                    'id',
+                    'type',
+                    'name',
+                    'email',
+                    'profile_image',
+                    'date_of_birth',
+                    'number',
+                    'gender',
+                    'city',
+                    'state',
+                    'country',
+                    'home_church_name',
+                    'home_church_address',
+                    'denomination',
+                    'view_as',
+                    'fcm_token',
                 ]);
-            } elseif ($user->type == 'consumer') {
-                $profileUpdate = array_filter([
-                    'country' => $country,
-                    'city' => $city,
-                    'state' => $state,
-                    'want_to_see' => $want_to_see,
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User Profile Updated successfully',
+                    'data' => $user
                 ]);
-            } elseif ($user->type == 'paid_member') {
-                $profileUpdate = array_filter([
-                    'buisness_name' => $business_name,
-                    'buisness_description' => $business_description,
-                    'buisness_categories' => $business_categories,
-                    'location_1' => $location_1,
-                    'location_2' => $location_2,
-                    'web_link' => $web_link,
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update user profile',
                 ]);
             }
-
-            User::where('id', $user->id)->update($profileUpdate);
-            return response()->json([
-                'success' => true,
-                'message' => 'User Profile Updated successfully',
-                'data' => $user
-            ]);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => true,
+                'success' => false,
                 'message' => $e->getMessage(),
             ]);
         }
@@ -555,6 +609,34 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        if ($user) {
+            foreach ($user->getAttributes() as $key => $value) {
+                if (is_null($value)) {
+                    $user->{$key} = "";
+                }
+            }
+        }
+
+        $user = $user->only([
+            'id',
+            'type',
+            'name',
+            'email',
+            'profile_image',
+            'date_of_birth',
+            'number',
+            'gender',
+            'city',
+            'state',
+            'country',
+            'home_church_name',
+            'home_church_address',
+            'denomination',
+            'view_as',
+            'fcm_token',
+        ]);
+
         return response()->json([
             'success' => true,
             'file_path' => asset('assets/uploads/user'),
@@ -578,7 +660,7 @@ class UserController extends Controller
 
     public function GetUser(Request $request, $user_id)
     {
-        $token = $request->cookie('token');
+        /*$token = $request->cookie('token');
         $bearer_token = $request->bearerToken();
 
         if (is_null($request->bearerToken())) {
@@ -594,14 +676,16 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Unauthorized. Invalid token.',
             ], 401);
-        }
+        }*/
 
         $user = User::find($user_id);
 
-        if (empty($user->web_link)) {
-            $user->web_link = [];
-        } else {
-            $user->web_link = explode(',', $user->web_link);
+        if (empty($user)) {
+            return response()->json(
+                [
+                    'status' => false,
+                    'message' => 'User not found.',
+                ], 401);
         }
 
         if ($user) {
@@ -612,38 +696,24 @@ class UserController extends Controller
             }
         }
 
-        /*$user_list['user_id'] = $user->id;
-        $user_list['user_name'] = $user->name;
-        $user_list['user_email'] = $user->email;
-        $user_list['user_profile_image'] = $user->profile_image;
-        $user_list['date_of_birth'] = $user->date_of_birth;
-        $user_list['gender'] = $user->gender;
-        $user_list['number'] = $user->number;
-
-        if ($user->type == 'buisness') {
-            $user_list['buisness_name'] = $user->buisness_name;
-            $user_list['buisness_description'] = $user->buisness_description;
-            $user_list['buisness_categories'] = $user->buisness_categories;
-            $user_list['home_church_address'] = $user->home_church_address;
-            $user_list['denomination'] = $user->denomination;
-            $user_list['view_as'] = $user->view_as;
-        } elseif ($user->type == 'consumer') {
-            $user_list['country'] = $user->country;
-            $user_list['city'] = $user->city;
-            $user_list['state'] = $user->state;
-            $user_list['want_to_see'] = $user->want_to_see;
-            $user_list['home_church_address'] = $user->home_church_address;
-            $user_list['denomination'] = $user->denomination;
-        } elseif ($user->type == 'paid_member') {
-            $user_list['buisness_name'] = $user->buisness_name;
-            $user_list['buisness_description'] = $user->buisness_description;
-            $user_list['buisness_categories'] = $user->buisness_categories;
-            $user_list['home_church_address'] = $user->home_church_address;
-            $user_list['denomination'] = $user->denomination;
-            $user_list['location_1'] = $user->location_1;
-            $user_list['location_2'] = $user->location_2;
-            $user_list['web_link'] = $user->web_link;
-        }*/
+        $user = $user->only([
+            'id',
+            'type',
+            'name',
+            'email',
+            'profile_image',
+            'date_of_birth',
+            'number',
+            'gender',
+            'city',
+            'state',
+            'country',
+            'home_church_name',
+            'home_church_address',
+            'denomination',
+            'view_as',
+            'fcm_token',
+        ]);
 
         /*$reviews = Product_review::where("renterpriser_id", $user_id)->get();
         if (sizeof($reviews)) {
@@ -812,7 +882,7 @@ class UserController extends Controller
             }
 
             $user_id = $user->id;
-            $business = Buisness::with('rating')->find($id);
+            $business = Buisness::with('rating', 'user')->find($id);
 
             foreach ($business->getAttributes() as $key => $value) {
                 if ($value === null) {
@@ -833,6 +903,8 @@ class UserController extends Controller
                 ], 404);
             }
 
+            $business->category_id = (string)$business->category_id;
+            $business->flag = (string)$business->flag;
             $business->details = strip_tags($business->details);
             $business->images = explode(',', $business->images);
 
@@ -845,7 +917,7 @@ class UserController extends Controller
             }
 
             if (strpos($business->location, 's:') === 0) {
-                $business->location = explode(', (seperate)', unserialize($business->location));
+                $business->location = explode('(seperate)', unserialize($business->location));
             }
 
             if (strpos($business->longitude, 's:') === 0) {
@@ -856,25 +928,101 @@ class UserController extends Controller
                 $business->latitude = explode(',', unserialize($business->latitude));
             }
 
-            $ratings = $business->rating;
-            $login_user_flag = $ratings->first(function ($rating) use ($user_id) {
-                return $rating->user_id == $user_id;
-            });
+            $business->location = is_array($business->location) ? $business->location : [$business->location];
+            $business->longitude = is_array($business->longitude) ? $business->longitude : [$business->longitude];
+            $business->latitude = is_array($business->latitude) ? $business->latitude : [$business->latitude];
 
-            if (!is_null($login_user_flag) && $login_user_flag !== false) {
-                $flag = $login_user_flag->flag;
-            } else {
-                $flag = 0;
+            $ratings = $business->rating;
+            if ($ratings) {
+                $login_user_flag = $ratings->first(function ($rating) use ($user_id) {
+                    return $rating->user_id == $user_id;
+                });
+
+                if (!is_null($login_user_flag) && $login_user_flag !== false) {
+                    $flag = $login_user_flag->flag;
+                } else {
+                    $flag = 0;
+                }
+
+                $average = $business->averageRating();
+                $rating_count = count($ratings);
             }
-            $average = $business->averageRating();
+
+            if (is_null($business->user)) {
+                $business->web_link = [];
+            } else {
+                if (is_object($business->user)) {
+                    $business->web_link = explode(',', $business->user->web_link);
+                } else {
+                    $business->web_link = [];
+                }
+                unset($business->user);
+            }
+
+            unset($business->user_id);
+            unset($business->customized_users);
+            unset($business->rating);
+
+            // Additional Work On This Api
+            $category = category::find($business->category_id);
+
+            if (empty($category)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Category not found.',
+                ], 401);
+            }
+
+            $viewAs = $user->view_as ?? "";
+            $webLinks = $user->web_link;
+
+            if ($webLinks) {
+                $webLinks = explode(',', $webLinks);
+            } else {
+                $webLinks = [];
+            }
+
+            $businessTiming = BuisnessTiming::where('buisness_id', $business->id)->first();
+
+            if (!is_null($businessTiming)) {
+                $day = explode(',', $businessTiming->day);
+                $openingHours = explode(',', $businessTiming->opening_hours);
+                $closingHours = explode(',', $businessTiming->closing_hours);
+                $availability = explode(',', $businessTiming->availability);
+            } else {
+                $businessTimingDefault = BuisnessTiming::find(1);
+                $day = explode(',', $businessTimingDefault->day);
+                $openingHours = explode(',', $businessTimingDefault->opening_hours);
+                $closingHours = explode(',', $businessTimingDefault->closing_hours);
+                $availability = explode(',', $businessTimingDefault->availability);
+            }
+
+            $businessData = $business->only([
+                'name',
+                'details',
+                'service',
+                'thumbnail'
+            ]);
+            $businessData['category_name'] = $category->name;
+            $businessData['view_as'] = $viewAs;
+            $businessData['location'] = $business->location;
+            $businessData['longitude'] = $business->longitude;
+            $businessData['latitude'] = $business->latitude;
+            $businessData['web_link'] = $webLinks;
+            $businessData['images'] = $business->images;
+            $businessData['days'] = $day;
+            $businessData['opening_hours'] = $openingHours;
+            $businessData['closing_hours'] = $closingHours;
+            $businessData['availability'] = $availability;
+            // Additional Work On This Api
 
             return response([
                 'success' => true,
-                'status' => 200,
-                'message' => 'Get Business By Id',
+                'rating_count' => $rating_count,
                 'user_rating_flag' => $flag,
                 'rating_average' => (string)$average,
-                'business' => $business,
+                'business' => $businessData,
+                // 'business' => $business,
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -896,21 +1044,6 @@ class UserController extends Controller
         }
 
         $businesses = Buisness::where('category_id', $id)->get();
-
-//        function normalizeArray($value) {
-//            // If the value is already an array, return it
-//            if (is_array($value)) {
-//                return $value;
-//            }
-//
-//            // If the value is empty or not a string, return an empty array
-//            if (empty($value) || !is_string($value)) {
-//                return [];
-//            }
-//
-//            // Otherwise, return an array containing the value
-//            return [$value];
-//        }
 
         $modifiedBusinesses = [];
         foreach ($businesses as $business) {
@@ -937,7 +1070,7 @@ class UserController extends Controller
             }
 
             if (strpos($location, 's:') === 0) {
-                $location = explode(', (seperate)', unserialize($businessArray['location']));
+                $location = explode('(seperate)', unserialize($businessArray['location']));
             }
 
             if (strpos($longitude, 's:') === 0) {
@@ -952,6 +1085,8 @@ class UserController extends Controller
             $longitude = is_array($longitude) ? $longitude : [$longitude];
             $latitude = is_array($latitude) ? $latitude : [$latitude];
 
+            $businessArray['category_name'] = $category->name;
+            $businessArray['category_image'] = $category->img;
             $businessArray['location'] = $location;
             $businessArray['longitude'] = $longitude;
             $businessArray['latitude'] = $latitude;
@@ -961,6 +1096,7 @@ class UserController extends Controller
 
             $businessArray['thumbnail'] = $thumbnail;
             $businessArray['images'] = $images;
+            unset($businessArray['customized_users']);
 
             $modifiedBusinesses[] = $businessArray;
         }
@@ -971,6 +1107,7 @@ class UserController extends Controller
                 'response' => 'Business not found',
             ]);
         }
+
         return response([
             'status' => 200,
             'response' => $modifiedBusinesses,
@@ -1166,6 +1303,450 @@ class UserController extends Controller
                 'success' => true,
                 'response' => $extractedData,
             ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function manageBusiness($id)
+    {
+        try {
+            $user = User::find($id);
+
+            if (empty($user)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User not found.',
+                ], 401);
+            }
+
+            $business = Buisness::where('user_id', $user->id)->latest()->first();
+
+            if (empty($business)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Business not found.',
+                ], 401);
+            }
+
+            $businessTiming = BuisnessTiming::where('buisness_id', $business->id)->first();
+
+            if (!is_null($businessTiming)) {
+                $day = explode(',', $businessTiming->day);
+                $openingHours = explode(',', $businessTiming->opening_hours);
+                $closingHours = explode(',', $businessTiming->closing_hours);
+                $availability = explode(',', $businessTiming->availability);
+            } else {
+                $businessTimingDefault = BuisnessTiming::find(1);
+                $day = explode(',', $businessTimingDefault->day);
+                $openingHours = explode(',', $businessTimingDefault->opening_hours);
+                $closingHours = explode(',', $businessTimingDefault->closing_hours);
+                $availability = explode(',', $businessTimingDefault->availability);
+            }
+
+            foreach ($business->getAttributes() as $key => $value) {
+                if (is_null($value)) {
+                    $business->{$key} = "";
+                }
+            }
+
+            $category = category::find($business->category_id);
+
+            if (empty($category)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Category not found.',
+                ], 401);
+            }
+
+            $viewAs = $user->view_as ?? "";
+            $webLinks = $user->web_link;
+            $location = $business->location;
+            $longitude = $business->longitude;
+            $latitude = $business->latitude;
+            $images = $business->images;
+
+            if ($images) {
+                $images = explode(',', $images);
+            } else {
+                $images = [];
+            }
+
+            if ($webLinks) {
+                $webLinks = explode(',', $webLinks);
+            } else {
+                $webLinks = [];
+            }
+
+            if (strpos($location, 's:') === 0) {
+                $location = explode('(seperate)', unserialize($location));
+            } else {
+                $location = [];
+            }
+
+            if (strpos($longitude, 's:') === 0) {
+                $longitude = explode(',', unserialize($longitude));
+            } else {
+                $longitude = [];
+            }
+
+            if (strpos($latitude, 's:') === 0) {
+                $latitude = explode(',', unserialize($latitude));
+            } else {
+                $latitude = [];
+            }
+
+            $business = $business->only([
+                'id',
+                'name',
+                'details',
+                'service',
+                'thumbnail',
+            ]);
+
+            $business['category_name'] = $category->name;
+            $business['view_as'] = $viewAs;
+            $business['location'] = $location;
+            $business['longitude'] = $longitude;
+            $business['latitude'] = $latitude;
+            $business['web_link'] = $webLinks;
+            $business['images'] = $images;
+            $business['days'] = $day;
+            $business['opening_hours'] = $openingHours;
+            $business['closing_hours'] = $closingHours;
+            $business['availability'] = $availability;
+
+            return response()->json([
+                'success' => true,
+                'response' => $business
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateManageBusiness(Request $request, $id)
+    {
+        try {
+            $business = Buisness::find($id);
+
+            if (empty($business)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Business record not found',
+                ], 404);
+            }
+
+            $user = User::where('id', $business->user_id)->first();
+
+            if (empty($user)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User record not found',
+                ], 404);
+            }
+
+            $name = $request->input('name');
+            $details = $request->input('details');
+            $category_id = $request->input('category_id');
+            $service = $request->input('service');
+            $view_as = $request->input('view_as');
+            $location = $request->input('location');
+            $longitude = $request->input('longitude');
+            $latitude = $request->input('latitude');
+            $web_link = $request->input('web_link');
+            $images = $request->input('images');
+            $days = $request->input('days');
+            $opening_hours = $request->input('opening_hours');
+            $closing_hours = $request->input('closing_hours');
+            $availability = $request->input('availability');
+            $currentImages = $business->images;
+
+            if (strpos($location, '(seperate)') !== false) {
+                $locations = explode('(seperate)', $location);
+
+                $serialize_location = serialize(implode('(seperate)', $locations));
+                $serialize_longitude = serialize($longitude);
+                $serialize_latitude = serialize($latitude);
+
+                $updateManageBusinessModel = array_filter([
+                    'name' => $name,
+                    'details' => $details,
+                    'category_id' => $category_id,
+                    'service' => $service,
+                    'location' => $serialize_location,
+                    'longitude' => $serialize_longitude,
+                    'latitude' => $serialize_latitude,
+                    'images' => $images,
+                ]);
+            } else {
+                $updateManageBusinessModel = array_filter([
+                    'name' => $name,
+                    'details' => $details,
+                    'category_id' => $category_id,
+                    'service' => $service,
+                    'location' => $location,
+                    'longitude' => $longitude,
+                    'latitude' => $latitude,
+                    'images' => $images,
+                ]);
+            }
+
+            $updateManageBusinessUserModel = array_filter([
+                'view_as' => $view_as,
+                'web_link' => $web_link,
+            ]);
+
+            $businessDayTiming = BuisnessTiming::where('buisness_id', $id)->first();
+            if (!empty($businessDayTiming)) {
+                $updateManageBusinessDayTimingModel = array_filter([
+                    'day' => $days,
+                    'opening_hours' => $opening_hours,
+                    'closing_hours' => $closing_hours,
+                    'availability' => $availability
+                ]);
+
+                $businessDayTiming->update($updateManageBusinessDayTimingModel);
+                $businessDayTiming->refresh();
+            } else {
+                $businessDayTiming = new BuisnessTiming();
+                $businessDayTiming->buisness_id = $id;
+                $businessDayTiming->day = $days;
+                $businessDayTiming->opening_hours = $opening_hours;
+                $businessDayTiming->closing_hours = $closing_hours;
+                $businessDayTiming->availability = $availability;
+
+                $businessDayTiming->save();
+            }
+
+            $updateManageBusinessStatus = $business->update($updateManageBusinessModel);
+            $user->update($updateManageBusinessUserModel);
+
+            if ($updateManageBusinessStatus) {
+                $business->refresh();
+                $user->refresh();
+
+                foreach ($business->getAttributes() as $key => $value) {
+                    if ($value === null) {
+                        $business->{$key} = "";
+                    }
+                }
+
+                $businessTiming = BuisnessTiming::where('buisness_id', $id)->first();
+                $day = explode(',', $businessTiming->day);
+                $openingHours = explode(',', $businessTiming->opening_hours);
+                $closingHours = explode(',', $businessTiming->closing_hours);
+                $availability = explode(',', $businessTiming->availability);
+
+                $category = category::find($business->category_id);
+                if (empty($category)) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Category not found.',
+                    ], 401);
+                }
+
+                $viewAs = $user->view_as ?? "";
+                $webLinks = $user->web_link;
+                $location = $business->location;
+                $longitude = $business->longitude;
+                $latitude = $business->latitude;
+                $images = $business->images;
+
+                if ($images) {
+                    $images = explode(',', $images);
+                } else {
+                    $images = [];
+                }
+
+                if ($webLinks) {
+                    $webLinks = explode(',', $webLinks);
+                } else {
+                    $webLinks = [];
+                }
+
+                if (strpos($location, 's:') === 0) {
+                    $location = explode('(seperate)', unserialize($location));
+                } else {
+                    $location = [];
+                }
+
+                if (strpos($longitude, 's:') === 0) {
+                    $longitude = explode(',', unserialize($longitude));
+                } else {
+                    $longitude = [];
+                }
+
+                if (strpos($latitude, 's:') === 0) {
+                    $latitude = explode(',', unserialize($latitude));
+                } else {
+                    $latitude = [];
+                }
+
+                $business = $business->only([
+                    'id',
+                    'name',
+                    'details',
+                    'service',
+                    'thumbnail',
+                ]);
+
+                $business['category_name'] = $category->name;
+                $business['view_as'] = $viewAs;
+                $business['location'] = $location;
+                $business['longitude'] = $longitude;
+                $business['latitude'] = $latitude;
+                $business['web_link'] = $webLinks;
+                $business['images'] = $images;
+                $business['days'] = $day;
+                $business['opening_hours'] = $openingHours;
+                $business['closing_hours'] = $closingHours;
+                $business['availability'] = $availability;
+
+                return response()->json([
+                    'success' => true,
+                    'response' => $business
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update manage business model',
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateManageBusinessThumbnail(Request $request, $id)
+    {
+        try {
+            $business = Buisness::find($id);
+
+            if (empty($business)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Business not found.',
+                ], 401);
+            }
+
+            if ($request->file('thumbnail')) {
+                $thumbnail = $request->file('thumbnail');
+                $newFilename = uniqid() . '_' . $thumbnail->getClientOriginalName();
+                $thumbnail->move(public_path() . '/uploads/business/', $newFilename);
+                $business->thumbnail = $newFilename;
+            }
+            $business->save();
+
+            $user = User::where('id', $business->user_id)->first();
+
+            if (empty($user)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User not found.',
+                ], 401);
+            }
+
+            $businessTiming = BuisnessTiming::where('buisness_id', $id)->first();
+
+            if (!is_null($businessTiming)) {
+                $day = explode(',', $businessTiming->day);
+                $openingHours = explode(',', $businessTiming->opening_hours);
+                $closingHours = explode(',', $businessTiming->closing_hours);
+                $availability = explode(',', $businessTiming->availability);
+            } else {
+                $businessTimingDefault = BuisnessTiming::find(1);
+                $day = explode(',', $businessTimingDefault->day);
+                $openingHours = explode(',', $businessTimingDefault->opening_hours);
+                $closingHours = explode(',', $businessTimingDefault->closing_hours);
+                $availability = explode(',', $businessTimingDefault->availability);
+            }
+
+            foreach ($business->getAttributes() as $key => $value) {
+                if (is_null($value)) {
+                    $business->{$key} = "";
+                }
+            }
+
+            $category = category::find($business->category_id);
+
+            if (empty($category)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Category not found.',
+                ], 401);
+            }
+
+            $viewAs = $user->view_as ?? "";
+            $webLinks = $user->web_link;
+            $location = $business->location;
+            $longitude = $business->longitude;
+            $latitude = $business->latitude;
+            $images = $business->images;
+
+            if ($images) {
+                $images = explode(',', $images);
+            } else {
+                $images = [];
+            }
+
+            if ($webLinks) {
+                $webLinks = explode(',', $webLinks);
+            } else {
+                $webLinks = [];
+            }
+
+            if (strpos($location, 's:') === 0) {
+                $location = explode('(seperate)', unserialize($location));
+            } else {
+                $location = [];
+            }
+
+            if (strpos($longitude, 's:') === 0) {
+                $longitude = explode(',', unserialize($longitude));
+            } else {
+                $longitude = [];
+            }
+
+            if (strpos($latitude, 's:') === 0) {
+                $latitude = explode(',', unserialize($latitude));
+            } else {
+                $latitude = [];
+            }
+
+            $business = $business->only([
+                'id',
+                'name',
+                'details',
+                'service',
+                'thumbnail',
+            ]);
+
+            $business['category_name'] = $category->name;
+            $business['view_as'] = $viewAs;
+            $business['location'] = $location;
+            $business['longitude'] = $longitude;
+            $business['latitude'] = $latitude;
+            $business['web_link'] = $webLinks;
+            $business['images'] = $images;
+            $business['days'] = $day;
+            $business['opening_hours'] = $openingHours;
+            $business['closing_hours'] = $closingHours;
+            $business['availability'] = $availability;
+
+            return response()->json([
+                'success' => true,
+                'response' => $business
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

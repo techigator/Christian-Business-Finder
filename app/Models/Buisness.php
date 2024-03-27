@@ -12,9 +12,11 @@ class Buisness extends Model
     protected $table = 'buisness';
 
     protected $fillable = [
+        'service',
         'name',
         'ratings',
         'images',
+        'thumbnail',
         'opening_hours',
         'details',
         'location',
@@ -22,17 +24,22 @@ class Buisness extends Model
         'latitude',
         'category_id',
     ];
-    
+
     public function category()
     {
         return $this->belongsTo(category::class);
     }
-    
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function rating()
     {
         return $this->hasMany(Rating::class);
     }
-    
+
     public function averageRating()
     {
         // Value example without point 2
