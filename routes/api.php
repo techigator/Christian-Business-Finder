@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\MessageController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ShopController;
 
@@ -88,6 +87,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('add-likes', [UserController::class, 'addLikes']);
     Route::get('get-likes', [UserController::class, 'getLikes']);
     Route::post('delete-like', [UserController::class, 'deleteLike']);
+
+// messages
+    Route::get('all-chats-by-user/{user_id}', [UserController::class, 'allChatsByUser']);
+    Route::post('specific-chat-by-user', [UserController::class, 'specificChatByUser']);
+    Route::post('sent-chat-by-user', [UserController::class, 'sentChatByUser']);
 
 // Product
     Route::post('create-product', [ShopController::class, 'CreateProduct']);

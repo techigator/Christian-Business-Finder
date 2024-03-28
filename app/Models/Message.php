@@ -15,7 +15,9 @@ class Message extends Model
      * @var array
      */
     protected $fillable = [
-        'sender_id', 'recipient_id', 'content',
+        'sender_id',
+        'recipient_id',
+        'content',
     ];
 
     /**
@@ -31,6 +33,6 @@ class Message extends Model
      */
     public function recipient()
     {
-        return $this->belongsTo(User::class, 'recipient_id');
+        return $this->belongsTo(Buisness::class, 'recipient_id', 'user_id');
     }
 }

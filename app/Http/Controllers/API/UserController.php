@@ -8,6 +8,7 @@ use App\Models\BuisnessTiming;
 use App\Models\category;
 use App\Models\Church;
 use App\Models\Like;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -959,7 +960,7 @@ class UserController extends Controller
                 unset($business->user);
             }
 
-            unset($business->user_id);
+            // unset($business->user_id);
             unset($business->customized_users);
             unset($business->rating);
 
@@ -1003,6 +1004,8 @@ class UserController extends Controller
                 'service',
                 'thumbnail'
             ]);
+
+            $businessData['user_id'] = (string)$business->user_id;
             $businessData['category_name'] = $category->name;
             $businessData['view_as'] = $viewAs;
             $businessData['location'] = $business->location;
@@ -1097,6 +1100,7 @@ class UserController extends Controller
             $businessArray['thumbnail'] = $thumbnail;
             $businessArray['images'] = $images;
             unset($businessArray['customized_users']);
+            unset($businessArray['user_id']);
 
             $modifiedBusinesses[] = $businessArray;
         }
@@ -1747,6 +1751,124 @@ class UserController extends Controller
                 'success' => true,
                 'response' => $business
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function allChatsByUser($id)
+    {
+        try {
+            $latestMessages = Message::with('recipient')
+                ->where('sender_id', $id)
+                ->select('id', 'sender_id', 'recipient_id', 'content', 'created_at')
+                ->whereIn('id', function ($query) {
+                    $query->select(\DB::raw('MAX(id)'))
+                        ->from('messages')
+                        ->groupBy('sender_id', 'recipient_id');
+                })
+                ->get();
+
+            if ($latestMessages->isNotEmpty()) {
+
+                $messageData = [];
+                foreach ($latestMessages as $message) {
+                    $messageData[] = [
+                        'id' => $message->id,
+                        'sender_id' => $message->sender_id,
+                        'recipient_id' => $message->recipient_id,
+                        'recipient_name' => $message->recipient->name,
+                        'recipient_thumbnail' => $message->recipient->thumbnail ?? 'No_Image_Available.jpg',
+                        'content' => $message->content,
+                        'created_at' => $message->created_at,
+                    ];
+                }
+                return response()->json([
+                    'success' => true,
+                    'response' => $messageData,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No chats found for the specified sender ID.',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function specificChatByUser(Request $request)
+    {
+        try {
+            $senderId = $request->input('sender_id');
+            $recipientId = $request->input('recipient_id');
+            $offset = $request->input('offset', 0);
+            $perPage = $request->input('per_page',15);
+
+            $messages = Message::where(['sender_id' => $senderId, 'recipient_id' => $recipientId])
+                ->offset($offset)
+                ->limit($perPage)
+                ->get();
+
+            if ($messages->count() > 0) {
+                $cleanedMessages = $messages->map(function ($message) {
+                    return collect($message)->except(['updated_at', 'id'])->toArray();
+                });
+
+                $formattedMessages = $messages->map(function ($message) {
+                    $createdAtParts = explode(' ', $message->created_at);
+                    return [
+                        'sender_id' => $message->sender_id,
+                        'recipient_id' => $message->recipient_id,
+                        'content' => $message->content,
+                        'created_date' => $createdAtParts[0],
+                        'created_time' => $createdAtParts[1],
+                    ];
+                });
+
+                return response()->json([
+                    'success' => true,
+                    'response' => $cleanedMessages,
+                    // 'response' => $formattedMessages,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'response' => 'No messages found.',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function sentChatByUser(Request $request)
+    {
+        try {
+            $senderId = $request->input('sender_id');
+            $recipientId = $request->input('recipient_id');
+            $content = $request->input('content');
+
+            $message = Message::create([
+                'sender_id' => $senderId,
+                'recipient_id' => $recipientId,
+                'content' => $content,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                // 'response' => $message,
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
