@@ -43,11 +43,12 @@ Route::get('get-business-by-category/{id}', [UserController::class, 'getBusiness
 // Route::get('get-buisness-by-id/{id?}', [UserController::class, 'getBuisnessById']);
 
 Route::post('register', [UserController::class, 'register']);
-Route::post('social-media-register', [UserController::class, 'SocialMediaRegister']);
+Route::post('social-media-register', [UserController::class, 'socialMediaRegister']);
 Route::post('login', [UserController::class, 'authenticate']);
-Route::post('forget-password-email', [UserController::class, 'ForgetPasswordEmail']);
-Route::post('valid-email', [UserController::class, 'ValidEmail']);
-Route::post('check-valid-email-code', [UserController::class, 'CheckValidEmailCodeVerification']);
+Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
+Route::post('forget-password-email', [UserController::class, 'forgetPasswordEmail']);
+Route::post('valid-email', [UserController::class, 'validEmail']);
+Route::post('check-valid-email-code', [UserController::class, 'checkValidEmailCodeVerification']);
 Route::post('check-forget-password-code', [UserController::class, 'checkForgetPasswordCodeVerification']);
 Route::post('update-forget-password', [UserController::class, 'updateForgetPassword']);
 
@@ -63,7 +64,7 @@ Route::middleware(['auth:api'])->group(function () {
 
 // User
     Route::post('update-info', [UserController::class, 'updateProfileInfo']);
-    Route::get('user/{user_id}', [UserController::class, 'GetUser']);
+    Route::get('user/{user_id}', [UserController::class, 'getUser']);
     Route::post('change-password', [UserController::class, 'changePassword']);
     Route::get('user-type-change/{user_type}', [UserController::class, 'UserTypeChange']);
     Route::get('logout', [UserController::class, 'logout']);

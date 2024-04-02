@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buisness;
+use App\Models\BuisnessTiming;
 use App\Models\category;
 use App\Models\User;
 use App\Exports\BusinessExport;
@@ -61,24 +62,52 @@ class BusinessController extends Controller
             'name' => 'required',
             'state' => 'required',
             'ratings' => 'required',
+            'days' => 'required',
             'opening_hours' => 'required',
+            'closing_hours' => 'required',
             'details' => 'required',
-            'location' => 'required',
+            'location' => $request->has('location') ? 'required' : '',
             'longitude' => $request->has('longitude') ? 'required' : '',
             'latitude' => $request->has('latitude') ? 'required' : '',
-            'image' => $request->has('longitude') ? 'required|mimes:jpeg,png,jpg,gif,svg|max:50000' : '',
+            'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:50000',
         ]);
+
         $business = new Buisness();
 
+        $location = $request->input('location');
+        $longitude = $request->input('longitude');
+        $latitude = $request->input('latitude');
+
+        if (count($location) > 1) {
+            for ($i = 1; $i < count($location); $i++) {
+                $location[$i] = '(seperate)' . $location[$i];
+            }
+            $location = implode(',', $location);
+        } else {
+            $location = $location[0];
+        }
+
+        if (strpos($location, ',(seperate)') !== false) {
+            $locations = explode(',(seperate)', $location);
+
+            $serialize_location = serialize(implode('(seperate)', $locations));
+            $serialize_longitude = serialize(implode(',', $longitude));
+            $serialize_latitude = serialize(implode(',', $latitude));
+            $business->location = $serialize_location;
+            $business->longitude = $serialize_longitude;
+            $business->latitude = $serialize_latitude;
+        } else {
+            $business->location = $location;
+            $business->longitude = $longitude[0];
+            $business->latitude = $latitude[0];
+        }
+
         if ($request->hasFile('image')) {
-            // $img_number = rand();
+            $img_number = rand();
             $img = $request->file('image');
-            $newFilename = $img->getClientOriginalName();
+            $newFilename = $img_number .'_'. $img->getClientOriginalName();
             $img->move(public_path() . '/uploads/business/', $newFilename);
             $imgNameToStore = $newFilename;
-            // $imgNameToStore = $img->getClientOriginalName();
-            // $img->move(base_path('public/uploads/business'), '_' . $img_number . '.' . $img->getClientOriginalName());
-            // $imgNameToStore = '/uploads/business/' . '_' . $img_number . '.' . $img->getClientOriginalName();
         }
 
         $customized_users = $request->input('customized_users');
@@ -93,12 +122,17 @@ class BusinessController extends Controller
         $business->ratings = $request->input('ratings');
         $business->thumbnail = $imgNameToStore;
         $business->images = $imgNameToStore;
-        $business->opening_hours = $request->input('opening_hours');
         $business->details = $request->input('details');
-        $business->location = $request->input('location');
-        $business->longitude = $request->input('longitude');
-        $business->latitude = $request->input('latitude');
+
         $business->save();
+
+        $businessTiming = new BuisnessTiming();
+
+        $businessTiming->buisness_id = $business->id;
+        $businessTiming->day = implode(',', $request->input('days'));
+        $businessTiming->opening_hours = implode(',', $request->input('opening_hours'));
+        $businessTiming->closing_hours = implode(',', $request->input('closing_hours'));
+        $businessTiming->availability = implode(',', $request->input('availability'));
 
         if (Auth::user()->type === 'admin') {
             return redirect()->route('business.index')

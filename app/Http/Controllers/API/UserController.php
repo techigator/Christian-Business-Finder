@@ -16,14 +16,27 @@ use App\Models\Suggestion;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Hash;
+use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\MessagingException;
 use Mail;
 use File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Client;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging;
+
 
 class UserController extends Controller
 {
+    protected $firebaseMessaging;
+
+    public function __construct(Messaging $firebaseMessaging)
+    {
+        $this->firebaseMessaging = $firebaseMessaging;
+    }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -92,11 +105,13 @@ class UserController extends Controller
             $user->number = $request->number;
             $user->profile_image = 'user-img.png';
             $user->view_as = $request->view_as;
+            $user->fcm_token = $request->fcm_token ?? "";
 
             $business = new Buisness();
-            $business->image = 'No_Image_Available.jpg';
+            $business->images = 'No_Image_Available.jpg';
             $business->thumbnail = 'No_Image_Available.jpg';
             $business->opening_hours = '00:00';
+            $business->buisness_type = $request->buisness_type;
 
             if ($user_type == 'business') {
                 $user->buisness_name = $request->buisness_name;
@@ -134,7 +149,6 @@ class UserController extends Controller
                 $business->name = $user->buisness_name;
                 $business->ratings = '0';
                 $business->details = $user->buisness_description;
-                $business->buisness_type = $user->buisness_type;
 
                 if ($location) {
                     $business->location = $location;
@@ -218,7 +232,7 @@ class UserController extends Controller
         }
     }
 
-    public function SocialMediaRegister(Request $request)
+    public function socialMediaRegister(Request $request)
     {
         $checkEmail = User::where('email', $request->email)->first();
         if ($checkEmail) {
@@ -264,66 +278,117 @@ class UserController extends Controller
 
     public function authenticate(Request $request)
     {
-        $minutes = 60;
-        $validator = Validator::make($request->all(), [
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'Errors' => $validator->messages()
+        try {
+            $minutes = 60;
+            $validator = Validator::make($request->all(), [
+                'email' => ['required', 'email'],
+                'password' => 'required',
             ]);
-        }
-        if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user_login_token = auth()->user()->createToken('renterprise')->accessToken;
-            $user = User::select('id', 'name', 'email', 'type')->where('id', auth()->user()->id)->first();
-            $user->fcm_token = $request->fcm_token ?? "";
-            $user->save();
 
-            $userData = User::find(auth()->user()->id);
-            if ($userData) {
-                foreach ($userData->getAttributes() as $key => $value) {
-                    if (is_null($value)) {
-                        $userData->{$key} = "";
-                    }
-                }
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->messages()
+                ]);
             }
 
-            $userData = $userData->only([
-                'id',
-                'type',
-                'name',
-                'email',
-                'profile_image',
-                'date_of_birth',
-                'number',
-                'gender',
-                'city',
-                'state',
-                'country',
-                'home_church_name',
-                'home_church_address',
-                'denomination',
-                'view_as',
-                'fcm_token',
-            ]);
+            if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
+                $user_login_token = auth()->user()->createToken('renterprise')->accessToken;
+                $user = User::select('id', 'name', 'email', 'type')->where('id', auth()->user()->id)->first();
+                $user->fcm_token = $request->fcm_token ?? "";
+                $user->save();
 
-            return response()->json([
-                'success' => true,
-                'response' => $userData,
-                'token' => $user_login_token,
-            ])->withCookie(cookie('token', $user_login_token, $minutes));
-        } else {
+                $userData = User::find(auth()->user()->id);
+                if ($userData) {
+                    foreach ($userData->getAttributes() as $key => $value) {
+                        if (is_null($value)) {
+                            $userData->{$key} = "";
+                        }
+                    }
+                }
+
+                $userData = $userData->only([
+                    'id',
+                    'type',
+                    'name',
+                    'email',
+                    'profile_image',
+                    'date_of_birth',
+                    'number',
+                    'gender',
+                    'city',
+                    'state',
+                    'country',
+                    'home_church_name',
+                    'home_church_address',
+                    'denomination',
+                    'view_as',
+                    'fcm_token',
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'response' => $userData,
+                    'token' => $user_login_token,
+                ])->withCookie(cookie('token', $user_login_token, $minutes));
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'Errors' => ['invalid' => ['Invalid Credentials']]
+                ]);
+            }
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'Errors' => ['invalid' => ['Invalid Credentials']]
+                'message' => $e->getMessage()
             ]);
         }
     }
 
-    public function ForgetPasswordEmail(Request $request)
+    public function updateFcmToken(Request $request)
+    {
+        try {
+            $userId = $request->user_id;
+            $fcmToken = $request->fcm_token;
+
+            $user = User::find($userId);
+
+            if (empty($user)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found.'
+                ]);
+            }
+
+            $profileUpdate = array_filter([
+                'fcm_token' => $fcmToken
+            ]);
+
+            $updateStatus = $user->update($profileUpdate);
+
+            if ($updateStatus) {
+                $user->refresh();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'FCM Token Updated successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update fcm token',
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function forgetPasswordEmail(Request $request)
     {
         $emailAddress = $request->email;
         $checkEmailExist = User::where('email', $emailAddress)->first();
@@ -366,7 +431,7 @@ class UserController extends Controller
         }
     }
 
-    public function ValidEmail(Request $request)
+    public function validEmail(Request $request)
     {
         $emailAddress = $request->email;
         $checkEmailExist = User::where('email', $emailAddress)->first();
@@ -409,7 +474,7 @@ class UserController extends Controller
         }
     }
 
-    public function CheckValidEmailCodeVerification(Request $request)
+    public function checkValidEmailCodeVerification(Request $request)
     {
         $code = $request->code;
         $id = $request->id;
@@ -659,7 +724,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function GetUser(Request $request, $user_id)
+    public function getUser(Request $request, $user_id)
     {
         /*$token = $request->cookie('token');
         $bearer_token = $request->bearerToken();
@@ -1002,7 +1067,8 @@ class UserController extends Controller
                 'name',
                 'details',
                 'service',
-                'thumbnail'
+                'thumbnail',
+                'phone_number',
             ]);
 
             $businessData['user_id'] = (string)$business->user_id;
@@ -1088,6 +1154,8 @@ class UserController extends Controller
             $longitude = is_array($longitude) ? $longitude : [$longitude];
             $latitude = is_array($latitude) ? $latitude : [$latitude];
 
+            $phoneNumber = $businessArray['phone_number'];
+            $businessArray['phone_number'] = $phoneNumber;
             $businessArray['category_name'] = $category->name;
             $businessArray['category_image'] = $category->img;
             $businessArray['location'] = $location;
@@ -1140,21 +1208,150 @@ class UserController extends Controller
         ]);
     }
 
-    public function getSuggestion(Request $request)
+    public function getSuggestion()
     {
-        /*if (is_null($request->bearerToken())) {
-            return response()->json(
-                [
-                    'status' => false,
-                    'message' => 'Unauthorized. Please log in first.',
-                ], 401);
-        }*/
+        try {
+            $suggestions = Suggestion::with('buisness')->get();
 
-        $suggestions = Suggestion::with('buisness')->get();
-        return response([
-            'status' => 200,
-            'response' => $suggestions,
-        ]);
+            if ($suggestions->isEmpty()) {
+                return response([
+                    'success' => false,
+                    'response' => [],
+                ], 401);
+            }
+
+            $suggestionData = [];
+
+            foreach ($suggestions as $suggestion) {
+                $business = $suggestion->buisness;
+
+                if (!empty($business)) {
+                    $categoryId = $business->category_id;
+                    $category = Category::find($categoryId);
+                    $businessUserId = $business->user_id;
+                    $businessUser = User::find($businessUserId);
+
+                    if ($category) {
+                        $categoryName = $category->name;
+                        $categoryImage = $category->img;
+
+                        $suggestionDetails = $suggestion->only([
+                            'id',
+                            'buisness_id',
+                            'created_at',
+                            'updated_at',
+                        ]);
+
+                        foreach ($suggestionDetails as $key => $value) {
+                            if ($value === null) {
+                                $suggestionDetails[$key] = '';
+                            }
+                        }
+
+                        $suggestionDetails['category_name'] = $categoryName;
+                        $suggestionDetails['category_image'] = $categoryImage;
+
+                        if (is_array($business->images) && count($business->images) === 1 && $business->images[0] === "") {
+                            $business->images = [];
+                        } else {
+                            $business->images = explode(',', $business->images);
+                        }
+
+                        if (empty($business->thumbnail)) {
+                            $business->thumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+                        }
+
+                        if (strpos($business->location, 's:') === 0) {
+                            $business->location = explode('(seperate)', unserialize($business->location));
+                        }
+
+                        if (strpos($business->longitude, 's:') === 0) {
+                            $business->longitude = explode(',', unserialize($business->longitude));
+                        }
+
+                        if (strpos($business->latitude, 's:') === 0) {
+                            $business->latitude = explode(',', unserialize($business->latitude));
+                        }
+
+                        $business->location = is_array($business->location) ? $business->location : [$business->location];
+                        $business->longitude = is_array($business->longitude) ? $business->longitude : [$business->longitude];
+                        $business->latitude = is_array($business->latitude) ? $business->latitude : [$business->latitude];
+
+                        unset($business->customized_users);
+                        unset($business->rating);
+
+                        $viewAs = $businessUser->view_as ?? "";
+                        $webLinks = $businessUser->web_link;
+
+                        if ($webLinks) {
+                            $webLinks = explode(',', $webLinks);
+                        } else {
+                            $webLinks = [];
+                        }
+
+                        $businessTiming = BuisnessTiming::where('buisness_id', $business->id)->first();
+
+                        if (!is_null($businessTiming)) {
+                            $day = explode(',', $businessTiming->day);
+                            $openingHours = explode(',', $businessTiming->opening_hours);
+                            $closingHours = explode(',', $businessTiming->closing_hours);
+                            $availability = explode(',', $businessTiming->availability);
+                        } else {
+                            $businessTimingDefault = BuisnessTiming::find(1);
+                            $day = explode(',', $businessTimingDefault->day);
+                            $openingHours = explode(',', $businessTimingDefault->opening_hours);
+                            $closingHours = explode(',', $businessTimingDefault->closing_hours);
+                            $availability = explode(',', $businessTimingDefault->availability);
+                        }
+
+                        $businessDetails = $business->only([
+                            'name',
+                            'service',
+                            'thumbnail',
+                            'phone_number',
+                        ]);
+
+                        $businessDetails['details'] = strip_tags($business->details);;
+                        $businessDetails['category_name'] = $category->name;
+                        $businessDetails['view_as'] = $viewAs;
+                        $businessDetails['location'] = $business->location;
+                        $businessDetails['longitude'] = $business->longitude;
+                        $businessDetails['latitude'] = $business->latitude;
+                        $businessDetails['web_link'] = $webLinks;
+                        $businessDetails['images'] = $business->images;
+                        $businessDetails['days'] = $day;
+                        $businessDetails['opening_hours'] = $openingHours;
+                        $businessDetails['closing_hours'] = $closingHours;
+                        $businessDetails['availability'] = $availability;
+
+                        foreach ($businessDetails as $key => $value) {
+                            if ($value === null) {
+                                $businessDetails[$key] = '';
+                            }
+                        }
+
+                        $suggestionDetails['business'] = $businessDetails;
+
+                        $suggestionData[] = $suggestionDetails;
+                    } else {
+                        return response([
+                            'success' => false,
+                            'response' => [],
+                        ], 401);
+                    }
+                }
+            }
+
+            return response([
+                'success' => true,
+                'response' => $suggestionData,
+            ], 200);
+        } catch (\Exception $e) {
+            return response([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function addLikes(Request $request)
@@ -1185,6 +1382,7 @@ class UserController extends Controller
         $like->user_id = Auth::user()->id;
         $like->buisness_id = $request->buisness_id;
         $like->save();
+
         return response([
             'status' => 200,
             'response' => $like
@@ -1213,11 +1411,136 @@ class UserController extends Controller
 
     public function getLikes()
     {
-        $likes = Like::with('buisness')->where('user_id', Auth::user()->id)->get();
-        return response([
-            'status' => 200,
-            'response' => $likes
-        ]);
+        try {
+            $user = Auth::user();
+            $userId = $user->id;
+            $likes = Like::with('buisness')->where('user_id', $userId)->get();
+
+            if ($likes->isEmpty()) {
+                return response([
+                    'success' => false,
+                    'response' => [],
+                ], 401);
+            }
+
+            $likeData = [];
+
+            foreach ($likes as $like) {
+                $business = $like->buisness;
+
+                if (!empty($business)) {
+                    $categoryId = $business->category_id;
+                    $category = Category::find($categoryId);
+                    $businessUserId = $business->user_id;
+                    $businessUser = User::find($businessUserId);
+
+                    $likesDetails['id'] = (string)$like->id;
+                    $likesDetails['user_id'] = (string)$like->user_id;
+                    $likesDetails['buisness_id'] = (string)$like->buisness_id;
+                    $likesDetails['created_at'] = $like->created_at;
+                    $likesDetails['updated_at'] = $like->updated_at;
+
+                    foreach ($likesDetails as $key => $value) {
+                        if ($value === null) {
+                            $likesDetails[$key] = '';
+                        }
+                    }
+
+                    if (is_array($business->images) && count($business->images) === 1 && $business->images[0] === "") {
+                        $business->images = [];
+                    } else {
+                        $business->images = explode(',', $business->images);
+                    }
+
+                    if (empty($business->thumbnail)) {
+                        $business->thumbnail = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+                    }
+
+                    if (strpos($business->location, 's:') === 0) {
+                        $business->location = explode('(seperate)', unserialize($business->location));
+                    }
+
+                    if (strpos($business->longitude, 's:') === 0) {
+                        $business->longitude = explode(',', unserialize($business->longitude));
+                    }
+
+                    if (strpos($business->latitude, 's:') === 0) {
+                        $business->latitude = explode(',', unserialize($business->latitude));
+                    }
+
+                    $business->location = is_array($business->location) ? $business->location : [$business->location];
+                    $business->longitude = is_array($business->longitude) ? $business->longitude : [$business->longitude];
+                    $business->latitude = is_array($business->latitude) ? $business->latitude : [$business->latitude];
+
+                    unset($business->customized_users);
+                    unset($business->rating);
+
+                    $viewAs = $businessUser->view_as ?? "";
+                    $webLinks = $businessUser->web_link;
+
+                    if ($webLinks) {
+                        $webLinks = explode(',', $webLinks);
+                    } else {
+                        $webLinks = [];
+                    }
+
+                    $businessTiming = BuisnessTiming::where('buisness_id', $business->id)->first();
+
+                    if (!is_null($businessTiming)) {
+                        $day = explode(',', $businessTiming->day);
+                        $openingHours = explode(',', $businessTiming->opening_hours);
+                        $closingHours = explode(',', $businessTiming->closing_hours);
+                        $availability = explode(',', $businessTiming->availability);
+                    } else {
+                        $businessTimingDefault = BuisnessTiming::find(1);
+                        $day = explode(',', $businessTimingDefault->day);
+                        $openingHours = explode(',', $businessTimingDefault->opening_hours);
+                        $closingHours = explode(',', $businessTimingDefault->closing_hours);
+                        $availability = explode(',', $businessTimingDefault->availability);
+                    }
+
+                    $businessDetails = $business->only([
+                        'name',
+                        'service',
+                        'thumbnail',
+                        'phone_number',
+                    ]);
+
+                    $businessDetails['details'] = strip_tags($business->details);
+                    $businessDetails['category_name'] = $category->name;
+                    $businessDetails['category_image'] = $category->img;
+                    $businessDetails['view_as'] = $viewAs;
+                    $businessDetails['location'] = $business->location;
+                    $businessDetails['longitude'] = $business->longitude;
+                    $businessDetails['latitude'] = $business->latitude;
+                    $businessDetails['web_link'] = $webLinks;
+                    $businessDetails['images'] = $business->images;
+                    $businessDetails['days'] = $day;
+                    $businessDetails['opening_hours'] = $openingHours;
+                    $businessDetails['closing_hours'] = $closingHours;
+                    $businessDetails['availability'] = $availability;
+
+                    foreach ($businessDetails as $key => $value) {
+                        if ($value === null) {
+                            $businessDetails[$key] = '';
+                        }
+                    }
+
+                    $likesDetails['business'] = $businessDetails;
+                    $likeData[] = $likesDetails;
+                }
+            }
+
+            return response([
+                'success' => true,
+                'response' => $likeData
+            ], 200);
+        } catch (\Exception $e) {
+            return response([
+                'success' => false,
+                'response' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function findByChurch(Request $request)
@@ -1239,6 +1562,7 @@ class UserController extends Controller
                 // ->where('state' , $request->state)
                 ->groupBy("buisness.id")
                 ->get();
+
             return response([
                 'status' => 200,
                 'nearest_businesses' => $businesses
@@ -1409,6 +1733,7 @@ class UserController extends Controller
                 'details',
                 'service',
                 'thumbnail',
+                'phone_number',
             ]);
 
             $business['category_name'] = $category->name;
@@ -1470,7 +1795,7 @@ class UserController extends Controller
             $opening_hours = $request->input('opening_hours');
             $closing_hours = $request->input('closing_hours');
             $availability = $request->input('availability');
-            $currentImages = $business->images;
+            $phone_number = $request->input('phone_number');
 
             if (strpos($location, '(seperate)') !== false) {
                 $locations = explode('(seperate)', $location);
@@ -1488,6 +1813,7 @@ class UserController extends Controller
                     'longitude' => $serialize_longitude,
                     'latitude' => $serialize_latitude,
                     'images' => $images,
+                    'phone_number' => $phone_number,
                 ]);
             } else {
                 $updateManageBusinessModel = array_filter([
@@ -1499,6 +1825,7 @@ class UserController extends Controller
                     'longitude' => $longitude,
                     'latitude' => $latitude,
                     'images' => $images,
+                    'phone_number' => $phone_number,
                 ]);
             }
 
@@ -1599,6 +1926,7 @@ class UserController extends Controller
                     'details',
                     'service',
                     'thumbnail',
+                    'phone_number',
                 ]);
 
                 $business['category_name'] = $category->name;
@@ -1733,6 +2061,7 @@ class UserController extends Controller
                 'details',
                 'service',
                 'thumbnail',
+                'phone_number',
             ]);
 
             $business['category_name'] = $category->name;
@@ -1763,6 +2092,10 @@ class UserController extends Controller
     {
         try {
             $latestMessages = Message::with('recipient')
+                // ->where(function($query) use ($id) {
+                //     $query->where('sender_id', $id)
+                //         ->orWhere('recipient_id', $id);
+                // })
                 ->where('sender_id', $id)
                 ->select('id', 'sender_id', 'recipient_id', 'content', 'created_at')
                 ->whereIn('id', function ($query) {
@@ -1770,21 +2103,44 @@ class UserController extends Controller
                         ->from('messages')
                         ->groupBy('sender_id', 'recipient_id');
                 })
+                ->orderBy('id', 'DESC')
                 ->get();
 
             if ($latestMessages->isNotEmpty()) {
 
                 $messageData = [];
                 foreach ($latestMessages as $message) {
-                    $messageData[] = [
-                        'id' => $message->id,
-                        'sender_id' => $message->sender_id,
-                        'recipient_id' => $message->recipient_id,
-                        'recipient_name' => $message->recipient->name,
-                        'recipient_thumbnail' => $message->recipient->thumbnail ?? 'No_Image_Available.jpg',
-                        'content' => $message->content,
-                        'created_at' => $message->created_at,
-                    ];
+
+                    if (!empty($message->recipient)) {
+                        $userId = $message->recipient->user_id;
+                        $user = User::find($userId);
+                        $userName = $user->name;
+
+                        $messageData[] = [
+                            'id' => $message->id,
+                            'sender_id' => $message->sender_id,
+                            'recipient_id' => $message->recipient_id,
+                            'recipient_name' => $message->recipient->name ?? $userName,
+                            'recipient_thumbnail' => "https://websitedemolink.co/christian-business-finder/public/uploads/business/" . $message->recipient->thumbnail ?? 'No_Image_Available.jpg',
+                            'content' => $message->content,
+                            'created_at' => $message->created_at,
+                        ];
+                    } else {
+                        $userId = $message->recipient_id;
+                        $user = User::find($userId);
+                        $userName = $user->name ?? 'Deleted Account';
+                        $userProfile = $user->profile_image ?? 'user-img.png';
+
+                        $messageData[] = [
+                            'id' => $message->id,
+                            'sender_id' => $message->sender_id,
+                            'recipient_id' => $message->recipient_id,
+                            'recipient_name' => $userName,
+                            'recipient_thumbnail' => "https://websitedemolink.co/christian-business-finder/public/assets/uploads/user/" . $userProfile,
+                            'content' => $message->content,
+                            'created_at' => $message->created_at,
+                        ];
+                    }
                 }
                 return response()->json([
                     'success' => true,
@@ -1793,8 +2149,8 @@ class UserController extends Controller
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No chats found for the specified sender ID.',
-                ], 404);
+                    'response' => [],
+                ], 200);
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -1810,11 +2166,12 @@ class UserController extends Controller
             $senderId = $request->input('sender_id');
             $recipientId = $request->input('recipient_id');
             $offset = $request->input('offset', 0);
-            $perPage = $request->input('per_page',15);
+            $perPage = $request->input('per_page', 15);
 
             $messages = Message::where(['sender_id' => $senderId, 'recipient_id' => $recipientId])
                 ->offset($offset)
                 ->limit($perPage)
+                ->orderBy('id', 'DESC')
                 ->get();
 
             if ($messages->count() > 0) {
@@ -1865,11 +2222,53 @@ class UserController extends Controller
                 'content' => $content,
             ]);
 
+            $factory = (new Factory)->withServiceAccount([
+                "type" => "service_account",
+                "project_id" => "cbf-notification",
+                "private_key_id" => "fff4976a482c942709f25035138080603cbc2370",
+                "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDKKYeNAEKRPrC4\nnNCyt71dcq+ukvYTrGwSmmZ36+fMVHig2S04TC6b8RjdULDLKkEciJrqZna79q2Q\nc2f1fgIOejwbcc+iDWUxUT/XeuqsN9kN5DAx+X24/bUqUQl+DJzTUmIfMZpSl6y3\nTsySjEmq57ddSNABYMMAoqLMgJYh7G09RQCIks8SJUVE4SNIui+b8AMhib9huSuQ\nfX3RB6XDIS3pXbkXshG89uQnCul2nB8xIEUEi2DF9GYY4ljGKT8/RMnH9k9v9c2R\n5U7OTC9lP1k4oPt+wG5LYQNhpc2DOZy6ItalnRSJA4ZxcmgYozI+GgkZM3bS1hTp\nHaODvkKpAgMBAAECggEAAKoCvB2bSYhi5hLhzckf8f6rHH8l/Ryb3VSEW9BwjMlC\nkVfcCJ3dIn2+w+2rvwIO0PZdLqcnJej6JSTVmAozbgCWbPYF4fxfb+lup1YBzAft\nxxu4ZcINCAVN+PjMfnk4gHR6Rk2yBDe0cTPs7wJqLfV36JrUp6zsxxE0O1ZUEFmr\nbbIzdhBPMGouHP2t376UfkRTngOSPkUvH5RKWSrMnqs64IFDM3g9dg+y8zCM1L71\nNxmN4WLTcJREkJHq4tmgURi9i1yMn1w1U6lqtq1te5W752B7PxJW5UXpyiKNXL8P\ncennvo8byTZ8isyQq2Nw7pQmx48uUcC4+EfkFjcdzwKBgQDxyWEY+czNa4xhrabO\nWMxv39Q3LOt177h5ulZW/ff8Q9TMUMTDgcGJs3Rlh5KdFS4r8XMKhUzG2u0KkC69\n5Tj59GI4tKhjNpgOTCoH7fuCp7awZUSUpvHDY9zmqQVnDTqZCXWtQKyZeXjrxqON\nJKjhBQ05sFIpzGrYygMYf+E84wKBgQDWC9jD6gskjnhX4zOLqfOpgv7tQIcTR5Az\ngqyqvUtOwcjmdtr1p2BrhBPtL1G41LW/vG4y1sX1Z1L5yGbl2Vnm3qv7cOGb2UAk\nP+82ng71crULg5PccBjuZIEwqNMQtcR1Z6mYHdzDZrW793CUGb2q+d26UY1NCo/t\nCuXpK+0EAwKBgQClZj0l+LxBSfEeYMxbHCO95EAn/nKUmwh3PSETIWkjCMPpgNcZ\nZwoeSMS3L6b8DiEnrmQkLkv3PIwrTbar8MKpOqR2Zh9Kv24FWdTm18XV+yTeRmhD\nyHBaWVYj9Dvd4w7S4cW+Xx+zXYV6xMfdJdbhF7OUYynRriTpaEf12oUaQQKBgEh1\nAC7pxlXcqJ5Puf44TNSAFJ3prw/2tLjLLnop1BlX/hMN/vcTbs9WiYxL7WUdFF1Q\ngxlQnPiCvpLxpOt/1TATBrL6NlUUiOL8hZS+kp/B8clxBBemFrp0aUs4iyJn9ZYs\nvjtROI8o8LItg/2ObSc4qDdPLf77aVc7zjJNfVFTAoGAPxp+1Hsr84CeM/yCEbU+\n/ymgZYB77KJRbholGoFbTKvxD8iRCl9h9Z9Nhq/g1NuOjwRfym24v5+yoyZX9ZeH\nkvKNwZdBikbitrbJZ4LawjlFdc5+F4ZL9oByryItp8UAta1Gjg9IJjJBo4jeDms+\nLWv4SqN2H/5n5fJeimh0tq4=\n-----END PRIVATE KEY-----\n",
+                "client_email" => "firebase-adminsdk-q97ue@cbf-notification.iam.gserviceaccount.com",
+                "client_id" => "109500120381256275725",
+                "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
+                "token_uri" => "https://oauth2.googleapis.com/token",
+                "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
+                "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-q97ue%40cbf-notification.iam.gserviceaccount.com",
+                "universe_domain" => "googleapis.com"
+            ]);
+
+            $recipient = User::find($recipientId);
+            $recipientFcmToken = $recipient->fcm_token;
+
+            $businessUser = Buisness::where('user_id', $recipientId);
+
+            if (empty($businessUser)) {
+                $messaging = $factory->createMessaging();
+                $firebaseMessage = CloudMessage::withTarget('token', $recipientFcmToken)
+                    ->withNotification([
+                        'title' => $recipient->name,
+                        'body' => $content,
+                    ]);
+                $messaging->send($firebaseMessage);
+            } else {
+                $messaging = $factory->createMessaging();
+                $firebaseMessage = CloudMessage::withTarget('token', $recipientFcmToken)
+                    ->withNotification([
+                        'title' => $businessUser->name,
+                        'body' => $content,
+                    ]);
+                $messaging->send($firebaseMessage);
+            }
+
             return response()->json([
                 'success' => true,
-                // 'response' => $message,
+                 'response' => $firebaseMessage,
             ], 200);
         } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        } catch (MessagingException|FirebaseException $e) {
             return response()->json([
                 'success' => false,
                 'response' => $e->getMessage(),

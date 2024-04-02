@@ -23,6 +23,7 @@ class Buisness extends Model
         'longitude',
         'latitude',
         'category_id',
+        'phone_number',
     ];
 
     public function category()

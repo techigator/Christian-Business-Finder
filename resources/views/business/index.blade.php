@@ -246,10 +246,7 @@
 
 <!-- Add Modal start -->
 
-<style>
 
-</style>
-<!-- Add Modal start -->
 <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -322,45 +319,145 @@
                                            class="form-control mt-2 mb-2" placeholder="Rating" id="ratings-text"
                                     />
 
-                                    <strong>Select Image to upload</strong>
-                                    <div id="image-error" class="error-message"></div>
-                                    <figure>
-                                        <img
-                                            src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
-                                            id="preview-image" style="height: 120px; width: 200px"
-                                            class="img-fluid" alt="Preview Image">
-                                        <input type="file" name="image" id="picture-input" class="form-control my-4">
-                                    </figure>
+                                    <div class="image-div">
+                                        <strong>Select Image to upload</strong>
+                                        <div id="image-error" class="error-message"></div>
+                                        <figure>
+                                            <img
+                                                src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                                                id="preview-image" style="height: 120px; width: 200px"
+                                                class="img-fluid" alt="Preview Image">
+                                            <input type="file" name="image" id="picture-input"
+                                                   class="form-control my-4">
+                                        </figure>
+                                    </div>
 
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div id="days-error" class="error-message"></div>
+                                                <div class="form-group">
+                                                    <strong>Days of the Week</strong>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-day" type="hidden" value="Monday" name="days[]" id="monday">
+                                                        <label class="form-check-label" for="monday">Monday</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-day" type="hidden" value="Tuesday" name="days[]" id="tuesday">
+                                                        <label class="form-check-label" for="tuesday">Tuesday</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-day" type="hidden" value="Wednesday" name="days[]" id="wednesday">
+                                                        <label class="form-check-label" for="wednesday">Wednesday</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-day" type="hidden" value="Thursday" name="days[]" id="thursday">
+                                                        <label class="form-check-label" for="thursday">Thursday</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-day" type="hidden" value="Friday" name="days[]" id="friday">
+                                                        <label class="form-check-label" for="friday">Friday</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-day" type="hidden" value="Saturday" name="days[]" id="saturday">
+                                                        <label class="form-check-label" for="saturday">Saturday</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-day" type="hidden" value="Sunday" name="days[]" id="sunday">
+                                                        <label class="form-check-label" for="sunday">Sunday</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                    <strong>Opening Hours</strong>
-                                    <div id="hour-error" class="error-message"></div>
-                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="hour-text"
-                                    />
+                                            <div class="col-md-3">
+                                                <div class="open-hour">
+                                                    <strong>Opening Hours</strong>
+                                                    <div id="opening-hour-error" class="error-message"></div>
+                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="close-hour">
+                                                    <strong>Closing Hours</strong>
+                                                    <div id="closing-hour-error" class="error-message"></div>
+                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
+                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
+                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="avail-days">
+                                                    <div class="form-group">
+                                                        <strong>Availability</strong>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="monday">
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="tuesday">
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="wednesday">
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="thursday">
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="friday">
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="saturday">
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="sunday">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--<i class="fas fa-plus btn btn-info"></i>
+                                    <br>--}}
 
                                     <strong>Detail</strong>
                                     <div id="detail-error" class="error-message"></div>
                                     <textarea class="form-control" name="details"
                                               id="myTextarea1" placeholder="Details"></textarea>
 
-                                    <strong>Location</strong>
-                                    <div id="location-error" class="error-message"></div>
-                                    <input class="form-control mt-2 mb-2" id="search-input" type="text"
-                                           placeholder="Enter a location" name="location" value="">
-                                    <div id="suggestions"></div>
+                                    <div class="add-multi-location my-2">
+                                    </div>
 
-                                    <strong>Longitude</strong>
-                                    <div id="longitude-error" class="error-message"></div>
-                                    <input type="text" name="longitude" value=""
-                                           class="form-control mt-2 mb-2" placeholder="Longitude" id="longitude-text"
-                                           readonly>
-
-                                    <strong>Latitude</strong>
-                                    <div id="latitude-error" class="error-message"></div>
-                                    <input type="text" name="latitude" value=""
-                                           class="form-control mt-2 mb-2" placeholder="Latitude" id="latitude-text"
-                                           readonly>
+                                    <strong class="my-2">Add Locations</strong>
+                                    <br>
+                                    <button type="button" class="btn btn-info" id="add-locations-div">
+                                        <i
+                                            class="fas fa-plus"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -438,7 +535,7 @@
                                     <input type="text" name="ratings" value=""
                                            class="form-control mt-2 mb-2" placeholder="Rating" id="edit-ratings"
                                            required/>
-                                    <div class="form-group image-div">
+                                    <div class="form-group edit-image-div">
                                         <strong>Edit Image:</strong>
                                         <br/>
                                         <img src="{{ asset('images/no-img-avalible.png') }}" width="150px"
@@ -540,37 +637,56 @@
                     $('#image-error').text("");
                 }
 
-                if ($('#hour-text').val().trim() === '') {
+                if ($('#input-day').val().trim() === '') {
                     e.preventDefault();
                     hasError = true;
-                    $('#hour-error').text("Please provide opening hour.");
+                    $('#days-error').text("Please select days.");
                 } else {
-                    $('#hour-error').text("");
+                    $('#days-error').text("");
                 }
 
-                if ($('#search-input').val().trim() === '') {
+                if ($('#opening-hour-text').val().trim() === '') {
                     e.preventDefault();
                     hasError = true;
-                    $('#location-error').text("Please provide location.");
+                    $('#opening-hour-error').text("Please provide opening hour.");
                 } else {
-                    $('#location-error').text("");
+                    $('#opening-hour-error').text("");
                 }
 
-                if ($('#longitude-text').val().trim() === '') {
+                if ($('#closing-hour-text').val().trim() === '') {
                     e.preventDefault();
                     hasError = true;
-                    $('#longitude-error').text("Please provide longitude.");
+                    $('#closing-hour-error').text("Please provide closing hour.");
                 } else {
-                    $('#longitude-error').text("");
+                    $('#closing-hour-error').text("");
                 }
 
-                if ($('#latitude-text').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#latitude-error').text("Please provide latitude.");
-                } else {
-                    $('#latitude-error').text("");
-                }
+                $('.location-input').each(function () {
+                    if ($(this).val().trim() === '') {
+                        hasError = true;
+                        $(this).siblings('.location-error').text("Please provide location.");
+                    } else {
+                        $(this).siblings('.location-error').text("");
+                    }
+                });
+
+                $('.longitude-input').each(function () {
+                    if ($(this).val().trim() === '') {
+                        hasError = true;
+                        $(this).siblings('.longitude-error').text("Please provide longitude.");
+                    } else {
+                        $(this).siblings('.longitude-error').text("");
+                    }
+                });
+
+                $('.latitude-input').each(function () {
+                    if ($(this).val().trim() === '') {
+                        hasError = true;
+                        $(this).siblings('.latitude-error').text("Please provide latitude.");
+                    } else {
+                        $(this).siblings('.latitude-error').text("");
+                    }
+                });
 
                 $(this).find('[required]').each(function () {
                     if (!$(this).val()) {
@@ -640,7 +756,7 @@
             });
         }
 
-        function initMultiMap(isEditing, index) {
+        function initEditMultiMap(isEditing, index) {
             let searchInput, longitudeInput, latitudeInput, suggestionsContainer, autocompleteService;
 
             if (isEditing) {
@@ -656,25 +772,25 @@
                 return;
             }
 
-            searchInput.addEventListener('input', function() {
+            searchInput.addEventListener('input', function () {
                 const query = this.value;
                 suggestionsContainer.innerHTML = '';
 
                 if (query) {
-                    autocompleteService.getPlacePredictions({ input: query }, function(predictions, status) {
+                    autocompleteService.getPlacePredictions({input: query}, function (predictions, status) {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
-                            predictions.forEach(function(prediction) {
+                            predictions.forEach(function (prediction) {
                                 const suggestionElement = document.createElement('div');
                                 suggestionElement.classList.add('suggestion');
                                 suggestionElement.textContent = prediction.description;
 
-                                suggestionElement.addEventListener('click', function() {
+                                suggestionElement.addEventListener('click', function () {
                                     searchInput.value = prediction.description;
                                     suggestionsContainer.innerHTML = '';
 
                                     // Fetch additional details for the selected place
                                     const placeService = new google.maps.places.PlacesService(document.createElement('div'));
-                                    placeService.getDetails({ placeId: prediction.place_id }, function(place, status) {
+                                    placeService.getDetails({placeId: prediction.place_id}, function (place, status) {
                                         if (status === google.maps.places.PlacesServiceStatus.OK) {
                                             const selectedLatitude = place.geometry.location.lat();
                                             const selectedLongitude = place.geometry.location.lng();
@@ -692,10 +808,59 @@
             });
         }
 
-        initMultiMap(false);
+        function initAddMultiMap(isFirstLoad, counter) {
+            let searchInput, longitudeInput, latitudeInput, suggestionsContainer, autocompleteService;
+
+            // Add Multiple Business Modal Location
+            searchInput = document.getElementById('search-input-' + counter);
+            longitudeInput = document.getElementById('longitude-text-' + counter);
+            latitudeInput = document.getElementById('latitude-text-' + counter);
+            suggestionsContainer = document.getElementById('add-suggestions-' + counter);
+            autocompleteService = new google.maps.places.AutocompleteService();
+
+            if (!searchInput) {
+                return;
+            }
+
+            searchInput.addEventListener('input', function () {
+                const query = this.value;
+                suggestionsContainer.innerHTML = '';
+
+                if (query) {
+                    autocompleteService.getPlacePredictions({input: query}, function (predictions, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            predictions.forEach(function (prediction) {
+                                const suggestionElement = document.createElement('div');
+                                suggestionElement.classList.add('suggestion');
+                                suggestionElement.textContent = prediction.description;
+
+                                suggestionElement.addEventListener('click', function () {
+                                    searchInput.value = prediction.description;
+                                    suggestionsContainer.innerHTML = '';
+
+                                    // Fetch additional details for the selected place
+                                    const placeService = new google.maps.places.PlacesService(document.createElement('div'));
+                                    placeService.getDetails({placeId: prediction.place_id}, function (place, status) {
+                                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                            const selectedLatitude = place.geometry.location.lat();
+                                            const selectedLongitude = place.geometry.location.lng();
+                                            latitudeInput.value = selectedLatitude;
+                                            longitudeInput.value = selectedLongitude;
+                                        }
+                                    });
+                                });
+
+                                suggestionsContainer.appendChild(suggestionElement);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        initEditMultiMap(false);
         initMap(false);
     </script>
-
 
     <script>
         ClassicEditor
@@ -730,13 +895,72 @@
             reader.readAsDataURL(input.files[0]);
         });
     </script>
+
     <script>
-        const isEditing = true;
-        $.noConflict()
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the opening hour input element
+            const openingHourInput = document.getElementById('opening-hour-text');
+            const closingHourInput = document.getElementById('closing-hour-text');
+
+            // Set the default time format
+            const defaultOpenTime = '09:00';
+            const defaultCloseTime = '17:00';
+
+            // Set the value to the input element
+            openingHourInput.value = defaultOpenTime;
+            closingHourInput.value = defaultCloseTime;
+        });
 
         $(document).ready(function () {
+            let counter = 0;
 
+            // Initialize map for the first location
+            initAddMultiMap(true, counter);
+
+            $(document).on('click', '#add-locations-div', function () {
+                let addMultiLocation = $('.add-multi-location');
+                counter++;
+
+                let locationElement = $(
+                    '<div class="location-div location-div-'+ counter +'">' +
+                    '<strong>Location-' + counter + '</strong>' +
+                    '<div id="location-error" class="error-message latitude-error"></div>' +
+                    '<input type="text" name="location[]" value="" class="form-control mt-2 mb-2 location-input" id="search-input-' + counter + '" placeholder="Location">' +
+                    '<div id="add-suggestions-' + counter + '"></div>' +
+                    '<strong>Longitude-' + counter + '</strong>' +
+                    '<div id="longitude-error" class="error-message latitude-error"></div>' +
+                    '<input type="text" name="longitude[]" value="" class="form-control mt-2 mb-2 longitude-input" id="longitude-text-' + counter + '" placeholder="Longitude" readonly>' +
+                    '<strong>Latitude-' + counter + '</strong>' +
+                    '<div id="latitude-error" class="error-message latitude-error"></div>' +
+                    '<input type="text" name="latitude[]" value="" class="form-control mt-2 mb-2 latitude-input" id="latitude-text-' + counter + '" placeholder="Latitude" readonly>' +
+                    '<button type="button" class="btn btn-info remove-location" data-location-id="'+ counter +'"><i class="fa fa-times" aria-hidden="true"></i></button>' +
+                    '</div>'
+                );
+
+                addMultiLocation.append(locationElement);
+
+                // Initialize map for the newly added location
+                initAddMultiMap(false, counter);
+            });
+
+            $(document).on('click', '.remove-location', function () {
+                var locationId = $(this).data('location-id');
+                $('.location-div-' + locationId).remove();
+                counter = 0;
+
+                $('.location-div').each(function () {
+                    counter++;
+                    var locationId = $(this).data('location-id');
+                    $(this).find('.location-input').attr('id', 'search-input-' + counter);
+                    $(this).find('.longitude-input').attr('id', 'longitude-text-' + counter);
+                    $(this).find('.latitude-input').attr('id', 'latitude-text-' + counter);
+                    $(this).find('.remove-location').attr('data-location-id', counter);
+                });
+            });
         });
+
+        const isEditing = true;
+        $.noConflict()
 
         $(document).ready(function () {
             var ckeditorInitialized = false;
@@ -756,7 +980,7 @@
 
                         $("#edit-modal").modal("show");
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error("Error fetching business data:", error);
                     }
                 });
@@ -816,24 +1040,24 @@
                 var editMultiLocation = $('.edit-multi-location');
                 editMultiLocation.empty();
 
-                data.location.forEach(function(location, index) {
+                data.location.forEach(function (location, index) {
                     var longitude = data.longitude[index];
                     var latitude = data.latitude[index];
 
                     var locationElement = $(
                         '<div>' +
                         '<strong>Edit Location</strong>' +
-                        '<input type="text" name="location" value="'+ location +'" class="form-control mt-2 mb-2" id="edit-search-input-'+ index +'" placeholder="Location" required>' +
-                        '<div id="edit-suggestions-'+ index +'"></div>' +
+                        '<input type="text" name="location" value="' + location + '" class="form-control mt-2 mb-2" id="edit-search-input-' + index + '" placeholder="Location" required>' +
+                        '<div id="edit-suggestions-' + index + '"></div>' +
                         '<strong>Edit Longitude</strong>' +
-                        '<input type="text" name="longitude" value="'+ longitude +'" class="form-control mt-2 mb-2" id="edit-longitude-'+ index +'" placeholder="Longitude" required readonly>' +
+                        '<input type="text" name="longitude" value="' + longitude + '" class="form-control mt-2 mb-2" id="edit-longitude-' + index + '" placeholder="Longitude" required readonly>' +
                         '<strong>Edit Latitude</strong>' +
-                        '<input type="text" name="latitude" value="'+ latitude +'" class="form-control mt-2 mb-2" id="edit-latitude-'+ index +'" placeholder="Latitude" required readonly>' +
+                        '<input type="text" name="latitude" value="' + latitude + '" class="form-control mt-2 mb-2" id="edit-latitude-' + index + '" placeholder="Latitude" required readonly>' +
                         '</div>'
                     );
 
                     editMultiLocation.append(locationElement);
-                    initMultiMap(true, index);
+                    initEditMultiMap(true, index);
                 });
             }
 
@@ -849,12 +1073,12 @@
                 var locationElement = $(
                     '<div>' +
                     '<strong>Edit Location</strong>' +
-                    '<input type="text" name="location" value="'+ locationValue +'" class="form-control mt-2 mb-2" id="edit-search-input" placeholder="Location" required>' +
+                    '<input type="text" name="location" value="' + locationValue + '" class="form-control mt-2 mb-2" id="edit-search-input" placeholder="Location" required>' +
                     '<div id="edit-suggestions"></div>' +
                     '<strong>Edit Longitude</strong>' +
-                    '<input type="text" name="longitude" value="'+ longitudeValue +'" class="form-control mt-2 mb-2" id="edit-longitude" placeholder="Longitude" required readonly>' +
+                    '<input type="text" name="longitude" value="' + longitudeValue + '" class="form-control mt-2 mb-2" id="edit-longitude" placeholder="Longitude" required readonly>' +
                     '<strong>Edit Latitude</strong>' +
-                    '<input type="text" name="latitude" value="'+ latitudeValue +'" class="form-control mt-2 mb-2" id="edit-latitude" placeholder="Latitude" required readonly>' +
+                    '<input type="text" name="latitude" value="' + latitudeValue + '" class="form-control mt-2 mb-2" id="edit-latitude" placeholder="Latitude" required readonly>' +
                     '</div>'
                 );
 
@@ -865,7 +1089,7 @@
 
             function populateImageFields(images) {
                 var imageUrlBase = '{{ asset('') }}/uploads/business/';
-                var imageDiv = $('.image-div');
+                var imageDiv = $('.edit-image-div');
 
                 if (images && images.length > 0) {
                     if (images.length > 1) {

@@ -33,6 +33,7 @@ class User extends Authenticatable
         'denomination',
         'view_as',
         'web_link',
+        'fcm_token',
     ];
 
     /**

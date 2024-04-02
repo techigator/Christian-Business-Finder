@@ -893,6 +893,7 @@ class ShopController extends Controller
             'amount' => $request->amount,
             'currency' => $request->currency,
         ]);
+
         if ($response) {
             return response([
                 'success' => true,
