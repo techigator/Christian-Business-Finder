@@ -2239,29 +2239,46 @@ class UserController extends Controller
             $recipient = User::find($recipientId);
             $recipientFcmToken = $recipient->fcm_token;
 
-            $businessUser = Buisness::where('user_id', $recipientId);
+            $businessUser = Buisness::where('user_id', $recipientId)->first();
 
-            if (empty($businessUser)) {
-                $messaging = $factory->createMessaging();
-                $firebaseMessage = CloudMessage::withTarget('token', $recipientFcmToken)
-                    ->withNotification([
-                        'title' => $recipient->name,
-                        'body' => $content,
-                    ]);
-                $messaging->send($firebaseMessage);
+            if ($businessUser) {
+                $this->firebaseConfiguration($factory, $recipientFcmToken, null, $content, $recipientId, $businessUser);
             } else {
-                $messaging = $factory->createMessaging();
-                $firebaseMessage = CloudMessage::withTarget('token', $recipientFcmToken)
-                    ->withNotification([
-                        'title' => $businessUser->name,
-                        'body' => $content,
-                    ]);
-                $messaging->send($firebaseMessage);
+                $this->firebaseConfiguration($factory, $recipientFcmToken, $recipient, $content, $recipientId, null);
             }
 
             return response()->json([
                 'success' => true,
-                 'response' => $firebaseMessage,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        } catch (MessagingException|FirebaseException $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    private function firebaseConfiguration($factory = null, $recipientFcmToken = null, $recipient = null, $content = null, $recipientId = null, $businessUser = null)
+    {
+        try {
+            $messaging = $factory->createMessaging();
+            $firebaseMessage = CloudMessage::withTarget('token', $recipientFcmToken)
+                ->withNotification([
+                    'title' => $recipient ? $recipient->name : $businessUser->name,
+                    'body' => $content,
+                ])
+                ->withData([
+                    'recipient_id' => $recipientId
+                ]);
+            $messaging->send($firebaseMessage);
+
+            return response()->json([
+                'success' => true,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
