@@ -94,6 +94,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('specific-chat-by-user', [UserController::class, 'specificChatByUser']);
     Route::post('sent-chat-by-user', [UserController::class, 'sentChatByUser']);
 
+// admin notification receive
+    Route::get('get-notification/{user_id?}', [UserController::class, 'getNotification']);
+
 // Product
     Route::post('create-product', [ShopController::class, 'CreateProduct']);
     Route::post('update-product', [ShopController::class, 'UpdateProduct']);

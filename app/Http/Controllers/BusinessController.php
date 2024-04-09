@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 // use App\Traits\PHPCustomMail;
 
 class BusinessController extends Controller
@@ -27,17 +28,16 @@ class BusinessController extends Controller
     {
         $menu = 'business';
         $loggedInUser = Auth::user();
-//        dd($loggedInUser);
         $loggedInUserId = $loggedInUser->id;
         $categories = category::all();
 
         if ($loggedInUser->type === 'sales_person') {
-             $users = User::where(['type' => 'user', 'created_by' => $loggedInUser->id])->get();
+            $users = User::where(['type' => 'user', 'created_by' => $loggedInUser->id])->get();
             $userIds = User::where(['type' => 'user', 'created_by' => $loggedInUser->id])
                 ->pluck('id')
                 ->toArray();
             $businesses = Buisness::with('category')
-                ->where(function($query) use ($userIds, $loggedInUserId) {
+                ->where(function ($query) use ($userIds, $loggedInUserId) {
                     $query->whereIn('user_id', array_merge($userIds, [$loggedInUserId]))
                         ->where(function ($query) {
                             $query->where('type', 'user')
@@ -65,11 +65,13 @@ class BusinessController extends Controller
             'days' => 'required',
             'opening_hours' => 'required',
             'closing_hours' => 'required',
+            'availability' => 'required',
             'details' => 'required',
             'location' => $request->has('location') ? 'required' : '',
             'longitude' => $request->has('longitude') ? 'required' : '',
             'latitude' => $request->has('latitude') ? 'required' : '',
-            'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:50000',
+            'images' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:50000',
         ]);
 
         $business = new Buisness();
@@ -102,12 +104,31 @@ class BusinessController extends Controller
             $business->latitude = $latitude[0];
         }
 
-        if ($request->hasFile('image')) {
+        $imgNameToStore = [];
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+
+            if (is_array($images)) {
+                foreach ($images as $image) {
+                    $img_number = rand();
+                    $newFileName = $img_number . '_' . $image->getClientOriginalName();
+                    $image->move(public_path() . '/uploads/business/', $newFileName);
+                    $imgNameToStore[] = $newFileName;
+                }
+            } else {
+                $img_number = rand();
+                $newFileName = $img_number . '_' . $images->getClientOriginalName();
+                $images->move(public_path() . '/uploads/business/', $newFileName);
+                $imgNameToStore[] = $newFileName;
+            }
+        }
+
+        if ($request->hasFile('thumbnail')) {
             $img_number = rand();
-            $img = $request->file('image');
-            $newFilename = $img_number .'_'. $img->getClientOriginalName();
-            $img->move(public_path() . '/uploads/business/', $newFilename);
-            $imgNameToStore = $newFilename;
+            $img = $request->file('thumbnail');
+            $newThumbnailName = $img_number . '_' . $img->getClientOriginalName();
+            $img->move(public_path() . '/uploads/business/', $newThumbnailName);
+            $thumbnailNameToStore = $newThumbnailName;
         }
 
         $customized_users = $request->input('customized_users');
@@ -120,19 +141,36 @@ class BusinessController extends Controller
         $business->name = $request->input('name');
         $business->state = $request->input('state');
         $business->ratings = $request->input('ratings');
-        $business->thumbnail = $imgNameToStore;
-        $business->images = $imgNameToStore;
+        $business->thumbnail = $thumbnailNameToStore ?? null;
+        $business->images = isset($imgNameToStore) ? implode(',', $imgNameToStore) : null;
         $business->details = $request->input('details');
-
         $business->save();
 
         $businessTiming = new BuisnessTiming();
-
         $businessTiming->buisness_id = $business->id;
-        $businessTiming->day = implode(',', $request->input('days'));
-        $businessTiming->opening_hours = implode(',', $request->input('opening_hours'));
-        $businessTiming->closing_hours = implode(',', $request->input('closing_hours'));
-        $businessTiming->availability = implode(',', $request->input('availability'));
+        $daysArray = $request->input('days');
+        $opening_hours = $request->input('opening_hours');
+        $closing_hours = $request->input('closing_hours');
+        $availabilityArray = $request->input('availability');
+
+        $availabilityMap = [];
+        foreach ($daysArray as $day) {
+            $availabilityMap[] = isset($availabilityArray[$day]) && $availabilityArray[$day] === "1" ? 1 : 0;
+        }
+
+        $opening_hours_am = array_map(function ($hour) {
+            return date("h:i A", strtotime($hour));
+        }, $opening_hours);
+
+        $closing_hours_pm = array_map(function ($hour) {
+            return date("h:i A", strtotime($hour));
+        }, $closing_hours);
+
+        $businessTiming->opening_hours = implode(',', $opening_hours_am);
+        $businessTiming->closing_hours = implode(',', $closing_hours_pm);
+        $businessTiming->day = implode(',', $daysArray);
+        $businessTiming->availability = implode(',', $availabilityMap);
+        $businessTiming->save();
 
         if (Auth::user()->type === 'admin') {
             return redirect()->route('business.index')
@@ -163,7 +201,7 @@ class BusinessController extends Controller
         }
 
         if (strpos($business->location, 's:') === 0) {
-            $location = explode(', (seperate)', unserialize($business->location));
+            $location = explode('(seperate)', unserialize($business->location));
         } else {
             $location = $business->location;
         }
@@ -180,7 +218,23 @@ class BusinessController extends Controller
             $latitude = $business->latitude;
         }
 
-        $data =  [
+        $businessTiming = BuisnessTiming::where('buisness_id', $id)->first();
+
+        if ($businessTiming) {
+            $days = explode(',', $businessTiming->day);
+            $openingHours = explode(',', $businessTiming->opening_hours);
+            $closingHours = explode(',', $businessTiming->closing_hours);
+            $availability = explode(',', $businessTiming->availability);
+        } else {
+            $businessTiming = BuisnessTiming::where('buisness_id', 0)->first();
+
+            $days = explode(',', $businessTiming->day);
+            $openingHours = explode(',', $businessTiming->opening_hours);
+            $closingHours = explode(',', $businessTiming->closing_hours);
+            $availability = explode(',', $businessTiming->availability);
+        }
+
+        $data = [
             'id' => $business->id,
             'user_id' => $business->user_id,
             'type' => $business->type,
@@ -189,8 +243,12 @@ class BusinessController extends Controller
             'name' => $business->name,
             'state' => $business->state,
             'ratings' => $business->ratings,
+            'thumbnail' => $business->thumbnail,
             'images' => explode(',', $business->images),
-            'opening_hours' => $business->opening_hours,
+            'days' => $days,
+            'opening_hours' => $openingHours,
+            'closing_hours' => $closingHours,
+            'availabilities' => $availability,
             'details' => $business->details,
             'location' => $location,
             'longitude' => $longitude,
@@ -206,12 +264,16 @@ class BusinessController extends Controller
             'name' => 'required',
             'state' => 'required',
             'ratings' => 'required',
+            'days' => 'required',
             'opening_hours' => 'required',
+            'closing_hours' => 'required',
+            'availability' => 'required',
             'details' => 'required',
-            'location' => 'required',
-            'image' => $request->has('image') ? 'required|mimes:jpeg,png,jpg,gif,svg|max:50000' : '',
+            'location' => $request->has('location') ? 'required' : '',
             'longitude' => $request->has('longitude') ? 'required' : '',
             'latitude' => $request->has('latitude') ? 'required' : '',
+            'images' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:50000',
         ]);
 
         $data = array();
@@ -224,13 +286,38 @@ class BusinessController extends Controller
         $data['ratings'] = $request->input('ratings');
         $data['opening_hours'] = $request->input('opening_hours');
         $data['details'] = $request->input('details');
-        $data['location'] = $request->input('location');
-        $data['longitude'] = $request->input('longitude');
-        $data['latitude'] = $request->input('latitude');
 
-        if ($request->hasFile('image')) {
+        $location = $request->input('location');
+        $longitude = $request->input('longitude');
+        $latitude = $request->input('latitude');
+
+        if (count($location) > 1) {
+            for ($i = 1; $i < count($location); $i++) {
+                $location[$i] = '(seperate)' . $location[$i];
+            }
+            $location = implode(',', $location);
+        } else {
+            $location = $location[0];
+        }
+
+        if (strpos($location, ',(seperate)') !== false) {
+            $locations = explode(',(seperate)', $location);
+
+            $serialize_location = serialize(implode('(seperate)', $locations));
+            $serialize_longitude = serialize(implode(',', $longitude));
+            $serialize_latitude = serialize(implode(',', $latitude));
+            $data['location'] = $serialize_location;
+            $data['longitude'] = $serialize_longitude;
+            $data['latitude'] = $serialize_latitude;
+        } else {
+            $data['location'] = $location;
+            $data['longitude'] = $longitude[0];
+            $data['latitude'] = $latitude[0];
+        }
+
+        if ($request->hasFile('images')) {
             $img_number = rand();
-            $img = $request->file('image');
+            $img = $request->file('images');
             $newFilename = $img->getClientOriginalName();
             $img->move(public_path() . '/uploads/business/', $newFilename);
             $imgNameToStore = $newFilename;
@@ -241,6 +328,33 @@ class BusinessController extends Controller
         }
 
         $business = Buisness::where('id', $id)->update($data);
+
+        $businessTiming = array();
+        $businessTiming['buisness_id'] = $business->id;
+        $daysArray = $request->input('days');
+        $opening_hours = $request->input('opening_hours');
+        $closing_hours = $request->input('closing_hours');
+        $availabilityArray = $request->input('availability');
+
+        $availabilityMap = [];
+        foreach ($daysArray as $day) {
+            $availabilityMap[] = isset($availabilityArray[$day]) && $availabilityArray[$day] === "1" ? 1 : 0;
+        }
+
+        $opening_hours_am = array_map(function ($hour) {
+            return date("h:i A", strtotime($hour));
+        }, $opening_hours);
+
+        $closing_hours_pm = array_map(function ($hour) {
+            return date("h:i A", strtotime($hour));
+        }, $closing_hours);
+
+        $businessTiming['opening_hours'] = implode(',', $opening_hours_am);
+        $businessTiming['closing_hours'] = implode(',', $closing_hours_pm);
+        $businessTiming['day'] = implode(',', $daysArray);
+        $businessTiming['availability'] = implode(',', $availabilityMap);
+
+        BuisnessTiming::where('buisness_id', $business->id)->update($businessTiming);
 
         if (Auth::user()->type === 'admin') {
             return redirect()->route('business.index')
@@ -255,8 +369,10 @@ class BusinessController extends Controller
     {
         $business = Buisness::find($id);
         $business->delete();
-        return redirect()->route('business.index')
-            ->with('success', 'Business deleted successfully');
+
+        return response()->json([
+            'success' => 'Business deleted successfully'
+        ]);
     }
 
     public function businessStatus(Request $request)
@@ -334,7 +450,7 @@ class BusinessController extends Controller
                 ->pluck('id')
                 ->toArray();
             $businesses = Buisness::with('category')
-                ->where(function($query) use ($userIds, $loggedInUserId) {
+                ->where(function ($query) use ($userIds, $loggedInUserId) {
                     $query->whereIn('user_id', array_merge($userIds, [$loggedInUserId]))
                         ->where(function ($query) {
                             $query->where('type', 'user')

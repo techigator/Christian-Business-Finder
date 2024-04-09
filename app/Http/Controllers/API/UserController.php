@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminNotification;
 use App\Models\Buisness;
 use App\Models\BuisnessTiming;
 use App\Models\category;
@@ -2103,7 +2104,7 @@ class UserController extends Controller
                         ->from('messages')
                         ->groupBy('sender_id', 'recipient_id');
                 })
-                ->orderBy('id', 'DESC')
+                ->orderBy('created_at', 'DESC')
                 ->get();
 
             if ($latestMessages->isNotEmpty()) {
@@ -2168,7 +2169,10 @@ class UserController extends Controller
             $offset = $request->input('offset', 0);
             $perPage = $request->input('per_page', 15);
 
-            $messages = Message::where(['sender_id' => $senderId, 'recipient_id' => $recipientId])
+            $messages = Message::where(function ($query) use ($senderId, $recipientId) {
+                $query->where(['sender_id' => $senderId, 'recipient_id' => $recipientId])
+                    ->orWhere(['sender_id' => $recipientId, 'recipient_id' => $senderId]);
+            })
                 ->offset($offset)
                 ->limit($perPage)
                 ->orderBy('id', 'DESC')
@@ -2224,27 +2228,27 @@ class UserController extends Controller
 
             $factory = (new Factory)->withServiceAccount([
                 "type" => "service_account",
-                "project_id" => "cbf-notification",
-                "private_key_id" => "fff4976a482c942709f25035138080603cbc2370",
-                "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDKKYeNAEKRPrC4\nnNCyt71dcq+ukvYTrGwSmmZ36+fMVHig2S04TC6b8RjdULDLKkEciJrqZna79q2Q\nc2f1fgIOejwbcc+iDWUxUT/XeuqsN9kN5DAx+X24/bUqUQl+DJzTUmIfMZpSl6y3\nTsySjEmq57ddSNABYMMAoqLMgJYh7G09RQCIks8SJUVE4SNIui+b8AMhib9huSuQ\nfX3RB6XDIS3pXbkXshG89uQnCul2nB8xIEUEi2DF9GYY4ljGKT8/RMnH9k9v9c2R\n5U7OTC9lP1k4oPt+wG5LYQNhpc2DOZy6ItalnRSJA4ZxcmgYozI+GgkZM3bS1hTp\nHaODvkKpAgMBAAECggEAAKoCvB2bSYhi5hLhzckf8f6rHH8l/Ryb3VSEW9BwjMlC\nkVfcCJ3dIn2+w+2rvwIO0PZdLqcnJej6JSTVmAozbgCWbPYF4fxfb+lup1YBzAft\nxxu4ZcINCAVN+PjMfnk4gHR6Rk2yBDe0cTPs7wJqLfV36JrUp6zsxxE0O1ZUEFmr\nbbIzdhBPMGouHP2t376UfkRTngOSPkUvH5RKWSrMnqs64IFDM3g9dg+y8zCM1L71\nNxmN4WLTcJREkJHq4tmgURi9i1yMn1w1U6lqtq1te5W752B7PxJW5UXpyiKNXL8P\ncennvo8byTZ8isyQq2Nw7pQmx48uUcC4+EfkFjcdzwKBgQDxyWEY+czNa4xhrabO\nWMxv39Q3LOt177h5ulZW/ff8Q9TMUMTDgcGJs3Rlh5KdFS4r8XMKhUzG2u0KkC69\n5Tj59GI4tKhjNpgOTCoH7fuCp7awZUSUpvHDY9zmqQVnDTqZCXWtQKyZeXjrxqON\nJKjhBQ05sFIpzGrYygMYf+E84wKBgQDWC9jD6gskjnhX4zOLqfOpgv7tQIcTR5Az\ngqyqvUtOwcjmdtr1p2BrhBPtL1G41LW/vG4y1sX1Z1L5yGbl2Vnm3qv7cOGb2UAk\nP+82ng71crULg5PccBjuZIEwqNMQtcR1Z6mYHdzDZrW793CUGb2q+d26UY1NCo/t\nCuXpK+0EAwKBgQClZj0l+LxBSfEeYMxbHCO95EAn/nKUmwh3PSETIWkjCMPpgNcZ\nZwoeSMS3L6b8DiEnrmQkLkv3PIwrTbar8MKpOqR2Zh9Kv24FWdTm18XV+yTeRmhD\nyHBaWVYj9Dvd4w7S4cW+Xx+zXYV6xMfdJdbhF7OUYynRriTpaEf12oUaQQKBgEh1\nAC7pxlXcqJ5Puf44TNSAFJ3prw/2tLjLLnop1BlX/hMN/vcTbs9WiYxL7WUdFF1Q\ngxlQnPiCvpLxpOt/1TATBrL6NlUUiOL8hZS+kp/B8clxBBemFrp0aUs4iyJn9ZYs\nvjtROI8o8LItg/2ObSc4qDdPLf77aVc7zjJNfVFTAoGAPxp+1Hsr84CeM/yCEbU+\n/ymgZYB77KJRbholGoFbTKvxD8iRCl9h9Z9Nhq/g1NuOjwRfym24v5+yoyZX9ZeH\nkvKNwZdBikbitrbJZ4LawjlFdc5+F4ZL9oByryItp8UAta1Gjg9IJjJBo4jeDms+\nLWv4SqN2H/5n5fJeimh0tq4=\n-----END PRIVATE KEY-----\n",
-                "client_email" => "firebase-adminsdk-q97ue@cbf-notification.iam.gserviceaccount.com",
-                "client_id" => "109500120381256275725",
+                "project_id" => "christian-business-finder-app",
+                "private_key_id" => "f7b0be0056ede86fb7d941448935e8673349fcaa",
+                "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDo3SEGdOXsw4nh\nIgF5oNk2BhB1R8AoS+i40fEKq1NrsUyGEEbXx1lZJdYZiFSzadv+LNoq/4P4wFlz\nkp8MV0wvfWSxAVu8zv9Hm1aL2gGZxb5NNUj1NH+eou03yzOADMlKk2B3eMuhp8cI\nHPHJa9e9k0Mud+4+npPI2Oytt4b7dbZsrilvKkQfvKNspzaUxR+9IDacjnkWN2nd\nSma3ZGslu4MJ/Cw2HGGfM2I3b1rs6J4PV5wce1qYOBUk3rp46l0/DPH9LpSNNLpR\n0dok2j9WSGzm8wGuyp1s6rlwxg94wU8LpiWalCPiM3+YXQt/FwNcV6rKtAhWdxaB\nFAHfSWzZAgMBAAECggEAElYLOi9tRXH2QvCDDjlAsVTT6fA+7M1hY2BAqzbnaDT7\nUhkpAuezHOZyT+tgxAnjZUXR3g3lreozgPq8JGQhXyHwElIJj7n69v//1h5R/vJH\ntFusRYafP/YTWM/a28vl88XcFDxCSJXmAbkJvvMLd2WHpjqSW4LwHyIZrOolKlqp\nigAFub2rH3d5+BmPCTaP54bPZaxUHzsQZ8kmc0J4eYzHn82r3Nb23TUw000AbwS2\n3V/7rlOXr1swDUV6Pym46wfsgZRhzrz2Ge+bDy320cMhkEtzz6fAnREXbzxGQIhY\nZ+crlNcjQnFBflDcheFF0MctIjqzIE/HwGmIelr/gQKBgQD98+j5FKsQAAbjV0f9\nM+CqPeFOs3emt//Oz2FJECMUymAdSGNXyFIqTsvtXwCJtjNnzJ3Jny6Ns52OeFTH\nF1ImflwuJkbpFnQQh3VQ+w/eXDP/qbTgBwMnvyGUy/JkJLwERXT/CSUHFjKw6y6f\nTsLVT5Vri5VWDV3j3HRNBnx8uQKBgQDqvbJtD2VwcKPLqb81Rbo2V5k+v9qiEnUJ\ntibqSgWMbZmYxgWveH0qVUmqWP/iDfKoIWWpAIxSg3pvPIYBiYe9eW/gXRlbfY9v\niAz3J2iAyfZ/RngLB2tf6Ptx90OotWVC0xxqWzoTtvgBUoF/n3was0q40I2G5zPV\nfsiwELWhIQKBgFxeA+Xc059dMyQrUd7RqKyjFzkF48Y69IsnOK5XdTsRpMXh12hN\nTz1eLaQnws1T/PyLGvUDte4KX4s7TzKe0912ZlbOy0nqRcrhShVrS8lH5g3ejxBQ\n3J/vT+qMB5zPE6fGD5jXnaUnOMbKs8lz3z+w05srSOTktbq0K4T8j/jZAoGAUhhV\ntl6UE2bRYgDTpkXkgezQ42klhVj/JY5Wvcl1d089UHiwtFVnMM7zHGhT1TMbkkFb\n1GckrBbfUtfP5em7V0CJJ+ZnX9/hshfasPVPTvtTAeAbS4AkxT4t8gWP3AjUiTJb\n1bZh8VMkGRJJx+B2/r+Fem01keB5+EiG10yAuQECgYAXPYzQUBiGSkNMdekFCGN4\nk/0xHbCZodZOTMibz2llfEjq0HjnJ+B8W08ad/iH1nFMGAS5+E2LaFLwxcLrDKv6\ny4xTPwU6j3j1K1X4HpTZI1/5xQsoRziw1exIHMvzMVUAyqqVkkwMDAWtlII59Phr\ncs18spIZENGJkFivRKIEYw==\n-----END PRIVATE KEY-----\n",
+                "client_email" => "firebase-adminsdk-f7vc8@christian-business-finder-app.iam.gserviceaccount.com",
+                "client_id" => "100015504870668066714",
                 "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
                 "token_uri" => "https://oauth2.googleapis.com/token",
                 "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
-                "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-q97ue%40cbf-notification.iam.gserviceaccount.com",
+                "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-f7vc8%40christian-business-finder-app.iam.gserviceaccount.com",
                 "universe_domain" => "googleapis.com"
             ]);
 
+            $sender = User::find($senderId);
             $recipient = User::find($recipientId);
             $recipientFcmToken = $recipient->fcm_token;
-
-            $businessUser = Buisness::where('user_id', $recipientId)->first();
+            $businessUser = Buisness::where('user_id', $senderId)->first();
 
             if ($businessUser) {
-                $this->firebaseConfiguration($factory, $recipientFcmToken, null, $content, $recipientId, $businessUser);
+                $this->firebaseConfiguration($factory, $recipientFcmToken, null, $content, $senderId, $businessUser);
             } else {
-                $this->firebaseConfiguration($factory, $recipientFcmToken, $recipient, $content, $recipientId, null);
+                $this->firebaseConfiguration($factory, $recipientFcmToken, $sender, $content, $senderId, null);
             }
 
             return response()->json([
@@ -2263,17 +2267,18 @@ class UserController extends Controller
         }
     }
 
-    private function firebaseConfiguration($factory = null, $recipientFcmToken = null, $recipient = null, $content = null, $recipientId = null, $businessUser = null)
+    private function firebaseConfiguration($factory = null, $recipientFcmToken = null, $sender = null, $content = null, $senderId = null, $businessUser = null)
     {
         try {
             $messaging = $factory->createMessaging();
             $firebaseMessage = CloudMessage::withTarget('token', $recipientFcmToken)
                 ->withNotification([
-                    'title' => $recipient ? $recipient->name : $businessUser->name,
+                    'title' => $businessUser ? $businessUser->name : $sender->name,
                     'body' => $content,
                 ])
                 ->withData([
-                    'recipient_id' => $recipientId
+                    'sender_id' => $senderId,
+                    'image' => $businessUser ? "https://websitedemolink.co/christian-business-finder/public/uploads/business/" . $businessUser->thumbnail : "https://websitedemolink.co/christian-business-finder/public/assets/uploads/user/" . $sender->profile_image
                 ]);
             $messaging->send($firebaseMessage);
 
@@ -2286,6 +2291,59 @@ class UserController extends Controller
                 'response' => $e->getMessage(),
             ], 500);
         } catch (MessagingException|FirebaseException $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getNotification($id)
+    {
+        try {
+            $user = User::find($id);
+
+            if (empty($user)) {
+                return response()->json([
+                    'success' => false,
+                    'response' => 'User not found.',
+                ], 401);
+            }
+
+            $type = $user->type;
+            $notifications = AdminNotification::all();
+
+            if (empty($notifications)) {
+                return response()->json([
+                    'success' => false,
+                    'response' => 'Notification not found.',
+                ], 401);
+            }
+
+            $notificationGet = [];
+            foreach ($notifications as $notification) {
+                $userType = explode(',', $notification->user_type);
+
+                if (is_array($userType) && in_array($type, $userType)) {
+                    $image = asset('uploads/notification/' . $notification->image);
+                    $title = $notification->notification_title;
+                    $description = strip_tags($notification->notification_description);
+                    $created_at = $notification->created_at;
+
+                    $notificationGet[] = [
+                        'image' => $image,
+                        'title' => $title,
+                        'description' => $description,
+                        'created_at' => $created_at,
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'response' => $notificationGet,
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'response' => $e->getMessage(),

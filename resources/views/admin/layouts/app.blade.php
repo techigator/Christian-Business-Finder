@@ -327,6 +327,16 @@
 
 
                     @if(\Illuminate\Support\Facades\Auth::user()->type === 'admin')
+
+                        <li class="nav-item">
+                            <a href="{{ route('notification.index') }}" class="nav-link">
+                                <i class="nav-icon fa fa-bell" aria-hidden="true"></i>
+                                <p>
+                                    Notifications
+                                </p>
+                            </a>
+                        </li>
+
                         {{--<li class="nav-item">
                           <a href="{{ url('/') }}" class="nav-link">
                             <i class="nav-icon fa fa-globe"></i>

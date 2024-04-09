@@ -1,11 +1,40 @@
 @extends('admin/layouts/app')
-@section('title', 'Business')
+@section('title', 'Notifications')
 @section('content')
     <style>
         .error-message {
             color: #d13d3d;
             font-weight: 600;
             font-size: 14px;
+        }
+
+        .remove-thumbnail {
+            margin-bottom: 5rem;
+            margin-left: 0.4rem;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        .remove-image {
+            margin-bottom: 5rem;
+            margin-left: 0.4rem;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        .remove-preview-image {
+            margin-bottom: 5rem;
+            margin-left: 0.4rem;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        table.dataTable {
+            width: 125%;
+            margin: 0 auto;
+            clear: both;
+            border-collapse: separate;
+            border-spacing: 0;
         }
     </style>
     <!-- =============== Left side End ================-->
@@ -52,6 +81,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="alert-container">
+                    </div>
+
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success alert-block">
                             <button type="button" class="close"
@@ -79,7 +112,7 @@
                                        style="float: right;"> Export Excel File
                                     </a>
                                     <a class="btn btn-secondary mr-2" href="" data-toggle="modal"
-                                       data-target="#AddModal"
+                                       data-target="#add-modal"
                                        style="background: #1e1e2d; border-color: #1e1e2d; float: right;"> Create New
                                         Business</a>
                                 </div>
@@ -127,7 +160,7 @@
                                                         $latitude = $business->latitude ? explode(', ', $business->latitude) : ['-76.574990'];
                                                     }
                                                 @endphp
-                                                <tr>
+                                                <tr data-business-id="{{ $business->id }}">
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $business->category->name ?? 'Business' }}</td>
                                                     <td>{{ $business->name ?? 'Koelpin, Hahn and Fay' }}</td>
@@ -139,8 +172,7 @@
                                                     <td>{{ htmlspecialchars(implode(', ', $longitude)) }}</td>
                                                     <td>{{ htmlspecialchars(implode(', ', $latitude)) }}</td>
                                                     <td>
-                                                        <form action="{{ route('business.destroy', $business->id) }}"
-                                                              method="DELETE" class="form-delete">
+                                                        <form class="form-delete">
                                                             <!-- <a class="btn btn-info showModalBtn" href="#" data-toggle="modal" data-showid="{!! $business->id !!}">Show</a> -->
                                                             <a title="send-mail" class="btn btn-success"
                                                                href="{{ route('customized.members.send.mail', $business->id) }}">
@@ -151,9 +183,7 @@
                                                                data-toggle="modal"
                                                                data-id="{!! $business->id !!}"><i
                                                                     class="fas fa-solid fa-edit"></i></a>
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger delete_button"
-                                                                    onclick="return confirm('Are you sure you want to delete this business?');">
+                                                            <button type="submit" class="btn btn-danger delete_button">
                                                                 <i class="fas fa-solid fa-trash"></i>
                                                             </button>
                                                         </form>
@@ -246,8 +276,8 @@
 
 <!-- Add Modal start -->
 
-
-<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+<!-- Add Modal Start -->
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -270,7 +300,7 @@
                             </ul>
                         </div>
                         <script type="text/javascript">
-                            $("#AddModal").modal("show");
+                            $("#add-modal").modal("show");
                         </script>
                     @endif
                     <form action="{{ route('business.store') }}" class="add-form" method="POST"
@@ -320,6 +350,20 @@
                                     />
 
                                     <div class="image-div">
+                                        <strong>Select Thumbnail to upload</strong>
+                                        <div id="thumbnail-error" class="error-message"></div>
+                                        <figure>
+                                            <img
+                                                src="https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo="
+                                                id="preview-thumbnail" style="height: 120px; width: 200px"
+                                                class="img-fluid" alt="Preview Image">
+                                            <input type="file" name="thumbnail" id="picture-thumbnail"
+                                                   style="display: none;" accept="image/*">
+                                            <i class="remove-thumbnail fa fa-times" aria-hidden="true"
+                                               onclick="removeBusinessThumbnail()"></i>
+                                        </figure>
+
+
                                         <strong>Select Image to upload</strong>
                                         <div id="image-error" class="error-message"></div>
                                         <figure>
@@ -327,124 +371,220 @@
                                                 src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
                                                 id="preview-image" style="height: 120px; width: 200px"
                                                 class="img-fluid" alt="Preview Image">
-                                            <input type="file" name="image" id="picture-input"
-                                                   class="form-control my-4">
+                                            <input type="file" name="images[]" id="picture-input"
+                                                   style="display: none;" accept="image/*">
+                                            <i class="remove-image fa fa-times" aria-hidden="true"
+                                               onclick="removeBusinessImage()"></i>
                                         </figure>
+
+                                        <strong class="my-2">Add more images</strong>
+                                        <div class="add-more-images"></div>
+
+                                        <br>
+                                        <button type="button" class="btn btn-info" id="add-images-div">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="container my-4" style="border: 2px solid black; border-radius: 2px;">
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <div id="days-error" class="error-message"></div>
-                                                <div class="form-group">
-                                                    <strong>Days of the Week</strong>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input input-day" type="hidden" value="Monday" name="days[]" id="monday">
-                                                        <label class="form-check-label" for="monday">Monday</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input input-day" type="hidden" value="Tuesday" name="days[]" id="tuesday">
-                                                        <label class="form-check-label" for="tuesday">Tuesday</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input input-day" type="hidden" value="Wednesday" name="days[]" id="wednesday">
-                                                        <label class="form-check-label" for="wednesday">Wednesday</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input input-day" type="hidden" value="Thursday" name="days[]" id="thursday">
-                                                        <label class="form-check-label" for="thursday">Thursday</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input input-day" type="hidden" value="Friday" name="days[]" id="friday">
-                                                        <label class="form-check-label" for="friday">Friday</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input input-day" type="hidden" value="Saturday" name="days[]" id="saturday">
-                                                        <label class="form-check-label" for="saturday">Saturday</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input input-day" type="hidden" value="Sunday" name="days[]" id="sunday">
-                                                        <label class="form-check-label" for="sunday">Sunday</label>
-                                                    </div>
-                                                </div>
+                                            <div class="col form-check mt-4" style="display: flex; justify-content: center;
+                                                    align-items: center;">
+                                                <strong>Days of the Week</strong>
                                             </div>
-
-                                            <div class="col-md-3">
-                                                <div class="open-hour">
-                                                    <strong>Opening Hours</strong>
-                                                    <div id="opening-hour-error" class="error-message"></div>
-                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('opening_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="opening-hour-text"/>
-                                                </div>
+                                            <div class="col mt-4">
+                                                <strong>Opening Hours</strong>
                                             </div>
-
-                                            <div class="col-md-3">
-                                                <div class="close-hour">
-                                                    <strong>Closing Hours</strong>
-                                                    <div id="closing-hour-error" class="error-message"></div>
-                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
-                                                    <input type="time" name="opening_hours" value="{{ old('closing_hours') }}"
-                                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="closing-hour-text"/>
-                                                </div>
+                                            <div class="col mt-4">
+                                                <strong>Closing Hours</strong>
                                             </div>
-
-                                            <div class="col-md-3">
-                                                <div class="avail-days">
-                                                    <div class="form-group">
-                                                        <strong>Availability</strong>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="monday">
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="tuesday">
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="wednesday">
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="thursday">
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="friday">
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="saturday">
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input input-day" type="checkbox" value="1" name="days[]" id="sunday">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="col form-check mt-4" style="
+                                                    display: flex;
+                                                    justify-content: center;
+                                                    align-items: center;
+                                                ">
+                                                <strong>Availability</strong>
                                             </div>
                                         </div>
-                                    </div>
-                                    {{--<i class="fas fa-plus btn btn-info"></i>
-                                    <br>--}}
+                                        <hr>
 
-                                    <strong>Detail</strong>
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="monday">Monday</label>
+                                                <input class="form-check-input input-day" type="hidden" value="Monday"
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value="09:00 AM"
+                                                       class="form-control mt-2 mb-2 opening-hour-text"
+                                                       placeholder="Opening Hours" id="monday-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value="05:00 PM"
+                                                       class="form-control mt-2 mb-2 closing-hour-text"
+                                                       placeholder="Closing Hours" id="monday-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day" type="checkbox" value="1"
+                                                       name="availability[Monday]" id="availability-monday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="tuesday">Tuesday</label>
+                                                <input class="form-check-input input-day" type="hidden" value="Tuesday"
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value="09:00 AM"
+                                                       class="form-control mt-2 mb-2 opening-hour-text"
+                                                       placeholder="Opening Hours" id="tuesday-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value="05:00 PM"
+                                                       class="form-control mt-2 mb-2 closing-hour-text"
+                                                       placeholder="Closing Hours" id="tuesday-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day" type="checkbox" value="1"
+                                                       name="availability[Tuesday]" id="availability-tuesday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="wednesday">Wednesday</label>
+                                                <input class="form-check-input input-day" type="hidden"
+                                                       value="Wednesday" name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value="09:00 AM"
+                                                       class="form-control mt-2 mb-2 opening-hour-text"
+                                                       placeholder="Opening Hours" id="wednesday-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value="05:00 PM"
+                                                       class="form-control mt-2 mb-2 closing-hour-text"
+                                                       placeholder="Closing Hours" id="wednesday-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day" type="checkbox" value="1"
+                                                       name="availability[Wednesday]" id="availability-wednesday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="thursday">Thursday</label>
+                                                <input class="form-check-input input-day" type="hidden" value="Thursday"
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value="09:00 AM"
+                                                       class="form-control mt-2 mb-2 opening-hour-text"
+                                                       placeholder="Opening Hours" id="thursday-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value="05:00 PM"
+                                                       class="form-control mt-2 mb-2 closing-hour-text"
+                                                       placeholder="Closing Hours" id="thursday-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day" type="checkbox" value="1"
+                                                       name="availability[Thursday]" id="availability-thursday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="friday">Friday</label>
+                                                <input class="form-check-input input-day" type="hidden" value="Friday"
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value="09:00 AM"
+                                                       class="form-control mt-2 mb-2 opening-hour-text"
+                                                       placeholder="Opening Hours" id="friday-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value="05:00 PM"
+                                                       class="form-control mt-2 mb-2 closing-hour-text"
+                                                       placeholder="Closing Hours" id="friday-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day" type="checkbox" value="1"
+                                                       name="availability[Friday]" id="availability-friday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="saturday">Saturday</label>
+                                                <input class="form-check-input input-day" type="hidden" value="Saturday"
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value="09:00 AM"
+                                                       class="form-control mt-2 mb-2 opening-hour-text"
+                                                       placeholder="Opening Hours" id="saturday-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value="05:00 PM"
+                                                       class="form-control mt-2 mb-2 closing-hour-text"
+                                                       placeholder="Closing Hours" id="saturday-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day" type="checkbox" value="1"
+                                                       name="availability[Saturday]" id="availability-saturday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="sunday">Sunday</label>
+                                                <input class="form-check-input input-day" type="hidden" value="Sunday"
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value="09:00 AM"
+                                                       class="form-control mt-2 mb-2 opening-hour-text"
+                                                       placeholder="Opening Hours" id="sunday-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value="05:00 PM"
+                                                       class="form-control mt-2 mb-2 closing-hour-text"
+                                                       placeholder="Closing Hours" id="sunday-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day" type="checkbox" value="1"
+                                                       name="availability[Sunday]" id="availability-sunday">
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+
+                                    <strong class="my-4">Detail</strong>
                                     <div id="detail-error" class="error-message"></div>
                                     <textarea class="form-control" name="details"
                                               id="myTextarea1" placeholder="Details"></textarea>
@@ -455,8 +595,7 @@
                                     <strong class="my-2">Add Locations</strong>
                                     <br>
                                     <button type="button" class="btn btn-info" id="add-locations-div">
-                                        <i
-                                            class="fas fa-plus"></i>
+                                        <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
@@ -473,9 +612,9 @@
         </div>
     </div>
 </div>
-<!-- Add Modal end -->
+<!-- Add Modal End -->
 
-<!-- Edit Modal start -->
+<!-- Edit Modal Start -->
 <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -535,38 +674,258 @@
                                     <input type="text" name="ratings" value=""
                                            class="form-control mt-2 mb-2" placeholder="Rating" id="edit-ratings"
                                            required/>
+
+                                    <div class="form-group edit-image-div">
+                                        <strong>Edit Thumbnail:</strong>
+                                        <br/>
+                                        <img src="https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo="
+                                             style="width: 150px; height: 100px;"
+                                             id="edit-thumbnail"
+                                             alt="business"/>
+                                        <input type="file" name="thumbnail" value="" id="thumbnail"
+                                               class="form-control my-4"/>
+                                        <hr>
+                                        <br/>
+                                    </div>
+
                                     <div class="form-group edit-image-div">
                                         <strong>Edit Image:</strong>
                                         <br/>
-                                        <img src="{{ asset('images/no-img-avalible.png') }}" width="150px"
+                                        <img src="{{ asset('images/no-img-avalible.png') }}"
+                                             style="width: 150px; height: 100px;"
                                              id="edit-image"
                                              alt="business"/>
-                                        <input type="file" name="image" value="" id="images"
-                                               class="form-control mt-2 mb-2"/>
+                                        <input type="file" name="images[]" value="" id="images"
+                                               class="form-control my-4"/>
+                                        <hr>
                                         <br/>
                                     </div>
-                                    <strong>Edit Opening Hours</strong>
+
+                                    {{--<strong class="my-2">Add more images</strong>
+                                    <div class="add-more-images"></div>
+
+                                    <br>
+                                    <button type="button" class="btn btn-info" id="add-images-div">
+                                        <i class="fas fa-plus"></i>
+                                    </button>--}}
+
+                                    {{--<strong>Edit Opening Hours</strong>
                                     <input type="time" name="opening_hours" value=""
                                            class="form-control mt-2 mb-2" placeholder="Opening Hours" id="edit-hour"
-                                           required/>
+                                           required/>--}}
+
+                                    <div class="container my-4" style="border: 2px solid black; border-radius: 2px;">
+                                        <div class="row">
+                                            <div class="col form-check mt-4" style="display: flex; justify-content: center;
+                                                    align-items: center;">
+                                                <strong>Days of the Week</strong>
+                                            </div>
+                                            <div class="col mt-4">
+                                                <strong>Opening Hours</strong>
+                                            </div>
+                                            <div class="col mt-4">
+                                                <strong>Closing Hours</strong>
+                                            </div>
+                                            <div class="col form-check mt-4" style="
+                                                    display: flex;
+                                                    justify-content: center;
+                                                    align-items: center;
+                                                ">
+                                                <strong>Availability</strong>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="monday">Monday</label>
+                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-opening-hour-text"
+                                                       placeholder="Opening Hours" id="edit-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-closing-hour-text"
+                                                       placeholder="Closing Hours" id="edit-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day-checkbox" type="checkbox"
+                                                       value="" name="availability[]" id="availability-monday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="tuesday">Tuesday</label>
+                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-opening-hour-text"
+                                                       placeholder="Opening Hours" id="edit-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-closing-hour-text"
+                                                       placeholder="Closing Hours" id="edit-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day-checkbox" type="checkbox"
+                                                       value="" name="availability[]" id="availability-tuesday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="wednesday">Wednesday</label>
+                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-opening-hour-text"
+                                                       placeholder="Opening Hours" id="edit-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-closing-hour-text"
+                                                       placeholder="Closing Hours" id="edit-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day-checkbox" type="checkbox"
+                                                       value="" name="availability[]" id="availability-wednesday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="thursday">Thursday</label>
+                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-opening-hour-text"
+                                                       placeholder="Opening Hours" id="edit-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-closing-hour-text"
+                                                       placeholder="Closing Hours" id="edit-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day-checkbox" type="checkbox"
+                                                       value="" name="availability[]" id="availability-thursday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="friday">Friday</label>
+                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-opening-hour-text"
+                                                       placeholder="Opening Hours" id="edit-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-closing-hour-text"
+                                                       placeholder="Closing Hours" id="edit-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day-checkbox" type="checkbox"
+                                                       value="" name="availability[]" id="availability-friday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="saturday">Saturday</label>
+                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-opening-hour-text"
+                                                       placeholder="Opening Hours" id="edit-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-closing-hour-text"
+                                                       placeholder="Closing Hours" id="edit-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day-checkbox" type="checkbox"
+                                                       value="" name="availability[]" id="availability-saturday">
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col form-check"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <label class="form-check-label" for="sunday">Sunday</label>
+                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                       name="days[]">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="opening_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-opening-hour-text"
+                                                       placeholder="Opening Hours" id="edit-opening">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" name="closing_hours[]" value=""
+                                                       class="form-control mt-2 mb-2 edit-closing-hour-text"
+                                                       placeholder="Closing Hours" id="edit-closing">
+                                            </div>
+                                            <div class="form-check col"
+                                                 style="display: flex; justify-content: center; align-items: center;">
+                                                <input class="form-check-input input-day-checkbox" type="checkbox"
+                                                       value="" name="availability[]" id="availability-sunday">
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+
                                     <strong>Edit Detail</strong>
                                     <textarea class="form-control my-2" name="details"
                                               id="myTextarea2"></textarea>
                                     <div class="edit-multi-location">
-                                        {{--<strong>Edit Location</strong>
-                                        <input type="text" name="location" value="" id="edit-search-input"
-                                               class="form-control mt-2 mb-2" placeholder="Location" required>
-                                        <div id="edit-suggestions"></div>
-                                        <strong>Edit Longitude</strong>
-                                        <input type="text" name="longitude" value=""
-                                               class="form-control mt-2 mb-2" placeholder="Longitude"
-                                               id="edit-longitude"
-                                               required readonly>
-                                        <strong>Edit Latitude</strong>
-                                        <input type="text" name="latitude" value=""
-                                               class="form-control mt-2 mb-2" placeholder="Latitude" id="edit-latitude"
-                                               required readonly>--}}
                                     </div>
+
+                                    {{--<div class="add-multi-location my-2">
+                                    </div>
+
+                                    <strong class="my-2">Add Locations</strong>
+                                    <br>
+                                    <button type="button" class="btn btn-info" id="add-locations-div">
+                                        <i class="fas fa-plus"></i>
+                                    </button>--}}
                                 </div>
                             </div>
                         </div>
@@ -582,18 +941,216 @@
         </div>
     </div>
 </div>
-<!-- Edit Modal end -->
+<!-- Edit Modal End -->
 
 @section('js')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYvOXB3SFyyeR0usVOgnLyoDiAd2XDunU&callback=initMap&libraries=places"
         async defer></script>
+
+    {{-- add or remove -- image and thumbnail image work --}}
+    <script>
+        // thumbnail work
+        document.querySelector('#preview-thumbnail').addEventListener('click', function () {
+            document.querySelector('#picture-thumbnail').click();
+        });
+
+        document.querySelector('#picture-thumbnail').addEventListener('change', function () {
+            previewThumbnail(this);
+        });
+
+        function previewThumbnail(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    document.querySelector('#preview-thumbnail').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function showRemoveButtonThumbnail(input) {
+            var thumbnail = document.querySelector('#preview-thumbnail');
+            var removeButton = document.querySelector('#remove-button');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    thumbnail.src = e.target.result;
+                    removeButton.style.display = 'inline-block';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeBusinessThumbnail() {
+            var thumbnail = document.getElementById('preview-thumbnail');
+            var removeButton = document.getElementById('remove-button');
+
+            // Remove thumbnail
+            thumbnail.src = 'https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo=';
+            // Hide remove button
+            removeButton.style.display = 'none';
+            // Clear file input
+            document.querySelector('#picture-thumbnail').value = '';
+        }
+
+        // image work
+        document.querySelector('#preview-image').addEventListener('click', function () {
+            document.querySelector('#picture-input').click();
+        });
+
+        document.querySelector('#picture-input').addEventListener('change', function () {
+            previewImage(this);
+        });
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    document.querySelector('#preview-image').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function showRemoveButton(input) {
+            var image = document.querySelector('#preview-image');
+            var removeButton = document.querySelector('#remove-button');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    image.src = e.target.result;
+                    removeButton.style.display = 'inline-block';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeBusinessImage() {
+            var image = document.getElementById('preview-image');
+            var removeButton = document.getElementById('remove-button');
+
+            // Remove image
+            image.src = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
+            // Hide remove button
+            removeButton.style.display = 'none';
+            // Clear file input
+            document.querySelector('#picture-input').value = '';
+        }
+
+        // static image work
+        $('#picture-input').on('change', function (event) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var dataURL = reader.result;
+                $('#preview-image').attr('src', dataURL);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        });
+
+        $('#images').on('change', function (event) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var dataURL = reader.result;
+                $('#edit-image').attr('src', dataURL);
+            };
+
+            console.log('input.files[0]', input.files[0])
+            reader.readAsDataURL(input.files[0]);
+        });
+
+        // add more images work
+        $(document).ready(function () {
+            let counter = 0;
+
+            function addImage(counter) {
+                let addMoreImages = $('.add-more-images');
+
+                let imageElement = $('<figure data-figure-id="' + counter + '">' +
+                    '<img src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" id="preview-image-' + counter + '" style="height: 120px; width: 200px" class="img-fluid" alt="Preview Image">' +
+                    '<input type="file" name="images[]" id="picture-input-' + counter + '" style="display: none;" accept="image/*">' +
+                    '<i class="remove-preview-image fa fa-times" aria-hidden="true"></i>' +
+                    '</figure>' +
+                    '<button type="button" class="btn btn-info remove-image-figure mb-3" data-image-id="' + counter + '"><i class="fa fa-times" aria-hidden="true"></i></button>'
+                );
+
+                addMoreImages.append(imageElement);
+
+                $('#preview-image-' + counter).on('click', function () {
+                    $('#picture-input-' + counter).click();
+                });
+
+                $('#picture-input-' + counter).on('change', function () {
+                    previewMoreImage(this, counter);
+                });
+            }
+
+            $(document).on('click', '#add-images-div', function () {
+                counter++;
+
+                addImage(counter);
+            });
+
+            // select image on multiple preview
+            function previewMoreImage(input, counter) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#preview-image-' + counter).attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // remove image preview
+            $(document).on('click', '.remove-preview-image', function () {
+                var figure = $(this).closest('figure');
+                var counter = figure.find('img').attr('id').replace('preview-image-', '');
+
+                removeMoreBusinessImage(counter);
+            });
+
+            function removeMoreBusinessImage(counter) {
+                var image = document.getElementById('preview-image-' + counter);
+
+                // Remove image
+                image.src = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
+                document.querySelector('#picture-input-' + counter).value = '';
+            }
+
+            $(document).on('click', '.remove-image-figure', function () {
+                var imageId = $(this).data('image-id');
+                $('#preview-image-' + imageId).closest('figure').remove();
+                $('#picture-input-' + imageId).remove();
+                $(this).remove();
+            });
+        });
+    </script>
+    {{-- add or remove -- image and thumbnail image work --}}
+
+    {{-- add or edit map location -- location, longitude and latitude work --}}
     <script>
         $(document).ready(function () {
             $('.js-example-basic-multiple').select2();
-            // $(".js-example-basic-multiple").select2({
-            //     maximumSelectionLength: 2
-            // });
 
             $('.add-form').submit(function (e) {
                 var hasError = false;
@@ -637,12 +1194,12 @@
                     $('#image-error').text("");
                 }
 
-                if ($('#input-day').val().trim() === '') {
+                if ($('#picture-thumbnail').val().trim() === '') {
                     e.preventDefault();
                     hasError = true;
-                    $('#days-error').text("Please select days.");
+                    $('#thumbnail-error').text("Please provide thumbnail.");
                 } else {
-                    $('#days-error').text("");
+                    $('#thumbnail-error').text("");
                 }
 
                 if ($('#opening-hour-text').val().trim() === '') {
@@ -691,6 +1248,52 @@
                 $(this).find('[required]').each(function () {
                     if (!$(this).val()) {
                         hasError = true;
+                    }
+                });
+            });
+
+            $('.delete_button').click(function (event) {
+                event.preventDefault();
+
+                var row = $(this).closest('tr');
+                var businessId = row.data('business-id');
+                var url = "{{ route('business.destroy') }}";
+
+                swal({
+                    title: `Are you sure?`,
+                    text: "If you delete this notification, it will be gone forever.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: url + '/' + businessId,
+                            type: 'POST',
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                            },
+                            success: function (response) {
+                                row.fadeOut(400, function () {
+                                    row.remove();
+                                });
+
+                                var alertBox = $('<div class="alert alert-success alert-block">');
+                                var closeButton = $('<button type="button" class="close" data-dismiss="alert">×</button>');
+                                var strongTag = $('<strong>').text(response.success);
+
+                                alertBox.append(closeButton, strongTag);
+                                $('.alert-container').empty().append(alertBox);
+                            },
+                            error: function (xhr, status, error) {
+                                var alertBox = $('<div class="alert alert-danger alert-block">');
+                                var closeButton = $('<button type="button" class="close" data-dismiss="alert">×</button>');
+                                var strongTag = $('<strong>').text(error);
+
+                                alertBox.append(closeButton, strongTag);
+                                $('.alert-container').empty().append(alertBox);
+                            }
+                        });
                     }
                 });
             });
@@ -861,7 +1464,9 @@
         initEditMultiMap(false);
         initMap(false);
     </script>
+    {{-- add or edit -- location, longitude and latitude work --}}
 
+    {{-- ckeditor or edit modal work --}}
     <script>
         ClassicEditor
             .create(document.querySelector('#myTextarea1'))
@@ -872,45 +1477,25 @@
                 console.error(error);
             });
 
-        $('#picture-input').on('change', function (event) {
-            var input = event.target;
-            var reader = new FileReader();
+        // day, date or timing work
+        document.addEventListener('DOMContentLoaded', function () {
+            const openingHourInputs = document.querySelectorAll('.opening-hour-text');
+            const closingHourInputs = document.querySelectorAll('.closing-hour-text');
 
-            reader.onload = function () {
-                var dataURL = reader.result;
-                $('#preview-image').attr('src', dataURL);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        });
-        $('#image').on('change', function (event) {
-            var input = event.target;
-            var reader = new FileReader();
-
-            reader.onload = function () {
-                var dataURL = reader.result;
-                $('#edit-image').attr('src', dataURL);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the opening hour input element
-            const openingHourInput = document.getElementById('opening-hour-text');
-            const closingHourInput = document.getElementById('closing-hour-text');
-
-            // Set the default time format
             const defaultOpenTime = '09:00';
             const defaultCloseTime = '17:00';
 
-            // Set the value to the input element
-            openingHourInput.value = defaultOpenTime;
-            closingHourInput.value = defaultCloseTime;
+            openingHourInputs.forEach(function (input) {
+                input.value = defaultOpenTime;
+            });
+
+            closingHourInputs.forEach(function (input) {
+                input.value = defaultCloseTime;
+            });
+
         });
 
+        // add more locations
         $(document).ready(function () {
             let counter = 0;
 
@@ -922,7 +1507,7 @@
                 counter++;
 
                 let locationElement = $(
-                    '<div class="location-div location-div-'+ counter +'">' +
+                    '<div class="location-div location-div-' + counter + '">' +
                     '<strong>Location-' + counter + '</strong>' +
                     '<div id="location-error" class="error-message latitude-error"></div>' +
                     '<input type="text" name="location[]" value="" class="form-control mt-2 mb-2 location-input" id="search-input-' + counter + '" placeholder="Location">' +
@@ -933,7 +1518,7 @@
                     '<strong>Latitude-' + counter + '</strong>' +
                     '<div id="latitude-error" class="error-message latitude-error"></div>' +
                     '<input type="text" name="latitude[]" value="" class="form-control mt-2 mb-2 latitude-input" id="latitude-text-' + counter + '" placeholder="Latitude" readonly>' +
-                    '<button type="button" class="btn btn-info remove-location" data-location-id="'+ counter +'"><i class="fa fa-times" aria-hidden="true"></i></button>' +
+                    '<button type="button" class="btn btn-info remove-location" data-location-id="' + counter + '"><i class="fa fa-times" aria-hidden="true"></i></button>' +
                     '</div>'
                 );
 
@@ -962,6 +1547,7 @@
         const isEditing = true;
         $.noConflict()
 
+        // edit modal working
         $(document).ready(function () {
             var ckeditorInitialized = false;
 
@@ -987,6 +1573,13 @@
             });
 
             function populateModal(data) {
+                var openingHours = data.opening_hours;
+                var closingHours = data.closing_hours;
+
+
+                var days = data.days;
+                var availabilities = data.availabilities;
+
                 // Populate basic fields
                 const selectedUserIds = data.customized_users;
                 const user_detail = data.details;
@@ -1005,8 +1598,35 @@
                 $("#edit-category").val(data.category_id);
                 $("#edit-state").val(data.state ?? 'Colorado');
                 $("#edit-ratings").val(data.ratings ?? '0');
+                $("#edit-thumbnail").val(data.thumbnail ?? 'https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo=');
+
                 // $("#images").val(data.images);
-                $("#edit-hour").val(data.opening_hours ?? '00:00');
+
+                function convertTo24HourFormat(time) {
+                    let [hour, minute, meridiem] = time.split(/\s|:/); // Split the time string by space or colon
+                    hour = parseInt(hour, 10); // Convert hour to integer
+                    if (meridiem === "PM" && hour !== 12) { // If PM and not noon (12 PM)
+                        hour += 12; // Add 12 hours to convert to 24-hour format
+                    } else if (meridiem === "AM" && hour === 12) { // If AM and noon (12 AM)
+                        hour = 0; // Set hour to 0 to represent midnight
+                    }
+                    // Convert back to string and pad with zeros if necessary
+                    return hour.toString().padStart(2, "0") + ":" + minute.padStart(2, "0");
+                }
+
+                days.forEach(function (day, index) {
+                    $(".input-days").eq(index).val(day);
+                    const openingHours12 = openingHours[index];
+                    const closingHours12 = closingHours[index];
+
+                    const openingHours24 = convertTo24HourFormat(openingHours12);
+                    $(".edit-opening-hour-text").eq(index).val(openingHours24);
+
+                    const closingHours24 = convertTo24HourFormat(closingHours12);
+                    $(".edit-closing-hour-text").eq(index).val(closingHours24);
+
+                    $(".input-day-checkbox").eq(index).prop("checked", availabilities[index] === '1').val(availabilities[index]);
+                });
 
                 // Initialize CKEditor if not already initialized
                 if (!ckeditorInitialized) {
@@ -1090,28 +1710,47 @@
             function populateImageFields(images) {
                 var imageUrlBase = '{{ asset('') }}/uploads/business/';
                 var imageDiv = $('.edit-image-div');
+                var emptyImageUrl = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
 
                 if (images && images.length > 0) {
                     if (images.length > 1) {
                         imageDiv.empty();
 
-                        images.forEach(function (image) {
+                        images.forEach(function (image, index) {
                             var imageElement = $(
                                 '<strong>Edit Image:</strong><br/>' +
-                                '<img src="' + imageUrlBase + image + '" width="150px" alt="business"/>' +
-                                '<input type="file" name="image" value="" class="form-control mt-2 mb-2"/>'
+                                '<img src="' + imageUrlBase + image + '" id="edit-multi-image-'+ index +'" style="width: 150px; height: 100px;" alt="business"/>' +
+                                '<input type="file" name="images[]" value="" class="form-control mt-2 mb-2" id="edit-multi-images" data-multi-images="' + index + '"/>' +
+                                '<hr>'
                             );
                             imageDiv.append(imageElement);
                         });
                     } else {
-                        var imageUrl = imageUrlBase + images[0];
-                        $("#edit-image").attr("src", imageUrl);
+                        if (images.length > 0 && images[0].trim() !== '') {
+                            var imageUrl = imageUrlBase + images[0];
+                            $("#edit-image").attr("src", imageUrl);
+                        } else {
+                            $("#edit-image").attr("src", emptyImageUrl);
+                        }
                     }
                 } else {
-                    var emptyImageUrl = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
                     $("#edit-image").attr("src", emptyImageUrl);
                 }
             }
+
+            $(document).on('change', '#edit-multi-images', function (event) {
+                var index = $(this).attr('data-multi-images');
+                var input = event.target;
+                var reader = new FileReader();
+
+                reader.onload = function () {
+                    var dataURL = reader.result;
+                    $('#edit-multi-image-'+ index +'').attr('src', dataURL);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            });
+
 
             $(".send-mail").on("click", function () {
                 var id = $(this).data("id");
@@ -1132,7 +1771,6 @@
             });
         });
 
-
         // slug
         $(document).ready(function () {
             $("#name-text").keyup(function () {
@@ -1149,7 +1787,6 @@
             });
         });
     </script>
-
 
     <script>
         $(document).ready(function () {
@@ -1183,6 +1820,7 @@
             });
         });
     </script>
+
     <script>
         $(function () {
             $("body").on("change", ".toggle-class", function () {
@@ -1203,5 +1841,4 @@
             })
         })
     </script>
-
 @endsection

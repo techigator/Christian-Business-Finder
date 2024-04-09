@@ -96,6 +96,15 @@ Route::post('admin/loginsubmit', [AuthenticationController::class, 'admin_authen
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::group(['prefix' => '/dashboard', 'middleware' => ['customer']], function () {
+
+        // notification
+        Route::get('/notification', [UserController::class, 'notificationIndex'])->name('notification.index');
+        Route::post('/notification-store', [UserController::class, 'notificationStore'])->name('notification.store');
+        Route::get('/notification-show/{id?}', [UserController::class, 'notificationShow'])->name('notification.show');
+        Route::post('/notification-destroy/{id?}', [UserController::class, 'notificationDestroy'])->name('notification.destroy');
+//        Route::get('/notification', [UserController::class, 'notificationIndex'])->name('notification.index');
+
+
         Route::get('/logo-listing', [LogoController::class, 'logo_index'])->name('logo_index');
         Route::post('/update_logo', [LogoController::class, 'logo_update'])->name('logo_update');
         // banner
