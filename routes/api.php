@@ -93,6 +93,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('all-chats-by-user/{user_id}', [UserController::class, 'allChatsByUser']);
     Route::post('specific-chat-by-user', [UserController::class, 'specificChatByUser']);
     Route::post('sent-chat-by-user', [UserController::class, 'sentChatByUser']);
+    Route::post('sent-chat-by-image', [UserController::class, 'sentChatByImage']);
 
 // admin notification receive
     Route::get('get-notification/{user_id?}', [UserController::class, 'getNotification']);

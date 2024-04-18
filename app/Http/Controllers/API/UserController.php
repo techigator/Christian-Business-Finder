@@ -2183,7 +2183,7 @@ class UserController extends Controller
                     return collect($message)->except(['updated_at', 'id'])->toArray();
                 });
 
-                $formattedMessages = $messages->map(function ($message) {
+                /*$formattedMessages = $messages->map(function ($message) {
                     $createdAtParts = explode(' ', $message->created_at);
                     return [
                         'sender_id' => $message->sender_id,
@@ -2192,7 +2192,7 @@ class UserController extends Controller
                         'created_date' => $createdAtParts[0],
                         'created_time' => $createdAtParts[1],
                     ];
-                });
+                });*/
 
                 return response()->json([
                     'success' => true,
@@ -2224,6 +2224,7 @@ class UserController extends Controller
                 'sender_id' => $senderId,
                 'recipient_id' => $recipientId,
                 'content' => $content,
+                'flag' => 0,
             ]);
 
             $factory = (new Factory)->withServiceAccount([
@@ -2253,6 +2254,80 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        } catch (MessagingException|FirebaseException $e) {
+            return response()->json([
+                'success' => false,
+                'response' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function sentChatByImage(Request $request)
+    {
+        try {
+            $senderId = $request->input('sender_id');
+            $recipientId = $request->input('recipient_id');
+
+            $message = new Message();
+            $message->sender_id = $senderId;
+            $message->recipient_id = $recipientId;
+
+            if ($request->hasFile('image')) {
+                $image = Str::random(17) .'_'. $request->file('image')->getClientOriginalName();
+                $request->image->move(public_path('assets/uploads/chats/images/'), $image);
+                $message->content = $image;
+                $message->flag = 1;
+            } else {
+                $message->content = 'Corrupted File.';
+                $message->flag = 0;
+            }
+
+            $message->save();
+
+
+            $data = $message->only([
+                'sender_id',
+                'recipient_id',
+                'content',
+                'flag',
+                'created_at',
+            ]);
+
+            $factory = (new Factory)->withServiceAccount([
+                "type" => "service_account",
+                "project_id" => "christian-business-finder-app",
+                "private_key_id" => "f7b0be0056ede86fb7d941448935e8673349fcaa",
+                "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDo3SEGdOXsw4nh\nIgF5oNk2BhB1R8AoS+i40fEKq1NrsUyGEEbXx1lZJdYZiFSzadv+LNoq/4P4wFlz\nkp8MV0wvfWSxAVu8zv9Hm1aL2gGZxb5NNUj1NH+eou03yzOADMlKk2B3eMuhp8cI\nHPHJa9e9k0Mud+4+npPI2Oytt4b7dbZsrilvKkQfvKNspzaUxR+9IDacjnkWN2nd\nSma3ZGslu4MJ/Cw2HGGfM2I3b1rs6J4PV5wce1qYOBUk3rp46l0/DPH9LpSNNLpR\n0dok2j9WSGzm8wGuyp1s6rlwxg94wU8LpiWalCPiM3+YXQt/FwNcV6rKtAhWdxaB\nFAHfSWzZAgMBAAECggEAElYLOi9tRXH2QvCDDjlAsVTT6fA+7M1hY2BAqzbnaDT7\nUhkpAuezHOZyT+tgxAnjZUXR3g3lreozgPq8JGQhXyHwElIJj7n69v//1h5R/vJH\ntFusRYafP/YTWM/a28vl88XcFDxCSJXmAbkJvvMLd2WHpjqSW4LwHyIZrOolKlqp\nigAFub2rH3d5+BmPCTaP54bPZaxUHzsQZ8kmc0J4eYzHn82r3Nb23TUw000AbwS2\n3V/7rlOXr1swDUV6Pym46wfsgZRhzrz2Ge+bDy320cMhkEtzz6fAnREXbzxGQIhY\nZ+crlNcjQnFBflDcheFF0MctIjqzIE/HwGmIelr/gQKBgQD98+j5FKsQAAbjV0f9\nM+CqPeFOs3emt//Oz2FJECMUymAdSGNXyFIqTsvtXwCJtjNnzJ3Jny6Ns52OeFTH\nF1ImflwuJkbpFnQQh3VQ+w/eXDP/qbTgBwMnvyGUy/JkJLwERXT/CSUHFjKw6y6f\nTsLVT5Vri5VWDV3j3HRNBnx8uQKBgQDqvbJtD2VwcKPLqb81Rbo2V5k+v9qiEnUJ\ntibqSgWMbZmYxgWveH0qVUmqWP/iDfKoIWWpAIxSg3pvPIYBiYe9eW/gXRlbfY9v\niAz3J2iAyfZ/RngLB2tf6Ptx90OotWVC0xxqWzoTtvgBUoF/n3was0q40I2G5zPV\nfsiwELWhIQKBgFxeA+Xc059dMyQrUd7RqKyjFzkF48Y69IsnOK5XdTsRpMXh12hN\nTz1eLaQnws1T/PyLGvUDte4KX4s7TzKe0912ZlbOy0nqRcrhShVrS8lH5g3ejxBQ\n3J/vT+qMB5zPE6fGD5jXnaUnOMbKs8lz3z+w05srSOTktbq0K4T8j/jZAoGAUhhV\ntl6UE2bRYgDTpkXkgezQ42klhVj/JY5Wvcl1d089UHiwtFVnMM7zHGhT1TMbkkFb\n1GckrBbfUtfP5em7V0CJJ+ZnX9/hshfasPVPTvtTAeAbS4AkxT4t8gWP3AjUiTJb\n1bZh8VMkGRJJx+B2/r+Fem01keB5+EiG10yAuQECgYAXPYzQUBiGSkNMdekFCGN4\nk/0xHbCZodZOTMibz2llfEjq0HjnJ+B8W08ad/iH1nFMGAS5+E2LaFLwxcLrDKv6\ny4xTPwU6j3j1K1X4HpTZI1/5xQsoRziw1exIHMvzMVUAyqqVkkwMDAWtlII59Phr\ncs18spIZENGJkFivRKIEYw==\n-----END PRIVATE KEY-----\n",
+                "client_email" => "firebase-adminsdk-f7vc8@christian-business-finder-app.iam.gserviceaccount.com",
+                "client_id" => "100015504870668066714",
+                "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
+                "token_uri" => "https://oauth2.googleapis.com/token",
+                "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
+                "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-f7vc8%40christian-business-finder-app.iam.gserviceaccount.com",
+                "universe_domain" => "googleapis.com"
+            ]);
+
+            $sender = User::find($senderId);
+            $recipient = User::find($recipientId);
+            $recipientFcmToken = $recipient->fcm_token;
+            $content = 'Recieved a image.';
+            $businessUser = Buisness::where('user_id', $senderId)->first();
+
+            if ($businessUser) {
+                $this->firebaseConfiguration($factory, $recipientFcmToken, null, $content, $senderId, $businessUser);
+            } else {
+                $this->firebaseConfiguration($factory, $recipientFcmToken, $sender, $content, $senderId, null);
+            }
+
+            return response()->json([
+                'success' => true,
+                'response' => $data,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
