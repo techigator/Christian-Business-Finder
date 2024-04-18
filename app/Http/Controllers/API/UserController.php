@@ -2098,7 +2098,7 @@ class UserController extends Controller
                 //         ->orWhere('recipient_id', $id);
                 // })
                 ->where('sender_id', $id)
-                ->select('id', 'sender_id', 'recipient_id', 'content', 'created_at')
+                ->select('id', 'sender_id', 'recipient_id', 'content', 'flag', 'created_at')
                 ->whereIn('id', function ($query) {
                     $query->select(\DB::raw('MAX(id)'))
                         ->from('messages')
@@ -2124,6 +2124,7 @@ class UserController extends Controller
                             'recipient_name' => $message->recipient->name ?? $userName,
                             'recipient_thumbnail' => "https://websitedemolink.co/christian-business-finder/public/uploads/business/" . $message->recipient->thumbnail ?? 'No_Image_Available.jpg',
                             'content' => $message->content,
+                            'flag' => $message->flag,
                             'created_at' => $message->created_at,
                         ];
                     } else {
@@ -2139,10 +2140,12 @@ class UserController extends Controller
                             'recipient_name' => $userName,
                             'recipient_thumbnail' => "https://websitedemolink.co/christian-business-finder/public/assets/uploads/user/" . $userProfile,
                             'content' => $message->content,
+                            'flag' => $message->flag,
                             'created_at' => $message->created_at,
                         ];
                     }
                 }
+
                 return response()->json([
                     'success' => true,
                     'response' => $messageData,
