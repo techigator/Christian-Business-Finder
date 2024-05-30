@@ -51,7 +51,7 @@
           {{--
                   <a class="btn btn-success" href="" data-toggle="modal" data-target="#AddModal" style="background: #28a745; border-color: #28a745;float:right;"> Create New Banner</a>
           --}}
-                   
+
                </div>
                <div class="card-body">
                   <div class="table-responsive">
@@ -109,7 +109,7 @@
                      {!! $banners->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
-                    
+
                   </div>
                </div>
             </div>
@@ -117,7 +117,7 @@
       </div>
       <!-- END: Card DATA-->
    </div>
-</main>       
+</main>
         <!-- Banner listing end   -->
     </div>
     <!-- Footer Start -->
@@ -181,13 +181,13 @@
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <strong>Title</strong>
-                                    <input type="text" id="name-text" name="name" value="{{ old('name') }}" class="form-control mt-2 mb-2" placeholder="Name" 
+                                    <input type="text" id="name-text" name="name" value="{{ old('name') }}" class="form-control mt-2 mb-2" placeholder="Name"
                                     />
-                                    
+
                                     <strong>Details:</strong>
                                     <textarea name="details" class="form-control mt-2 mb-2" id="details" placeholder="Details">{{ old('details') }}</textarea>
                                     <br />
-                                        
+
                                     <strong>Select 1st Image to upload</strong>
                                     <input type="file" name="img" value="{{ old('img') }}" id="img" class="form-control mt-2 mb-2" />
                                     <br />
@@ -196,13 +196,13 @@
                                     <br />
                                     {{--
                                      <strong>Post By</strong>
-                                    <input type="text" name="post_by" value="{{ old('post_by') }}" class="form-control mt-2 mb-2" placeholder="Post By" 
+                                    <input type="text" name="post_by" value="{{ old('post_by') }}" class="form-control mt-2 mb-2" placeholder="Post By"
                                     id="page-text"/>
                                     <strong>Post Date</strong>
-                                    <input type="date" name="created_at" value="{{ old('created_at') }}" class="form-control mt-2 mb-2" placeholder="Date" 
+                                    <input type="date" name="created_at" value="{{ old('created_at') }}" class="form-control mt-2 mb-2" placeholder="Date"
                                     id="page-text"/>
                                     <strong>Select Video to upload</strong>
-                                    <br /> 
+                                    <br />
                                      <input type="file" name="file" value="{{ old('file') }}" id="file" class="form-control mt-2 mb-2" />
                                     --}}
                                 </div>
@@ -262,8 +262,8 @@
                                 <strong>Details:</strong>
                                 <textarea id="editDetails"  name="details" class="form-control mt-2 mb-2" placeholder="Details"></textarea>
                             </div>
-                            
-                            
+
+
                             <div class="form-group">
                                 <strong>1st Image:</strong>
                                 <br />
@@ -329,7 +329,7 @@
 div#example_filter {
     float: right;
 }
-.form-delete {    
+.form-delete {
     margin: 0;
 
 }
@@ -338,15 +338,15 @@ div#example_filter {
     background-color: #218838;
     border-color: #1e7e34;
 }
-</style> 
-@endsection 
-@section('link') 
+</style>
+@endsection
+@section('link')
 <!-- <link rel="stylesheet" href="{{asset('vendors/datatable/css/dataTables.bootstrap4.min.css')}}" /> -->
 <link rel="stylesheet" href="{{asset('vendors/datatable/buttons/css/buttons.bootstrap4.min.css')}}"/>
 <!-- <link rel="stylesheet" href="{{asset('vendors/x-editable/css/bootstrap-editable.css')}}" /> -->
 
-@endsection 
-@section('script') 
+@endsection
+@section('script')
 <!-- END: Template JS-->
 <script src="{{asset('vendors/datatable/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('vendors/datatable/buttons/js/dataTables.buttons.min.js')}}"></script>
@@ -362,12 +362,12 @@ div#example_filter {
 <script src="{{asset('vendors/datatable/buttons/js/buttons.html5.min.js')}}"></script>
 <script src="{{asset('vendors/datatable/buttons/js/buttons.print.min.js')}}"></script> -->
 <script src="{{asset('vendors/datatable.script.js')}}"></script>
-@endsection 
+@endsection
 @section('js')
 <script src="{{asset('admin/vendors/ckeditor/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("body").on("click", ".editModalBtn", function(event){ 
+        $("body").on("click", ".editModalBtn", function(event){
             var id = $(this).data("id");
             var action = '{{route("banner_edit")}}/' + id;
             var url = '{{route("banner_edit")}}/' + id;
@@ -381,7 +381,7 @@ div#example_filter {
                     $("#editName").attr("value", data.name);
                     // $("#editpage").attr("value", data.page);
                     CKEDITOR.instances.editDetails.setData(data.details);
-                    // $("#editDetails").val(data.details);               
+                    // $("#editDetails").val(data.details);
                     // $("#editPost_by").val(data.post_by);
                     // $("#editCreated_at").val(data.created_at);
 @if (env('APP_ENV')=='local')
@@ -392,7 +392,7 @@ div#example_filter {
                     $("#editImg").attr("src", '{{asset("/")}}' + data.img);
                     $("#editFile").attr("src", '{{asset("/")}}' + data.file);
                     // var src = '{{asset("")}}'+ '/'+ data.file;
-@endif               
+@endif
                    // $("#editFile").prop("src",src)
                     // $('#editid').attr('action', '{{route("banner_update")}}/'+id);
                     $("#editModal").modal("show");
@@ -402,7 +402,7 @@ div#example_filter {
     });
 </script>
 <script>
- $(document).ready(function () {     
+ $(document).ready(function () {
     var details = CKEDITOR.replace("details");
     details.on("change", function (evt) {
         $("#details").text(evt.editor.getData());
@@ -411,13 +411,13 @@ div#example_filter {
     editDetails.on("change", function (evt) {
         $("#editDetails").text(evt.editor.getData());
     });
-});    
+});
 </script>
 <script>
   $(function() {
-         $("body").on("change", ".toggle-class", function(){ 
-        var is_active = $(this).prop('checked') == true ? 1 : 0; 
-        var id = $(this).data('id');          
+         $("body").on("change", ".toggle-class", function(){
+        var is_active = $(this).prop('checked') == true ? 1 : 0;
+        var id = $(this).data('id');
         $.ajax({
             type: "GET",
             dataType: "json",

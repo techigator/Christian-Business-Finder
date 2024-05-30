@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\category;
-use Illuminate\Http\Request;
 use App\Models\Order;
-
-use Auth;
 use Gate;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function dashboard()
     {
-
-        if (auth()->check()) {
-            return view('admin.dashboard');
+        if (Auth::check() && Auth::user()) {
+            $user = Auth::user();
+            $couponCode = $user->coupon[0]['code'] ?? '';
+            return view('admin.dashboard', compact('user', 'couponCode'));
         } else {
             return redirect()->route('admin.login')->with('ERROR', 'Session expire again login to access admin panel.');
         }
+
 	    /*if (Gate::denies('isAdmin'))
 			abort(403);*/
 

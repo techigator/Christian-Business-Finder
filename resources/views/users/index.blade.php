@@ -14,6 +14,16 @@
         .card-title {
             font-weight: 500;
         }
+
+        .admin-user-password {
+            outline: none;
+            box-shadow: none;
+            background: none;
+            border: none;
+            position: relative;
+            top: -2.1rem;
+            left: 45rem;
+        }
     </style>
 
     <!-- =============== Left side End ================-->
@@ -89,7 +99,10 @@
                                             <th>User Type</th>
                                             <th>User Name</th>
                                             <th>User Email</th>
-                                            <th width="180px">Action</th>
+                                            @if ($users->contains('type', 'sales_person'))
+                                                <th>Sales Person Users Count</th>
+                                            @endif
+                                            <th width="480px">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -102,16 +115,38 @@
                                                 <td>{{ $type }}</td>
                                                 <td>{{ $user->name }}</td>
                                                 <td class="user-email">{{ $user->email }}</td>
+                                                @if ($users->contains('type', 'sales_person'))
+                                                    <td class="user-email">
+                                                        ( {{ count($user['referral_person']) ?? '0' }} )
+                                                    </td>
+                                                @endif
                                                 <td class="assgine-role">
                                                     <a class="btn btn-secondary show-modal-btn" href="javascript:;"
                                                        style="background: #1e1e2d; border-color: #1e1e2d;"
                                                        data-toggle="modal"
                                                        data-id="{!! $user->id !!}"> <i class="fas fa-solid fa-eye"></i></a>
                                                     @if(Auth()->user()->type === 'admin')
-                                                        <a class="btn btn-secondary edit-modal-btn" href="javascript:;"
-                                                           style="background: #1e1e2d; border-color: #1e1e2d;"
-                                                           data-toggle="modal"
-                                                           data-id="{!! $user->id !!}"> Assigne Role To {{ $type }}</a>
+                                                        @if ($type !== 'Admin')
+                                                            {{--@if (!in_array($user->type, ['admin', 'consumer', 'sales_person', 'user']))
+                                                                <a class="btn btn-secondary edit-modal-btn"
+                                                                   href="javascript:;"
+                                                                   style="background: #1e1e2d; border-color: #1e1e2d;"
+                                                                   data-toggle="modal"
+                                                                   data-id="{!! $user->id !!}"> Assign Role
+                                                                    To {{ $type }}
+                                                                </a>
+                                                            @endif--}}
+                                                            @if (!in_array($user->type, ['admin', 'consumer', 'sales_person', 'user', 'church']))
+                                                                <a
+                                                                    href="javascript:;"
+                                                                    style="color: #fff8f8;"
+                                                                    class="btn paid-status {{ $user->type == 'paid_member' ? 'btn-success' : 'btn-danger' }}"
+                                                                    data-user-id="{{ $user->id }}"
+                                                                    data-is-paid="{{ $user->type == 'paid_member' ? 1 : 0 }}">
+                                                                    {{ $user->type == 'paid_member' ? 'Paid' : 'Not Paid' }}
+                                                                </a>
+                                                            @endif
+                                                        @endif
                                                     @endif
                                                 </td>
                                             </tr>
@@ -123,6 +158,9 @@
                                             <th>User Type</th>
                                             <th>User Name</th>
                                             <th>User Email</th>
+                                            @if ($users->contains('type', 'sales_person'))
+                                                <th>Sales Person Users Count</th>
+                                            @endif
                                             <th width="180px">Action</th>
                                         </tr>
                                         </tfoot>
@@ -188,6 +226,123 @@
     </div>
 @endsection
 
+<!-- Add Users Modal Start -->
+<div class="modal fade" id="add-users-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle1"
+     style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #1e1e2d; color: #fff;">
+                <h5 class="modal-title" id="exampleModalLongTitle1">Add User</h5>
+                <button type="button" class="close" style="color: #fff;" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="document-content">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br/>
+                            <br/>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div id="app">
+                        <form action="{{ route('add.user') }}" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="referred_id" value="{{ Auth::user()->id }}"/>
+                            <input type="hidden" name="referral_code" value="{{ Auth::user()->referral_code }}"/>
+                            <input type="hidden" value="{{ csrf_token() }}" name="_token"/>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <strong>User Type</strong>
+                                        <select class="form-control mt-2 mb-2" name="type">
+                                            <option value="">Select User Type</option>
+                                            @foreach($userTypes as $type)
+                                                @php
+                                                    $userType = str_replace('_', ' ', ucwords($type))
+                                                @endphp
+                                                <option value="{{ $type }}">{{ $userType }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        <strong>User Name:</strong>
+                                        <input type="text" name="name" value=""
+                                               class="form-control mt-2 mb-2" placeholder="User Name">
+
+                                        <strong>User Email:</strong>
+                                        <input type="text" name="email" value=""
+                                               class="form-control mt-2 mb-2" placeholder="User Email">
+
+                                        <strong>User Password:</strong>
+                                        <input
+                                            id="password"
+                                            :type="showPassword ? 'text' : 'password'"
+                                            class="form-control mt-2 mb-2 @error('password') is-invalid @enderror"
+                                            name="password"
+                                            required
+                                            autocomplete="password"
+                                            placeholder="********"
+                                        />
+                                        <button
+                                            type="button"
+                                            class="admin-user-password"
+                                            @click="togglePasswordVisibility"
+                                        >
+                                            <i aria-hidden="true" class="fa fa-eye"
+                                               v-if="showPassword"></i>
+                                            <i aria-hidden="true" class="fa fa-eye-slash" v-else></i>
+                                        </button>
+                                        <br>
+
+                                        <strong>User Number:</strong>
+                                        <input type="tel" name="number" value=""
+                                               class="form-control mt-2 mb-2 phoneNumber" placeholder="Number">
+
+                                        <strong>User DOB:</strong>
+                                        <input type="date" name="date_of_birth" value=""
+                                               class="form-control mt-2 mb-2" placeholder="DOB">
+
+                                        <strong>User Gender:</strong>
+                                        <select name="gender" id="" class="form-control mt-2 mb-2">
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+
+                                        <strong>User Profile Image:</strong>
+                                        <figure>
+                                            <img
+                                                src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                                                width="150px"
+                                                id="add-user-image"
+                                                alt="add-user-profile-image"/>
+                                            <input type="file" name="profile_image" value="" id="user-profile-image"
+                                                   class="form-control mt-2 mb-2"/>
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn" style="background: #1e1e2d; color: #fff;">Save
+                                    changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Users Modal End -->
+
 <!-- Edit Modal start -->
 <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
      style="display: none;" aria-hidden="true">
@@ -250,6 +405,7 @@
         </div>
     </div>
 </div>
+<!-- Edit Modal start -->
 
 <!-- Show Modal start -->
 <div class="modal fade" id="show-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle1"
@@ -267,82 +423,53 @@
         </div>
     </div>
 </div>
-
-<!-- Add Users Modal Start -->
-<div class="modal fade" id="add-users-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle1"
-     style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background: #1e1e2d; color: #fff;">
-                <h5 class="modal-title" id="exampleModalLongTitle1">Add User</h5>
-                <button type="button" class="close" style="color: #fff;" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="document-content">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <strong>Whoops!</strong> There were some problems with your input.<br/>
-                            <br/>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <form action="{{ route('add.user') }}" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="created_by" value="{{ Auth::user()->id }}"/>
-                        <input type="hidden" value="{{ csrf_token() }}" name="_token"/>
-
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <strong>User Name:</strong>
-                                    <input type="text" name="user_name" value=""
-                                           class="form-control mt-2 mb-2" placeholder="User Name">
-                                    <strong>User Email:</strong>
-                                    <input type="text" name="user_email" value=""
-                                           class="form-control mt-2 mb-2" placeholder="User Email">
-                                    <strong>User Password:</strong>
-                                    <input type="password" name="user_password" value=""
-                                           class="form-control mt-2 mb-2" placeholder="*********">
-                                    <strong>User Number:</strong>
-                                    <input type="number" name="user_number" value=""
-                                           class="form-control mt-2 mb-2" placeholder="User Number">
-                                    <strong>User DOB:</strong>
-                                    <input type="date" name="date_of_birth" value=""
-                                           class="form-control mt-2 mb-2" placeholder="User DOB">
-                                    <strong>User Gender:</strong>
-                                    <input type="text" name="user_gender" value=""
-                                           class="form-control mt-2 mb-2" placeholder="User Gender">
-                                    <strong>User Profile Image:</strong>
-                                    <figure>
-                                        <img src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" width="150px"
-                                             id="add-user-image"
-                                             alt="add-user-profile-image"/>
-                                        <input type="file" name="profile_image" value="" id="user-profile-image"
-                                               class="form-control mt-2 mb-2"/>
-                                    </figure>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn" style="background: #1e1e2d; color: #fff;">Save
-                                changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Add Users Modal End -->
+<!-- Show Modal start -->
 
 @section('js')
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showPassword: false
+            },
+            methods: {
+                togglePasswordVisibility() {
+                    this.showPassword = !this.showPassword;
+                }
+            },
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".paid-status").on("click", function () {
+                var $this = $(this);
+                var user_id = $this.data('user-id');
+                var is_paid = $this.data('is-paid');
+                var url = '{{ route('user.status') }}/' + user_id;
+
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    data: {
+                        is_paid: is_paid,
+                    },
+                    success: function (response) {
+                        if (response.success === true) {
+                            toastr.success(response.message);
+
+                            setTimeout(function() {
+                                $this.parents('tr').hide();
+                            }, 3000);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Error updating status:', textStatus, errorThrown);
+                    }
+                });
+            });
+        });
+    </script>
+
     <script>
         $.noConflict()
         $(document).ready(function () {
@@ -387,7 +514,7 @@
                         let Type = replaceUnderscores(response.user.type.toUpperCase());
 
                         // User Detail
-                        let non_paid = 'Non-paid';
+                        let type = response.user.type;
                         let name = response.user.name || '';
                         let email = response.user.email || '';
                         let gender = response.user.gender || '';
@@ -402,7 +529,7 @@
                         $(".userModalBody").append(
                             "<strong><h3>" + Type + " DETAILS:</h3></strong>" +
                             "<strong>Member:</strong>" +
-                            "<input class='form-control mt-2 mb-2' type='text' value='" + non_paid + "' readonly/>" +
+                            "<input class='form-control mt-2 mb-2' type='text' value='" + type + "' readonly/>" +
                             "<strong>Name:</strong>" +
                             "<input class='form-control mt-2 mb-2' type='text' value='" + name + "' readonly/>" +
                             "<strong>Email:</strong>" +
@@ -433,7 +560,7 @@
                                 let business_opening_hour = business.opening_hour || '';
                                 let business_detail = business.detail || '';
                                 let business_location = business.location || '';
-                                let business_longtitude = business.longtitude || '';
+                                let business_longitude = business.longitude || '';
                                 let business_latitude = business.latitude || '';
 
                                 $(".userModalBody").append(
@@ -457,7 +584,7 @@
                                     "<strong>Business location:</strong>" +
                                     "<input class='form-control mt-2 mb-2' type='text' value='" + business_location + "' readonly/>" +
                                     "<strong>Business longtitude:</strong>" +
-                                    "<input class='form-control mt-2 mb-2' type='text' value='" + business_longtitude + "' readonly/>" +
+                                    "<input class='form-control mt-2 mb-2' type='text' value='" + business_longitude + "' readonly/>" +
                                     "<strong>Business latitude:</strong>" +
                                     "<input class='form-control mt-2 mb-2' type='text' value='" + business_latitude + "' readonly/>"
                                 );

@@ -34,4 +34,8 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'firebase' => [
+//        'credentials' => base_path('config/firebase-credentials.json'),
+        'credentials' => env('FIREBASE_CREDENTIALS'),
+    ],
 ];

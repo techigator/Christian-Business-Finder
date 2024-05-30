@@ -1,5 +1,5 @@
 @extends('admin/layouts/app')
-@section('title', 'Business')
+@section('title', 'Notifications')
 @section('content')
     <style>
         .error-message {

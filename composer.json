@@ -6,7 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|8.*",
+        "ext-dom": "*",
+        "dompdf/dompdf": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
+        "giggsey/libphonenumber-for-php": "^8.13",
         "guzzlehttp/guzzle": "^7.0.1",
         "kreait/laravel-firebase": "3.0",
         "laravel/framework": "^8.75",
@@ -14,8 +17,12 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.0",
+        "phpoffice/phpword": "^1.2",
         "pusher/pusher-php-server": "^7.2",
-        "stripe/stripe-php": "^8.12"
+        "setasign/fpdf": "1.8",
+        "setasign/fpdi": "^2.6",
+        "stripe/stripe-php": "^8.12",
+        "twilio/sdk": "^8.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -33,6 +40,9 @@
         }
     },
     "autoload-dev": {
+        "files": [
+            "app/Helper/helper.php"
+        ],
         "psr-4": {
             "Tests\\": "tests/"
         }

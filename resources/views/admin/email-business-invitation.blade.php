@@ -14,7 +14,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 60rem;
             margin: 20px auto;
             padding: 20px;
             background-color: #fff;
@@ -82,7 +82,7 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tbody>
                                         <tr>
-                                            <td style="padding-bottom: 10px;">
+                                            <td>
                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0"
                                                        bgcolor="#0e264b">
                                                 </table>
@@ -148,11 +148,12 @@
                                                                                         font-size:16px;
                                                                                         line-height:30px;
                                                                                         text-align:center;
-                                                                                        color:#ffffff;
-                                                                                        padding-bottom:20px;
+                                                                                        color:#f1e4d4;
+                                                                                        /*padding-bottom:20px;*/
                                                                                         width:50%;
                                                                                         display:table;
-                                                                                        margin:0 auto ;
+                                                                                        margin:0 auto;
+                                                                                        text-transform: uppercase;
                                                                                         ">
                                                                                         <multiline>
                                                                                             <strong>Welcome To</strong>
@@ -181,9 +182,9 @@
                                                                                         font-size:40px;
                                                                                         line-height:36px;
                                                                                         text-align:center;
-                                                                                        color:#ffffff;
+                                                                                        color:#f1e4d4;
                                                                                         padding-bottom:20px;
-                                                                                        width:50%;
+                                                                                        /*width:50%;*/
                                                                                         display:table;
                                                                                         margin:0 auto ;
                                                                                         text-transform: uppercase;
@@ -200,44 +201,58 @@
                                                                                         font-size:16px;
                                                                                         line-height:30px;
                                                                                         text-align:center;
-                                                                                        color:#ffffff;
-                                                                                        padding-bottom:20px;
+                                                                                        color: #816e51;
+                                                                                        padding: 20px;
                                                                                         width:60%;
-                                                                                        display:table;
-                                                                                        margin:0 auto ;
-                                                                                        line-height: 30px;
+                                                                                        display: table;
+                                                                                        margin: 1rem auto ;
+                                                                                        background-color: #F1E4D4;
+                                                                                        border-radius: 5px;
                                                                                         ">
                                                                                         <multiline>
-                                                                                            <h2>Invitation to Join
-                                                                                                Christian Business
-                                                                                                Finder</h2>
+                                                                                            <h2 style="color: #816e51">
+                                                                                                Reset Password Christian
+                                                                                                Business Finder</h2>
                                                                                             <p>
-                                                                                                <strong>Dear {{ $userName }}
-                                                                                                    ,</strong>
-                                                                                            </p>
+                                                                                                Dear<strong> {{ $userName }}
+                                                                                                    ,</strong></p>
                                                                                             <p>
                                                                                                 Salesperson
                                                                                                 has invited you to join
-                                                                                                their business, {{ $business->name }} on
+                                                                                                their
+                                                                                                business, {{ $business->name }}
+                                                                                                on
                                                                                                 Christian Business
                                                                                                 Finder.
                                                                                             </p>
                                                                                             <p>
                                                                                                 Please click the
                                                                                                 following link to create
-                                                                                                an account and sign up:
+                                                                                                an account.
                                                                                             </p>
-                                                                                            <p>
-                                                                                                <strong><a
-                                                                                                        href="https://websitedemolynks.co/christian-buisness-finder/register/{{ $userId }}/{{ $businessTypeId }}/{{ $businessType }}"
-{{--                                                                                                        href="http://christian_business_finder.test/register/{{ $userId }}/{{ $businessTypeId }}/{{ $businessType }}"--}}
-                                                                                                        style="color: black;">Signup
-                                                                                                        Link</a></strong>
-                                                                                            </p>
+                                                                                            <a href="{{ $signupLink }}"
+                                                                                               target="_blank"
+                                                                                               class="link-white"
+                                                                                               style="padding: 1rem;
+                                                                                               background: linear-gradient(180deg, #886C46, #493B24);
+                                                                                               /*display: flex; */
+                                                                                               /*align-items: center;*/
+                                                                                               /*justify-content: center;*/
+                                                                                               border-radius: 10px;
+                                                                                               color: white;
+                                                                                               font-weight: 600;
+                                                                                               font-size: 1.125rem;
+                                                                                               text-decoration:none;">
+                                                                                                <span class="link-white"
+                                                                                                      style="text-decoration:none; text-transform: uppercase;">
+                                                                                                    Sign up
+                                                                                                </span>
+                                                                                            </a>
                                                                                             <p>
                                                                                                 Thank you,
                                                                                             </p>
-                                                                                            <p class="signature">
+                                                                                            <p class="signature"
+                                                                                               style="color: #816e51">
                                                                                                 <strong>The Christian
                                                                                                     Business Finder
                                                                                                     Team</strong>
@@ -254,7 +269,7 @@
                                                                                             <tbody>
                                                                                             <tr>
                                                                                                 <td class="dark-blue-button3 text-button"
-                                                                                                    style="background:#fff;
+                                                                                                    style="background: #f1e4d4;
                                                                                                     font-family:'Muli', Arial,sans-serif;
                                                                                                     font-size:14px; line-height:18px; padding:12px
                                                                                                     30px; text-align:center;
@@ -333,8 +348,8 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tbody>
                                 <tr>
-                                    <td class="p30-15 bbrr" style="padding: 50px 30px 40px;
-			border-radius:0px;" bgcolor="#1e1e2d">
+                                    <td class="p30-15 bbrr" style="padding: 50px 30px 40px; border-radius:0px;"
+                                        bgcolor="#1e1e2d">
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                             <tbody>
                                             <tr>
@@ -342,49 +357,55 @@
                                                     <table border="0" cellspacing="0" cellpadding="0">
                                                         <tbody>
                                                         <tr>
-                                                            <td class="img" width="55" style="font-size:0pt;
-											line-height:0pt; text-align:left;"><a
-                                                                    href="https://twitter.com"
-                                                                    target="_blank"><img
+                                                            <td class="img" width="25"
+                                                                style="font-size:0pt; line-height:0pt; text-align:left; padding: 15px;">
+                                                                <a href="https://twitter.com" target="_blank">
+                                                                    <img
                                                                         src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-black-icon.png"
                                                                         height="30" editable="true" border="0"
-                                                                        alt=""></a>
+                                                                        alt="">
+                                                                </a>
                                                             </td>
-                                                            <td class="img" width="55" style="font-size:0pt;
-											line-height:0pt; text-align:left;"><a
-                                                                    href="https://www.linkedin.com/company"
-                                                                    target="_blank"><img
+                                                            <td class="img" width="25"
+                                                                style="font-size:0pt; line-height:0pt; text-align:left; padding: 15px;">
+                                                                <a href="https://www.linkedin.com/company"
+                                                                   target="_blank">
+                                                                    <img
                                                                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/2048px-LinkedIn_icon.svg.png"
                                                                         width="20"
                                                                         height="20" editable="true" border="0"
-                                                                        alt=""></a>
+                                                                        alt="">
+                                                                </a>
                                                             </td>
-                                                            <td class="img" width="55" style="font-size:0pt;
-											line-height:0pt; text-align:left;"><a
-                                                                    href="https://www.instagram.com"
-                                                                    target="_blank"><img
+                                                            <td class="img" width="25"
+                                                                style="font-size:0pt; line-height:0pt; text-align:left; padding: 15px;">
+                                                                <a href="https://www.instagram.com" target="_blank">
+                                                                    <img
                                                                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Instagram.svg/768px-Instagram.svg.png"
                                                                         width="20"
                                                                         height="20" editable="true" border="0"
-                                                                        alt=""></a>
+                                                                        alt="">
+                                                                </a>
                                                             </td>
-                                                            <td class="img" width="38" style="font-size:0pt;
-											line-height:0pt; text-align:left;"><a
-                                                                    href="https://www.tiktok.com"
-                                                                    target="_blank"><img
+                                                            <td class="img" width="25"
+                                                                style="font-size:0pt; line-height:0pt; text-align:left; padding: 15px;">
+                                                                <a href="https://www.tiktok.com" target="_blank">
+                                                                    <img
                                                                         src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/tiktok-icon.png"
                                                                         width="20"
                                                                         height="20" editable="true" border="0"
-                                                                        alt=""></a>
+                                                                        alt="">
+                                                                </a>
                                                             </td>
-                                                            <td class="img" width="38" style="font-size:0pt;
-											line-height:0pt; text-align:left;"><a
-                                                                    href="https://www.facebook.com"
-                                                                    target="_blank"><img
+                                                            <td class="img" width="25"
+                                                                style="font-size:0pt; line-height:0pt; text-align:left; padding: 15px;">
+                                                                <a href="https://www.facebook.com" target="_blank">
+                                                                    <img
                                                                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png"
                                                                         width="20"
                                                                         height="20" editable="true" border="0"
-                                                                        alt=""></a>
+                                                                        alt="">
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -403,12 +424,13 @@
                                                                     line-height:20px;
                                                                     text-align:center;
                                                                     font-weight: 600;
-                                                                    color:#fff;"
+                                                                    color:#fff;
+                                                                    padding: 15px;"
                                                                    target="_blank">
                                                                     Unsubscribe
                                                                 </a></td>
                                                             <td>
-                                                                <a href="javascript:;"
+                                                                <a href="https://websitedemolynks.co/christian-buisness-finder/privacy-policy"
                                                                    style="font-family:'Muli', Arial,sans-serif;
                                                                     font-size:14px;
                                                                     line-height:20px;
@@ -417,19 +439,21 @@
                                                                     margin-right:15;
                                                                     font-weight: 600;
                                                                     margin-left:15;
+                                                                    padding: 15px;
                                                                     "
                                                                    target="_blank">
                                                                     Privacy Policy
                                                                 </a>
                                                             </td>
                                                             <td>
-                                                                <a href="javascript:;"
+                                                                <a href="https://websitedemolynks.co/christian-buisness-finder/"
                                                                    style="font-family:'Muli', Arial,sans-serif;
-												font-weight: 600;
-												font-size:14px;
-												line-height:20px;
-												text-align:center;
-												color:#fff;"
+                                                                    font-weight: 600;
+                                                                    font-size:14px;
+                                                                    line-height:20px;
+                                                                    text-align:center;
+                                                                    color:#fff;
+                                                                    padding: 15px;"
                                                                    target="_blank">
                                                                     Web
                                                                 </a>
@@ -439,24 +463,6 @@
                                                     </table>
                                                 </td>
                                             </tr>
-                                            {{--<tr>
-                                                <td class="text-center white pb20" style="font-family:'Muli',
-                                                    Arial,sans-serif;
-                                                    font-size:16px;
-                                                    line-height:30px;
-                                                    text-align:center;
-                                                    color:#ffffff;
-                                                    width:100%;
-                                                    display:table;
-                                                    margin:0 auto ;
-                                                    ">
-                                                    <multiline>
-                                                        Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                        commodo consequat. Duis aute irure dolor cillum dolore eu
-                                                        fugiat nulla pariatur.
-                                                    </multiline>
-                                                </td>
-                                            </tr>--}}
                                             </tbody>
                                         </table>
                                     </td>

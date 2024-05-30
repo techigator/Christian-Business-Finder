@@ -42,6 +42,17 @@ Route::get('get-business-by-category/{id}', [UserController::class, 'getBusiness
 // comment by adil
 // Route::get('get-buisness-by-id/{id?}', [UserController::class, 'getBuisnessById']);
 
+// sign-up paypal payment
+Route::get('paypal-payment-gateway/{amount?}', [UserController::class, 'paypalPaymentGateway']);
+Route::post('user-create', [UserController::class, 'userCreate']);
+
+// subscription payment
+Route::get('subscription-payment-gateway/{id?}/{amount?}', [UserController::class, 'subscriptionPaymentGateway']);
+Route::post('user-update', [UserController::class, 'userUpdate']);
+
+// coupon work
+Route::get('coupon-apply/{code?}', [UserController::class, 'applyCoupon']);
+
 Route::post('register', [UserController::class, 'register']);
 Route::post('social-media-register', [UserController::class, 'socialMediaRegister']);
 Route::post('login', [UserController::class, 'authenticate']);
@@ -58,6 +69,15 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('manage-business/{user_id}', [UserController::class, 'manageBusiness']);
     Route::post('update-manage-business/{business_id}', [UserController::class, 'updateManageBusiness']);
     Route::post('update-manage-business-thumbnail/{business_id}', [UserController::class, 'updateManageBusinessThumbnail']);
+    Route::post('update-manage-business-thumbnail/{business_id}', [UserController::class, 'updateManageBusinessThumbnail']);
+    Route::post('upload-cover-image/{id?}', [UserController::class, 'uploadCoverImage']);
+
+// Banner
+    Route::get('banner-image', [UserController::class, 'bannerImage']);
+
+// coupon
+    Route::post('coupon-apply', [UserController::class, 'applyCoupon']);
+
 
 // chat
     Route::post('send-message', [MessageController::class, 'sendMessage']);
@@ -94,6 +114,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('specific-chat-by-user', [UserController::class, 'specificChatByUser']);
     Route::post('sent-chat-by-user', [UserController::class, 'sentChatByUser']);
     Route::post('sent-chat-by-image', [UserController::class, 'sentChatByImage']);
+    Route::post('sent-chat-by-attachment', [UserController::class, 'sentChatByAttachment']);
 
 // admin notification receive
     Route::get('get-notification/{user_id?}', [UserController::class, 'getNotification']);

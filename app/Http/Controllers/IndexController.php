@@ -75,7 +75,7 @@ class IndexController extends Controller
             ));
     }
 
-    public function about_us()
+    public function aboutUs()
     {
         $menu = 'about_us';
         $keywords = "";
@@ -243,7 +243,7 @@ class IndexController extends Controller
     public function product()
     {
         $menu = 'product';
-        // $reviews = Helper::getImageWithData('reviews','id','',"is_active=1 and is_deleted=0",0,'order by id asc'); 
+        // $reviews = Helper::getImageWithData('reviews','id','',"is_active=1 and is_deleted=0",0,'order by id asc');
         $keywords = "";
         $description = "";
         // dd($menu);
@@ -331,8 +331,8 @@ class IndexController extends Controller
     {
         if (Auth::check()) {
             //     Session::put('url.intended',URL::previous());
-            //     
-            // 
+            //
+            //
             $product_request_check = Product_request::where('user_request_id', auth()->user()->id)->where('product_id', $request->product_id)->first();
 
             if ($product_request_check) {
@@ -483,7 +483,7 @@ class IndexController extends Controller
     public function payout($id = "")
     {
         $inner_banner = inner_banner::where('is_active', 1)->where('id', 9)->first();
-        // $book_id = Crypt::decrypt($id);    
+        // $book_id = Crypt::decrypt($id);
         // $booking = booking::where("is_active" ,1)->where("id" ,$book_id)->first();
         // if(!$booking){
         //     return redirect()->route("home")->with('error','No active booking found against this link.');

@@ -1,24 +1,21 @@
 <?php
 namespace App\Http\Middleware;
 use Closure;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+
 class customer
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check()) {
-            if (Auth::user()->type == 'admin') {
-                return $next($request);
-            } elseif (Auth::user()->type == null) {
-                return redirect()->route('dashboard')->with('ERROR', "Session expire again login to access admin panel.");
-            } else {
-                return redirect()->route('admin.login')->with('ERROR', "Session expire again login to access admin panel.");
-            }
+        if (Auth::check() && (Auth::user()->type === 'sales_person' || Auth::user()->type === 'admin')) {
+            return $next($request);
+        } elseif (Auth::check() && Auth::user()->type == null) {
+            return redirect()->route('admin/dashboard')->with('ERROR', "Session expire again login to access admin panel.");
         } else {
-            return redirect()->route('admin.login');
+            return redirect()->route('admin.login')->with('ERROR', "Session expire again login to access admin panel.");
         }
     }
     public function terminate($request, $response){
-        
+
     }
 }

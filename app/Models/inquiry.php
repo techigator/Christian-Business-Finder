@@ -8,5 +8,11 @@ class inquiry extends Model
 {
     protected $table = 'inquiry';
     public $primaryKey = 'id';
-    protected $fillable = ['name', 'email', 'phonenumber', 'message', 'url'];
+    protected $fillable = [
+        'name',
+        'email',
+        'phone_number',
+        'message',
+        'url'
+    ];
 }

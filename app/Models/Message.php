@@ -29,6 +29,11 @@ class Message extends Model
         return $this->belongsTo(User::class, 'sender_id');
     }
 
+    public function sender_business()
+    {
+        return $this->belongsTo(Buisness::class, 'sender_id', 'user_id');
+    }
+
     /**
      * Get the recipient of the message.
      */

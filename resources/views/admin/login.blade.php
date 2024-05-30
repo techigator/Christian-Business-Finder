@@ -88,6 +88,15 @@
             background-color: #fff;
             border-color: #fff;
         }
+
+        .admin-user-password {
+            outline: none;
+            box-shadow: none;
+            background: none;
+            border: none;
+            position: relative;
+            top: -0.1rem;
+        }
     </style>
 </head>
 <body class="hold-transition login-page" style="min-height: 336px;backdrop-filter: brightness(0.4);">
@@ -100,42 +109,61 @@
         <div class="card-body">
             <p class="login-box-msg"><b>Christian Business Finder</b></p>
 
-            <form action="{{ url('admin/loginsubmit') }}" method="post">
-                @csrf
-                <div class="input-group mb-3">
-                    <input name="email" type="email" class="form-control
+            <div id="app">
+                <form action="{{ url('admin/loginsubmit') }}" method="post">
+                    @csrf
+                    <div class="input-group mb-3">
+                        <input name="email" type="email" class="form-control
                     @error('email') is-invalid @enderror" placeholder="Email">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
                         </div>
-                    </div>
-                    @error('email')
-                    <span class="invalid-feedback" role="alert">
+                        @error('email')
+                        <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
-                    @enderror
-                </div>
-                <div class="input-group mb-3">
-                    <input name="password" type="password" class="form-control
-                    @error('password') is-invalid @enderror" placeholder="Password">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                        </div>
+                        @enderror
                     </div>
-                    @error('password')
-                    <span class="invalid-feedback" role="alert">
+                    <div class="input-group mb-3">
+                        <input
+                            id="password"
+                            :type="showPassword ? 'text' : 'password'"
+                            class="form-control mt-2 mb-2 @error('password') is-invalid @enderror"
+                            name="password"
+                            required
+                            autocomplete="password"
+                            placeholder="********"
+                        />
+                        <button
+                            type="button"
+                            class="admin-user-password"
+                            @click="togglePasswordVisibility"
+                        >
+                            <i aria-hidden="true" class="fa fa-eye"
+                               v-if="showPassword"></i>
+                            <i aria-hidden="true" class="fa fa-eye-slash" v-else></i>
+                        </button>
+
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        @error('password')
+                        <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
-                    @enderror
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-dark btn-block">Sign In</button>
+                        @enderror
                     </div>
-                </div>
-            </form>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark btn-block">Sign In</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         <!-- /.card-body -->
     </div>
@@ -152,13 +180,28 @@
 
 <!-- Toastr -->
 <script src="{{asset('assets/backend_assets/plugins/toastr/toastr.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
 <script type="text/javascript">
     @if(session('SUCCESS'))
-    toastr.success("{{session('SUCCESS')}}");
+        toastr.success("{{session('SUCCESS')}}");
     @endif
+
     @if(session('ERROR'))
-    toastr.error("{{session('ERROR')}}")
+        toastr.error("{{session('ERROR')}}")
     @endif
+
+    new Vue({
+        el: '#app',
+        data: {
+            showPassword: false
+        },
+        methods: {
+            togglePasswordVisibility() {
+                this.showPassword = !this.showPassword;
+            }
+        },
+    });
 </script>
 
 </body>

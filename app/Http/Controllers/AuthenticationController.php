@@ -13,10 +13,10 @@ class AuthenticationController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-   
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'type' => ['admin', 'sales_person']]))
-        	return redirect()->intended('dashboard')->with('SUCCESS','Signed in successfully');
-        
+        	return redirect()->intended('admin/dashboard')->with('SUCCESS','Signed in successfully');
+
   		return redirect("admin/login")->with('ERROR','Login details are not valid');
 	}
 

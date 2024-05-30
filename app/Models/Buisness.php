@@ -12,10 +12,14 @@ class Buisness extends Model
     protected $table = 'buisness';
 
     protected $fillable = [
-        'service',
+        'user_id',
+        'type',
+        'buisness_type',
         'name',
+        'service',
         'ratings',
         'images',
+        'cover_image',
         'thumbnail',
         'opening_hours',
         'details',
@@ -61,8 +65,18 @@ class Buisness extends Model
         // return $this->rating()->avg('ratings');
     }
 
-    // public function suggestions()
-    // {
-    //     return $this->hasMany(Suggestion::class, 'buisness_id');
-    // }
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'buisness_id');
+    }
+
+    public function business_timing()
+    {
+        return $this->hasMany(BuisnessTiming::class, 'buisness_id');
+    }
+
+    public function banner(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Buisness::class, 'buisness_id', 'id');
+    }
 }

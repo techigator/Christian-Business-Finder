@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminNotification;
+use App\Models\SalesPersonUser;
 use App\Models\User;
 use App\Models\Buisness;
 use App\Exports\UsersExport;
@@ -19,65 +20,74 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function userIndex()
+    public function userIndex($slug = null)
     {
-        $loggedInUser = Auth::user();
-
-        if ($loggedInUser->type === 'sales_person') {
-            $users = User::where('created_by', $loggedInUser->id)
-                ->orderBy('created_at', 'desc')->latest()->paginate(20);
-            $userTypes = [
-                'user',
-                'sales_person'
-            ];
-        } else {
-            $users = User::orderBy('created_at', 'desc')->latest()->paginate(10);
-            $userTypes = [
-                'admin',
-                'user',
-                'sales_person'
-            ];
+        if ($slug === null) {
+            $slug = '';
         }
 
-        return view('users.index', compact('users', 'userTypes'));
+        $loggedInUser = Auth::user();
+        $userTypes = [
+            'church',
+            'consumer',
+            'business',
+            'paid_member',
+            'sales_person',
+        ];
+
+        if ($loggedInUser->type === 'sales_person') {
+            $salesPersons = SalesPersonUser::with('users')->where('referral_id', $loggedInUser->id)->get();
+            $userIds = $salesPersons->pluck('users.id')->filter()->all();
+            $users = User::whereIn('id', $userIds)->orderBy('created_at', 'desc')->paginate(20);
+        } else {
+            $users = User::with('referral_person')->where('type', $slug)->orderBy('created_at', 'desc')->latest()->paginate(10);
+        }
+
+        return view('users.index', compact('users', 'userTypes', 'loggedInUser', 'slug'));
     }
 
-    public function userAddByAdmin(Request $request)
+    public function addUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_name' => ['required', 'string', 'max:255'],
-            'user_email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'user_password' => ['required', 'string', 'min:8', 'confirmed'],
-            'user_number' => 'required',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'number' => 'required',
             'date_of_birth' => 'required',
-            'user_gender' => 'required',
+            'gender' => 'required',
             'profile_image' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'Errors' => $validator->messages()
-        //     ]);
-        // }
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        $created_by = $request->created_by;
-        $user_name = $request->user_name;
-        $user_email = $request->user_email;
-        $user_number = $request->user_number;
-        $date_of_birth = $request->date_of_birth;
-        $user_gender = $request->user_gender;
-        $password = $request->user_password;
+        $loggedInUser = Auth::user();
+
+        $referred_id = $request->input('referred_id');
+        $referral_code = $request->input('referral_code');
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $number = $request->input('number');
+        $date_of_birth = $request->input('date_of_birth');
+        $gender = $request->input('gender');
+        $password = $request->input('password');
+        $userType = $request->input('type');
 
         $user = new User();
-        $user->type = 'user';
-        $user->created_by = $created_by;
+        if ($userType === 'sales_person') {
+            $user->referral_code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->type = $userType;
+        } else {
+            $user->type = $userType;
+        }
+
         $user->login_from = 'website';
-        $user->name = $user_name;
-        $user->email = $user_email;
-        $user->number = $user_number;
+        $user->name = $name;
+        $user->email = $email;
+        $user->number = $number;
         $user->date_of_birth = $date_of_birth;
-        $user->gender = $user_gender;
+        $user->gender = $gender;
         $user->password = Hash::make($password);
 
         if ($request->hasFile('profile_image')) {
@@ -85,11 +95,19 @@ class UserController extends Controller
             $request->profile_image->move(public_path('assets/uploads/user'), $profile_image);
             $user->profile_image = $profile_image;
         }
-
         $user->save();
 
+        if ($loggedInUser->type === 'sales_person') {
+            $salesPerson = new SalesPersonUser();
+            $salesPerson->user_id = $user->id;
+            $salesPerson->referral_id = $referred_id;
+            $salesPerson->referral_code = $referral_code;
+
+            $salesPerson->save();
+        }
+
         if (Auth::user()->type === 'admin') {
-            return redirect()->route('user.index')
+            return redirect()->route('user.index', $userType)
                 ->with('success', 'User created successfully');
         } else {
             return redirect()->route('user.sales.index')
@@ -116,7 +134,7 @@ class UserController extends Controller
                         'opening_hour' => $businessData->opening_hour,
                         'detail' => $businessData->detail,
                         'location' => $businessData->location,
-                        'longtitude' => $businessData->longtitude,
+                        'longitude' => $businessData->longtitude,
                         'latitude' => $businessData->latitude,
                     ];
                 });
@@ -124,7 +142,7 @@ class UserController extends Controller
         }
 
         $data = [
-            'type' => $user->type,
+            'type' => $user->type === 'paid_member' ? 'Paid' : 'Non-Paid',
             'name' => $user->name,
             'email' => $user->email,
             'number' => $user->number,
@@ -162,6 +180,27 @@ class UserController extends Controller
 
         return redirect()->route('user.index')
             ->with('success', 'User role updated successfully');
+    }
+
+    public function userStatus(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found.'
+            ], 404);
+        }
+
+        $isPaid = $request->input('is_paid') === '0';
+        $user->type = $isPaid ? 'paid_member' : 'business';
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status changed to ' . ($isPaid ? 'paid member' : 'business') . '.'
+        ]);
     }
 
     public function exportUsers()

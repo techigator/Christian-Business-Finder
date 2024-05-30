@@ -1,5 +1,5 @@
 @extends('admin/layouts/app')
-@section('title', 'Notifications')
+@section('title', 'Businesses')
 @section('content')
     <style>
         .error-message {
@@ -29,12 +29,108 @@
             position: absolute;
         }
 
+        .add-edit-remove-thumbnail {
+            margin-bottom: 5rem;
+            margin-left: 0.4rem;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        .add-edit-remove-image {
+            margin-bottom: 5rem;
+            margin-left: 0.4rem;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        .add-edit-remove-preview-image {
+            margin-bottom: 5rem;
+            margin-left: 0.4rem;
+            cursor: pointer;
+            position: absolute;
+        }
+
         table.dataTable {
             width: 125%;
             margin: 0 auto;
             clear: both;
             border-collapse: separate;
             border-spacing: 0;
+        }
+
+        .ck.ck-editor {
+            position: relative;
+            margin-bottom: 2rem !important;
+        }
+
+        .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+            border-color: var(--ck-color-base-border);
+            height: 10rem !important;
+            padding: 1rem !important;
+        }
+
+        .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable, .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+            border-radius: var(--ck-border-radius);
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            height: 10rem !important;
+            padding: 1rem !important;
+        }
+
+        .ck.ck-editor__editable.ck-focused:not(.ck-editor__nested-editable) {
+            border: var(--ck-focus-ring);
+            box-shadow: var(--ck-inner-shadow), 0 0;
+            outline: none;
+            height: 10rem !important;
+            padding: 1rem !important;
+        }
+
+        .multi-suggestions {
+            background: white !important;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            height: 200px;
+            overflow: auto;
+            border-radius: 4px;
+            border: 2px solid #00000070;
+        }
+
+        .suggestion {
+            padding: 1rem;
+            border-bottom: 1px solid #e9eef1;
+            cursor: pointer;
+        }
+
+        .suggestion:hover {
+            background: #f1e4d4;
+        }
+
+        .add-edit-multi-suggestions {
+            background: white !important;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            height: 200px;
+            overflow: auto;
+            border-radius: 4px;
+            border: 2px solid #00000070;
+        }
+
+        .add-edit-suggestion {
+            padding: 1rem;
+            border-bottom: 1px solid #e9eef1;
+            cursor: pointer;
+        }
+
+        .add-edit-suggestion:hover {
+            background: #f1e4d4;
+        }
+
+        .accent-color {
+            transform: scale(1.5) !important;
+        }
+
+        .accent {
+            accent-color: #7c6947 !important;
         }
     </style>
     <!-- =============== Left side End ================-->
@@ -120,57 +216,30 @@
                                     <div class="table-responsive">
 
                                         <table id="example"
-                                               class="display table dataTable table-striped table-bordered">
+                                               class="display table dataTable table-striped table-bordered"
+                                               style="width: 150%;">
                                             <thead>
                                             <tr>
                                                 <th>Sr.no</th>
-                                                <th width="120px">Category Name</th>
+                                                <th>Category Name</th>
                                                 <th>Name</th>
-                                                <th>State</th>
-                                                <th>Rating</th>
-                                                <th width="120px">Opening Hour</th>
                                                 <th>Detail</th>
                                                 <th>Location</th>
                                                 <th>Longitude</th>
                                                 <th>Latitude</th>
-                                                <th width="180px">Action</th>
+                                                <th>Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach ($businesses as $business)
-                                                @php
-                                                    if (is_string($business->location) && strpos($business->location, 's:') === 0) {
-                                                        $location = unserialize($business->location);
-                                                        $location = is_array($location) ? $location : [$location];
-                                                    } else {
-                                                        $location = $business->location ? explode(', ', $business->location) : ['65579 Marley Neck'];
-                                                    }
-
-                                                    if (is_string($business->longitude) && strpos($business->longitude, 's:') === 0) {
-                                                        $longitude = unserialize($business->longitude);
-                                                        $longitude = is_array($longitude) ? $longitude : [$longitude];
-                                                    } else {
-                                                        $longitude = $business->longitude ? explode(', ', $business->longitude) : ['39.169680'];
-                                                    }
-
-                                                    if (is_string($business->latitude) && strpos($business->latitude, 's:') === 0) {
-                                                        $latitude = unserialize($business->latitude);
-                                                        $latitude = is_array($latitude) ? $latitude : [$latitude];
-                                                    } else {
-                                                        $latitude = $business->latitude ? explode(', ', $business->latitude) : ['-76.574990'];
-                                                    }
-                                                @endphp
+                                            @foreach ($modifiedBusiness as $business)
                                                 <tr data-business-id="{{ $business->id }}">
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $business->category->name ?? 'Business' }}</td>
                                                     <td>{{ $business->name ?? 'Koelpin, Hahn and Fay' }}</td>
-                                                    <td>{{ $business->state ?? 'Colorado' }}</td>
-                                                    <td>{{ $business->ratings ?? '0' }}</td>
-                                                    <td>{{ $business->opening_hours ?? '00:00' }}</td>
                                                     <td>{{ strip_tags($business->details ?? 'Upgradable Uniform Securedline') }}</td>
-                                                    <td>{{ htmlspecialchars(implode(', ', $location)) }}</td>
-                                                    <td>{{ htmlspecialchars(implode(', ', $longitude)) }}</td>
-                                                    <td>{{ htmlspecialchars(implode(', ', $latitude)) }}</td>
+                                                    <td>{{ htmlspecialchars(implode(',', $business['location'])) }}</td>
+                                                    <td>{{ html_entity_decode(htmlspecialchars_decode(implode(', ', $business['longitude']))) }}</td>
+                                                    <td>{{ html_entity_decode(htmlspecialchars_decode(implode(', ', $business['latitude']))) }}</td>
                                                     <td>
                                                         <form class="form-delete">
                                                             <!-- <a class="btn btn-info showModalBtn" href="#" data-toggle="modal" data-showid="{!! $business->id !!}">Show</a> -->
@@ -194,20 +263,17 @@
                                             <tfoot>
                                             <tr>
                                                 <th>Sr.no</th>
-                                                <th width="120px">Category Name</th>
+                                                <th>Category Name</th>
                                                 <th>Name</th>
-                                                <th>State</th>
-                                                <th>Rating</th>
-                                                <th width="120px">Opening Hour</th>
                                                 <th>Detail</th>
                                                 <th>Location</th>
                                                 <th>Longitude</th>
                                                 <th>Latitude</th>
-                                                <th width="180px">Action</th>
+                                                <th>Action</th>
                                             </tr>
                                             </tfoot>
                                         </table>
-                                        @if ($businesses->isEmpty())
+                                        @if ($modifiedBusiness->isEmpty())
                                             <div class="col-md-12">
                                                 <div class="alert alert-warning"
                                                      style="margin: 10% 0; text-align: center;">
@@ -221,7 +287,7 @@
                                                 <div class="col-lg-6 offset-lg-3">
                                                     <nav aria-label="Page navigation">
                                                         <ul class="pagination justify-content-center">
-                                                            @if ($businesses->onFirstPage())
+                                                            @if ($paginatedModifiedBusiness->onFirstPage())
                                                                 <li class="page-item disabled">
                                                                     <span class="page-link"
                                                                           aria-hidden="true">&laquo;</span>
@@ -229,22 +295,22 @@
                                                             @else
                                                                 <li class="page-item">
                                                                     <a class="page-link"
-                                                                       href="{{ $businesses->previousPageUrl() }}"
+                                                                       href="{{ $paginatedModifiedBusiness->previousPageUrl() }}"
                                                                        rel="prev" aria-label="Previous">&laquo;</a>
                                                                 </li>
                                                             @endif
 
-                                                            @foreach ($businesses->getUrlRange(1, $businesses->lastPage()) as $page => $url)
-                                                                <li class="page-item{{ $page == $businesses->currentPage() ? ' active' : '' }}">
+                                                            @foreach ($paginatedModifiedBusiness->getUrlRange(1, $paginatedModifiedBusiness->lastPage()) as $page => $url)
+                                                                <li class="page-item{{ $page == $paginatedModifiedBusiness->currentPage() ? ' active' : '' }}">
                                                                     <a class="page-link"
                                                                        href="{{ $url }}">{{ $page }}</a>
                                                                 </li>
                                                             @endforeach
 
-                                                            @if ($businesses->hasMorePages())
+                                                            @if ($paginatedModifiedBusiness->hasMorePages())
                                                                 <li class="page-item">
                                                                     <a class="page-link"
-                                                                       href="{{ $businesses->nextPageUrl() }}"
+                                                                       href="{{ $paginatedModifiedBusiness->nextPageUrl() }}"
                                                                        rel="next" aria-label="Next">&raquo;</a>
                                                                 </li>
                                                             @else
@@ -253,6 +319,7 @@
                                                                           aria-hidden="true">&raquo;</span>
                                                                 </li>
                                                             @endif
+
                                                         </ul>
                                                     </nav>
                                                 </div>
@@ -274,9 +341,7 @@
     <br>
 @endsection
 
-<!-- Add Modal start -->
-
-<!-- Add Modal Start -->
+{{-- Add Modal Start --}}
 <div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -305,7 +370,7 @@
                     @endif
                     <form action="{{ route('business.store') }}" class="add-form" method="POST"
                           enctype="multipart/form-data">
-                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}"/>
+                        {{--<input type="hidden" name="user_id" value="{{ Auth::user()->id }}"/>--}}
                         <input type="hidden" value="{{ csrf_token() }}" name="_token"/>
                         <input type="hidden" value="{{ Auth::user()->type }}" name="user_type"/>
                         <div class="row">
@@ -319,13 +384,27 @@
                                         <input type="hidden" id="name-text" name="user_type" value="Admin"
                                                class="form-control mt-2 mb-2" placeholder="Name" disabled>
                                     @endif
-                                    <strong>Members</strong>
-                                    <select class="js-example-basic-multiple form-control" name="customized_users[]"
-                                            multiple="multiple">
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                        @endforeach
-                                    </select>
+
+                                    @if(Auth::user()->type === 'sales_person')
+                                        <strong>Members</strong>
+                                        {{--<select class="js-example-basic-multiple form-control" name="customized_users[]"
+                                                multiple="multiple">--}}
+                                        <select class="form-control" name="user_id">
+                                            <option value="">Select User Members</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}
+                                                    <strong class="business-created">(
+                                                        @if($user->type === 'business' || $user->type === 'paid_member')
+                                                            Business Created
+                                                        @else
+                                                            Business Not Created
+                                                        @endif
+                                                    )</strong>
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+
                                     <strong>Categories</strong>
                                     <select class="form-control mt-2 mb-2" name="category">
                                         @foreach($categories as $category)
@@ -338,7 +417,7 @@
                                     <input type="text" id="name-text" name="name" value="{{ old('name') }}"
                                            class="form-control mt-2 mb-2 business-text" placeholder="Name">
 
-                                    <strong>State</strong>
+                                    {{--<strong>State</strong>
                                     <div id="state-error" class="error-message"></div>
                                     <input type="text" name="state" value="{{ old('state') }}"
                                            class="form-control mt-2 mb-2" placeholder="State" id="state-text">
@@ -347,7 +426,7 @@
                                     <div id="rating-error" class="error-message"></div>
                                     <input type="number" name="ratings" value="{{ old('ratings') }}" step="0.01" max="5"
                                            class="form-control mt-2 mb-2" placeholder="Rating" id="ratings-text"
-                                    />
+                                    />--}}
 
                                     <div class="image-div">
                                         <strong>Select Thumbnail to upload</strong>
@@ -363,6 +442,7 @@
                                                onclick="removeBusinessThumbnail()"></i>
                                         </figure>
 
+                                        <hr>
 
                                         <strong>Select Image to upload</strong>
                                         <div id="image-error" class="error-message"></div>
@@ -386,7 +466,8 @@
                                         </button>
                                     </div>
 
-                                    <div class="container my-4" style="border: 2px solid black; border-radius: 2px;">
+                                    <div class="container my-4"
+                                         style="border: 2px solid #00000070; border-radius: 5px; overflow: scroll; height: 400px;">
                                         <div class="row">
                                             <div class="col form-check mt-4" style="display: flex; justify-content: center;
                                                     align-items: center;">
@@ -427,8 +508,9 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day" type="checkbox" value="1"
-                                                       name="availability[Monday]" id="availability-monday">
+                                                <input class="form-check-input input-day accent accent-color"
+                                                       type="checkbox" value="1"
+                                                       name="availability[Monday]" id="availability-monday accent-blue">
                                             </div>
                                         </div>
                                         <hr>
@@ -452,8 +534,10 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day" type="checkbox" value="1"
-                                                       name="availability[Tuesday]" id="availability-tuesday">
+                                                <input class="form-check-input input-day accent accent-color"
+                                                       type="checkbox" value="1"
+                                                       name="availability[Tuesday]"
+                                                       id="availability-tuesday accent-blue">
                                             </div>
                                         </div>
                                         <hr>
@@ -477,8 +561,10 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day" type="checkbox" value="1"
-                                                       name="availability[Wednesday]" id="availability-wednesday">
+                                                <input class="form-check-input input-day accent accent-color"
+                                                       type="checkbox" value="1"
+                                                       name="availability[Wednesday]"
+                                                       id="availability-wednesday accent-blue">
                                             </div>
                                         </div>
                                         <hr>
@@ -502,8 +588,10 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day" type="checkbox" value="1"
-                                                       name="availability[Thursday]" id="availability-thursday">
+                                                <input class="form-check-input input-day accent accent-color"
+                                                       type="checkbox" value="1"
+                                                       name="availability[Thursday]"
+                                                       id="availability-thursday accent-blue">
                                             </div>
                                         </div>
                                         <hr>
@@ -527,8 +615,9 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day" type="checkbox" value="1"
-                                                       name="availability[Friday]" id="availability-friday">
+                                                <input class="form-check-input input-day accent accent-color"
+                                                       type="checkbox" value="1"
+                                                       name="availability[Friday]" id="availability-friday accent-blue">
                                             </div>
                                         </div>
                                         <hr>
@@ -552,8 +641,10 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day" type="checkbox" value="1"
-                                                       name="availability[Saturday]" id="availability-saturday">
+                                                <input class="form-check-input input-day accent accent-color"
+                                                       type="checkbox" value="1"
+                                                       name="availability[Saturday]"
+                                                       id="availability-saturday accent-blue">
                                             </div>
                                         </div>
                                         <hr>
@@ -577,17 +668,18 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day" type="checkbox" value="1"
-                                                       name="availability[Sunday]" id="availability-sunday">
+                                                <input class="form-check-input input-day accent accent-color"
+                                                       type="checkbox" value="1"
+                                                       name="availability[Sunday]" id="availability-sunday accent-blue">
                                             </div>
                                         </div>
                                         <br>
                                     </div>
 
-                                    <strong class="my-4">Detail</strong>
+                                    <strong class="my-4">Description</strong>
                                     <div id="detail-error" class="error-message"></div>
                                     <textarea class="form-control" name="details"
-                                              id="myTextarea1" placeholder="Details"></textarea>
+                                              id="myTextarea1" placeholder="Description (Optional)"></textarea>
 
                                     <div class="add-multi-location my-2">
                                     </div>
@@ -612,9 +704,9 @@
         </div>
     </div>
 </div>
-<!-- Add Modal End -->
+{{-- Add Modal End --}}
 
-<!-- Edit Modal Start -->
+{{-- Edit Modal Start --}}
 <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
      style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -639,8 +731,9 @@
                         </div>
                     @endif
                     <form action="{{ route('business.update') }}" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}"/>
-                        <input type="hidden" name="id" id="edit-id" value=""/>
+                        {{--<input type="hidden" name="user_id" value="{{ Auth::user()->id }}"/>--}}
+                        <input type="hidden" name="business_id" id="edit-business-id" value=""/>
+                        <input type="hidden" value="{{ Auth::user()->type }}" name="user_type"/>
                         <input type="hidden" value="{{ csrf_token() }}" name="_token"/>
 
                         <div class="row">
@@ -649,40 +742,64 @@
                                     <strong>Created by</strong>
                                     <input type="text" id="edit-type" name="user_type" value=""
                                            class="form-control mt-2 mb-2" placeholder="Name" readonly>
-                                    <strong>Edit Members</strong>
-                                    <select class="js-example-basic-multiple form-control" id="edit-customized-users"
+                                    {{--<select class="js-example-basic-multiple form-control" id="edit-customized-users"
                                             name="customized_users[]" multiple="multiple">
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}">
                                                 {{ $user->name }}
                                             </option>
                                         @endforeach
-                                    </select>
+                                    </select>--}}
+
+                                    @if(Auth::user()->type === 'sales_person')
+                                        <strong>Edit Members</strong>
+                                        {{--<select class="js-example-basic-multiple form-control" name="customized_users[]"
+                                                multiple="multiple">--}}
+                                        <select class="form-control" name="user_id" id="selected-user">
+                                            <option value="">Select User Members</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}
+                                                    <strong class="business-created">(
+                                                        @if($user->type === 'business' || $user->type === 'paid_member')
+                                                            Business Created
+                                                        @else
+                                                            Business Not Created
+                                                        @endif
+                                                    )</strong>
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+
                                     <strong>Edit Categories</strong>
                                     <select class="form-control mt-2 mb-2" id="edit-category" name="category" required>
                                         @foreach($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     </select>
+
                                     <strong>Edit Business Name</strong>
                                     <input type="text" id="edit-name" name="name" value=""
                                            class="form-control mt-2 mb-2" placeholder="Name" required>
-                                    <strong>Edit State</strong>
+
+                                    {{--<strong>Edit State</strong>
                                     <input type="text" id="edit-state" name="state" value=""
                                            class="form-control mt-2 mb-2" placeholder="State" required>
+
                                     <strong>Edit Rating</strong>
                                     <input type="text" name="ratings" value=""
                                            class="form-control mt-2 mb-2" placeholder="Rating" id="edit-ratings"
-                                           required/>
+                                           required/>--}}
 
-                                    <div class="form-group edit-image-div">
+                                    <div class="form-group edit-thumbnail-div">
                                         <strong>Edit Thumbnail:</strong>
                                         <br/>
-                                        <img src="https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo="
-                                             style="width: 150px; height: 100px;"
-                                             id="edit-thumbnail"
-                                             alt="business"/>
-                                        <input type="file" name="thumbnail" value="" id="thumbnail"
+                                        <img
+                                            src="https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo="
+                                            style="width: 150px; height: 100px;"
+                                            id="edit-thumbnail"
+                                            alt="business"/>
+                                        <input type="file" name="thumbnail" value="" id="thumbnails"
                                                class="form-control my-4"/>
                                         <hr>
                                         <br/>
@@ -691,30 +808,27 @@
                                     <div class="form-group edit-image-div">
                                         <strong>Edit Image:</strong>
                                         <br/>
-                                        <img src="{{ asset('images/no-img-avalible.png') }}"
-                                             style="width: 150px; height: 100px;"
-                                             id="edit-image"
-                                             alt="business"/>
+                                        <img
+                                            src="https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo="
+                                            style="width: 150px; height: 100px;"
+                                            id="edit-image"
+                                            alt="business"/>
                                         <input type="file" name="images[]" value="" id="images"
                                                class="form-control my-4"/>
                                         <hr>
                                         <br/>
                                     </div>
 
-                                    {{--<strong class="my-2">Add more images</strong>
-                                    <div class="add-more-images"></div>
+                                    <strong class="my-2">Add more images</strong>
+                                    <div class="add-edit-more-images"></div>
 
                                     <br>
-                                    <button type="button" class="btn btn-info" id="add-images-div">
+                                    <button type="button" class="btn btn-info" id="add-edit-images-div">
                                         <i class="fas fa-plus"></i>
-                                    </button>--}}
+                                    </button>
 
-                                    {{--<strong>Edit Opening Hours</strong>
-                                    <input type="time" name="opening_hours" value=""
-                                           class="form-control mt-2 mb-2" placeholder="Opening Hours" id="edit-hour"
-                                           required/>--}}
-
-                                    <div class="container my-4" style="border: 2px solid black; border-radius: 2px;">
+                                    <div class="container my-4"
+                                         style="border: 2px solid #00000070; border-radius: 5px; overflow: scroll; height: 400px;">
                                         <div class="row">
                                             <div class="col form-check mt-4" style="display: flex; justify-content: center;
                                                     align-items: center;">
@@ -740,7 +854,8 @@
                                             <div class="col form-check"
                                                  style="display: flex; justify-content: center; align-items: center;">
                                                 <label class="form-check-label" for="monday">Monday</label>
-                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                <input class="form-check-input edit-input-days" type="hidden"
+                                                       value="Monday"
                                                        name="days[]">
                                             </div>
                                             <div class="col">
@@ -755,8 +870,9 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day-checkbox" type="checkbox"
-                                                       value="" name="availability[]" id="availability-monday">
+                                                <input class="form-check-input input-day-checkbox accent accent-color"
+                                                       type="checkbox"
+                                                       value="1" name="availability[Monday]" id="availability-monday">
                                             </div>
                                         </div>
                                         <hr>
@@ -765,7 +881,8 @@
                                             <div class="col form-check"
                                                  style="display: flex; justify-content: center; align-items: center;">
                                                 <label class="form-check-label" for="tuesday">Tuesday</label>
-                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                <input class="form-check-input edit-input-days" type="hidden"
+                                                       value="Tuesday"
                                                        name="days[]">
                                             </div>
                                             <div class="col">
@@ -780,8 +897,9 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day-checkbox" type="checkbox"
-                                                       value="" name="availability[]" id="availability-tuesday">
+                                                <input class="form-check-input input-day-checkbox accent accent-color"
+                                                       type="checkbox"
+                                                       value="1" name="availability[Tuesday]" id="availability-tuesday">
                                             </div>
                                         </div>
                                         <hr>
@@ -790,7 +908,8 @@
                                             <div class="col form-check"
                                                  style="display: flex; justify-content: center; align-items: center;">
                                                 <label class="form-check-label" for="wednesday">Wednesday</label>
-                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                <input class="form-check-input edit-input-days" type="hidden"
+                                                       value="Wednesday"
                                                        name="days[]">
                                             </div>
                                             <div class="col">
@@ -805,8 +924,10 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day-checkbox" type="checkbox"
-                                                       value="" name="availability[]" id="availability-wednesday">
+                                                <input class="form-check-input input-day-checkbox accent accent-color"
+                                                       type="checkbox"
+                                                       value="1" name="availability[Wednesday]"
+                                                       id="availability-wednesday">
                                             </div>
                                         </div>
                                         <hr>
@@ -815,7 +936,8 @@
                                             <div class="col form-check"
                                                  style="display: flex; justify-content: center; align-items: center;">
                                                 <label class="form-check-label" for="thursday">Thursday</label>
-                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                <input class="form-check-input edit-input-days" type="hidden"
+                                                       value="Thursday"
                                                        name="days[]">
                                             </div>
                                             <div class="col">
@@ -830,8 +952,10 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day-checkbox" type="checkbox"
-                                                       value="" name="availability[]" id="availability-thursday">
+                                                <input class="form-check-input input-day-checkbox accent accent-color"
+                                                       type="checkbox"
+                                                       value="1" name="availability[Thursday]"
+                                                       id="availability-thursday">
                                             </div>
                                         </div>
                                         <hr>
@@ -840,7 +964,8 @@
                                             <div class="col form-check"
                                                  style="display: flex; justify-content: center; align-items: center;">
                                                 <label class="form-check-label" for="friday">Friday</label>
-                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                <input class="form-check-input edit-input-days" type="hidden"
+                                                       value="Friday"
                                                        name="days[]">
                                             </div>
                                             <div class="col">
@@ -855,8 +980,9 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day-checkbox" type="checkbox"
-                                                       value="" name="availability[]" id="availability-friday">
+                                                <input class="form-check-input input-day-checkbox accent accent-color"
+                                                       type="checkbox"
+                                                       value="1" name="availability[Friday]" id="availability-friday">
                                             </div>
                                         </div>
                                         <hr>
@@ -865,7 +991,8 @@
                                             <div class="col form-check"
                                                  style="display: flex; justify-content: center; align-items: center;">
                                                 <label class="form-check-label" for="saturday">Saturday</label>
-                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                <input class="form-check-input edit-input-days" type="hidden"
+                                                       value="Saturday"
                                                        name="days[]">
                                             </div>
                                             <div class="col">
@@ -880,8 +1007,10 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day-checkbox" type="checkbox"
-                                                       value="" name="availability[]" id="availability-saturday">
+                                                <input class="form-check-input input-day-checkbox accent accent-color"
+                                                       type="checkbox"
+                                                       value="1" name="availability[Saturday]"
+                                                       id="availability-saturday">
                                             </div>
                                         </div>
                                         <hr>
@@ -890,7 +1019,8 @@
                                             <div class="col form-check"
                                                  style="display: flex; justify-content: center; align-items: center;">
                                                 <label class="form-check-label" for="sunday">Sunday</label>
-                                                <input class="form-check-input edit-input-days" type="hidden" value=""
+                                                <input class="form-check-input edit-input-days" type="hidden"
+                                                       value="Sunday"
                                                        name="days[]">
                                             </div>
                                             <div class="col">
@@ -905,8 +1035,9 @@
                                             </div>
                                             <div class="form-check col"
                                                  style="display: flex; justify-content: center; align-items: center;">
-                                                <input class="form-check-input input-day-checkbox" type="checkbox"
-                                                       value="" name="availability[]" id="availability-sunday">
+                                                <input class="form-check-input input-day-checkbox accent accent-color"
+                                                       type="checkbox"
+                                                       value="1" name="availability[Sunday]" id="availability-sunday">
                                             </div>
                                         </div>
                                         <br>
@@ -915,9 +1046,16 @@
                                     <strong>Edit Detail</strong>
                                     <textarea class="form-control my-2" name="details"
                                               id="myTextarea2"></textarea>
-                                    <div class="edit-multi-location">
-                                    </div>
 
+                                    <div class="edit-multi-location"></div>
+
+                                    <strong class="my-2">Add Locations</strong>
+                                    <br>
+                                    <button type="button" class="btn btn-info" id="add-edit-locations-div">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+
+                                    <div class="add-edit-multi-location my-2"></div>
                                     {{--<div class="add-multi-location my-2">
                                     </div>
 
@@ -941,14 +1079,10 @@
         </div>
     </div>
 </div>
-<!-- Edit Modal End -->
+{{-- Edit Modal End --}}
 
 @section('js')
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYvOXB3SFyyeR0usVOgnLyoDiAd2XDunU&callback=initMap&libraries=places"
-        async defer></script>
 
     {{-- add or remove -- image and thumbnail image work --}}
     <script>
@@ -1072,7 +1206,18 @@
                 $('#edit-image').attr('src', dataURL);
             };
 
-            console.log('input.files[0]', input.files[0])
+            reader.readAsDataURL(input.files[0]);
+        });
+
+        $(document).on('change', '#thumbnails', function (e) {
+            var input = e.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var dataURL = reader.result;
+                $('#edit-thumbnail').attr('src', dataURL);
+            };
+
             reader.readAsDataURL(input.files[0]);
         });
 
@@ -1144,6 +1289,75 @@
                 $(this).remove();
             });
         });
+
+        // edit more images work
+        $(document).ready(function () {
+            let counter = 0;
+
+            function addEditAddImage(counter) {
+                let addEditMoreImages = $('.add-edit-more-images');
+
+                let imageElement = $('<figure data-figure-id="' + counter + '">' +
+                    '<img src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" id="add-edit-preview-image-' + counter + '" style="height: 120px; width: 200px" class="img-fluid" alt="Add Edit Preview Image">' +
+                    '<input type="file" name="images[]" id="add-edit-picture-input-' + counter + '" style="display: none;" accept="image/*">' +
+                    '<i class="add-edit-remove-preview-image fa fa-times" aria-hidden="true"></i>' +
+                    '</figure>' +
+                    '<button type="button" class="btn btn-info add-edit-remove-image-figure mb-3" data-image-id="' + counter + '"><i class="fa fa-times" aria-hidden="true"></i></button>'
+                );
+
+                addEditMoreImages.append(imageElement);
+
+                $('#add-edit-preview-image-' + counter).on('click', function () {
+                    $('#add-edit-picture-input-' + counter).click();
+                });
+
+                $('#add-edit-picture-input-' + counter).on('change', function () {
+                    addEditPreviewMoreImage(this, counter);
+                });
+            }
+
+            $(document).on('click', '#add-edit-images-div', function () {
+                counter++;
+
+                addEditAddImage(counter);
+            });
+
+            // select image on multiple preview
+            function addEditPreviewMoreImage(input, counter) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#add-edit-preview-image-' + counter).attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // remove image preview
+            $(document).on('click', '.add-edit-remove-preview-image', function () {
+                var figure = $(this).closest('figure');
+                var counter = figure.find('img').attr('id').replace('add-edit-preview-image-', '');
+
+                addEditRemoveMoreBusinessImage(counter);
+            });
+
+            function addEditRemoveMoreBusinessImage(counter) {
+                var addEditImage = document.getElementById('add-edit-preview-image-' + counter);
+
+                // Remove image
+                addEditImage.src = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
+                document.querySelector('#add-edit-picture-input-' + counter).value = '';
+            }
+
+            $(document).on('click', '.add-edit-remove-image-figure', function () {
+                var addEditImageId = $(this).data('image-id');
+                $('#add-edit-preview-image-' + addEditImageId).closest('figure').remove();
+                $('#add-edit-picture-input-' + addEditImageId).remove();
+                $(this).remove();
+            });
+        });
     </script>
     {{-- add or remove -- image and thumbnail image work --}}
 
@@ -1151,106 +1365,6 @@
     <script>
         $(document).ready(function () {
             $('.js-example-basic-multiple').select2();
-
-            $('.add-form').submit(function (e) {
-                var hasError = false;
-                if ($('#myTextarea1').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#detail-error').text("Please provide details.");
-                } else {
-                    $('#detail-error').text("");
-                }
-
-                if ($('.business-text').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#business-error').text("Please provide business name.");
-                } else {
-                    $('#business-error').text("");
-                }
-
-                if ($('#state-text').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#state-error').text("Please provide state.");
-                } else {
-                    $('#state-error').text("");
-                }
-
-                if ($('#ratings-text').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#rating-error').text("Please provide rating.");
-                } else {
-                    $('#rating-error').text("");
-                }
-
-                if ($('#picture-input').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#image-error').text("Please provide image.");
-                } else {
-                    $('#image-error').text("");
-                }
-
-                if ($('#picture-thumbnail').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#thumbnail-error').text("Please provide thumbnail.");
-                } else {
-                    $('#thumbnail-error').text("");
-                }
-
-                if ($('#opening-hour-text').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#opening-hour-error').text("Please provide opening hour.");
-                } else {
-                    $('#opening-hour-error').text("");
-                }
-
-                if ($('#closing-hour-text').val().trim() === '') {
-                    e.preventDefault();
-                    hasError = true;
-                    $('#closing-hour-error').text("Please provide closing hour.");
-                } else {
-                    $('#closing-hour-error').text("");
-                }
-
-                $('.location-input').each(function () {
-                    if ($(this).val().trim() === '') {
-                        hasError = true;
-                        $(this).siblings('.location-error').text("Please provide location.");
-                    } else {
-                        $(this).siblings('.location-error').text("");
-                    }
-                });
-
-                $('.longitude-input').each(function () {
-                    if ($(this).val().trim() === '') {
-                        hasError = true;
-                        $(this).siblings('.longitude-error').text("Please provide longitude.");
-                    } else {
-                        $(this).siblings('.longitude-error').text("");
-                    }
-                });
-
-                $('.latitude-input').each(function () {
-                    if ($(this).val().trim() === '') {
-                        hasError = true;
-                        $(this).siblings('.latitude-error').text("Please provide latitude.");
-                    } else {
-                        $(this).siblings('.latitude-error').text("");
-                    }
-                });
-
-                $(this).find('[required]').each(function () {
-                    if (!$(this).val()) {
-                        hasError = true;
-                    }
-                });
-            });
 
             $('.delete_button').click(function (event) {
                 event.preventDefault();
@@ -1360,27 +1474,30 @@
         }
 
         function initEditMultiMap(isEditing, index) {
-            let searchInput, longitudeInput, latitudeInput, suggestionsContainer, autocompleteService;
+            let searchMultiInput, longitudeMultiInput, latitudeMultiInput, suggestionsMultiContainer,
+                autocompleteMultiService;
 
-            if (isEditing) {
-                // Edit Business Modal
-                searchInput = document.getElementById('edit-search-input-' + index);
-                longitudeInput = document.getElementById('edit-longitude-' + index);
-                latitudeInput = document.getElementById('edit-latitude-' + index);
-                suggestionsContainer = document.getElementById('edit-suggestions-' + index);
-                autocompleteService = new google.maps.places.AutocompleteService();
-            }
+            // Edit Business Modal
+            searchMultiInput = document.getElementById('edit-search-input-' + index);
+            longitudeMultiInput = document.getElementById('edit-longitude-' + index);
+            latitudeMultiInput = document.getElementById('edit-latitude-' + index);
+            suggestionsMultiContainer = document.getElementById('edit-suggestions-' + index);
+            autocompleteMultiService = new google.maps.places.AutocompleteService();
 
-            if (!searchInput) {
+            // Check if all necessary elements are found
+            if (!searchMultiInput || !longitudeMultiInput || !latitudeMultiInput || !suggestionsMultiContainer) {
+                // console.error('One or more elements not found for counter:', counter);
                 return;
             }
 
-            searchInput.addEventListener('input', function () {
+            autocompleteMultiService = new google.maps.places.AutocompleteService();
+
+            searchMultiInput.addEventListener('input', function () {
                 const query = this.value;
-                suggestionsContainer.innerHTML = '';
+                suggestionsMultiContainer.innerHTML = '';
 
                 if (query) {
-                    autocompleteService.getPlacePredictions({input: query}, function (predictions, status) {
+                    autocompleteMultiService.getPlacePredictions({input: query}, function (predictions, status) {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
                             predictions.forEach(function (prediction) {
                                 const suggestionElement = document.createElement('div');
@@ -1388,26 +1505,44 @@
                                 suggestionElement.textContent = prediction.description;
 
                                 suggestionElement.addEventListener('click', function () {
-                                    searchInput.value = prediction.description;
-                                    suggestionsContainer.innerHTML = '';
+                                    searchMultiInput.value = prediction.description;
+                                    suggestionsMultiContainer.innerHTML = '';
 
                                     // Fetch additional details for the selected place
                                     const placeService = new google.maps.places.PlacesService(document.createElement('div'));
                                     placeService.getDetails({placeId: prediction.place_id}, function (place, status) {
                                         if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                            const selectedLatitude = place.geometry.location.lat();
-                                            const selectedLongitude = place.geometry.location.lng();
-                                            latitudeInput.value = selectedLatitude;
-                                            longitudeInput.value = selectedLongitude;
+                                            const selectedMultiLatitude = place.geometry.location.lat();
+                                            const selectedMultiLongitude = place.geometry.location.lng();
+                                            latitudeMultiInput.value = selectedMultiLatitude;
+                                            longitudeMultiInput.value = selectedMultiLongitude;
+
+                                            // Hide suggestions container when latitude or longitude is selected
+                                            suggestionsMultiContainer.style.display = 'none';
                                         }
                                     });
                                 });
 
-                                suggestionsContainer.appendChild(suggestionElement);
+                                suggestionsMultiContainer.appendChild(suggestionElement);
                             });
+
+                            suggestionsMultiContainer.style.display = 'block';
+                        } else {
+                            suggestionsMultiContainer.style.display = 'none';
                         }
                     });
+                } else {
+                    suggestionsMultiContainer.style.display = 'none';
                 }
+            });
+
+            // Event listener for latitude and longitude input fields
+            latitudeMultiInput.addEventListener('input', function () {
+                suggestionsMultiContainer.style.display = 'none';
+            });
+
+            longitudeMultiInput.addEventListener('input', function () {
+                suggestionsMultiContainer.style.display = 'none';
             });
         }
 
@@ -1461,6 +1596,65 @@
             });
         }
 
+        function initAddEditMultiMap(isFirstLoad, counter) {
+            let addEditSearchInput, addEditLongitudeInput, addEditLatitudeInput, addEditSuggestionsContainer, addEditAutocompleteService;
+
+            // Add Multiple Business Modal Location
+            addEditSearchInput = document.getElementById('add-edit-search-input-' + counter);
+            addEditLongitudeInput = document.getElementById('add-edit-longitude-text-' + counter);
+            addEditLatitudeInput = document.getElementById('add-edit-latitude-text-' + counter);
+            addEditSuggestionsContainer = document.getElementById('add-edit-add-suggestions-' + counter);
+            addEditAutocompleteService = new google.maps.places.AutocompleteService();
+
+            if (!addEditSearchInput) {
+                return;
+            }
+
+            addEditSearchInput.addEventListener('input', function () {
+                const query = this.value;
+                addEditSuggestionsContainer.innerHTML = '';
+
+                if (query) {
+                    addEditAutocompleteService.getPlacePredictions({input: query}, function (predictions, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            predictions.forEach(function (prediction) {
+                                const suggestionElement = document.createElement('div');
+                                suggestionElement.classList.add('add-edit-suggestion');
+                                suggestionElement.textContent = prediction.description;
+
+                                suggestionElement.addEventListener('click', function () {
+                                    addEditSearchInput.value = prediction.description;
+                                    addEditSuggestionsContainer.innerHTML = '';
+
+                                    // Fetch additional details for the selected place
+                                    const placeService = new google.maps.places.PlacesService(document.createElement('div'));
+                                    placeService.getDetails({placeId: prediction.place_id}, function (place, status) {
+                                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                            const selectedMultiLatitude = place.geometry.location.lat();
+                                            const selectedMultiLongitude = place.geometry.location.lng();
+                                            addEditLatitudeInput.value = selectedMultiLatitude;
+                                            addEditLongitudeInput.value = selectedMultiLongitude;
+
+                                            // Hide suggestions container when latitude or longitude is selected
+                                            addEditSuggestionsContainer.style.display = 'none';
+                                        }
+                                    });
+                                });
+
+                                addEditSuggestionsContainer.appendChild(suggestionElement);
+                            });
+
+                            addEditSuggestionsContainer.style.display = 'block';
+                        } else {
+                            addEditSuggestionsContainer.style.display = 'none';
+                        }
+                    });
+                } else {
+                    addEditSuggestionsContainer.style.display = 'none';
+                }
+            });
+        }
+
         initEditMultiMap(false);
         initMap(false);
     </script>
@@ -1501,7 +1695,6 @@
 
             // Initialize map for the first location
             initAddMultiMap(true, counter);
-
             $(document).on('click', '#add-locations-div', function () {
                 let addMultiLocation = $('.add-multi-location');
                 counter++;
@@ -1528,6 +1721,33 @@
                 initAddMultiMap(false, counter);
             });
 
+            initAddEditMultiMap(true, counter);
+            $(document).on('click', '#add-edit-locations-div', function () {
+                let addMultiLocation = $('.add-edit-multi-location');
+                counter++;
+
+                let locationElement = $(
+                    '<div class="location-div location-div-' + counter + '">' +
+                    '<strong>Location</strong>' +
+                    '<div id="location-error" class="error-message latitude-error"></div>' +
+                    '<input type="text" name="location[]" value="" class="form-control mt-2 mb-2 location-input" id="add-edit-search-input-' + counter + '" placeholder="Location">' +
+                    '<div id="add-edit-add-suggestions-' + counter + '" class="add-edit-multi-suggestions" style="display: none;"></div>' +
+                    '<strong>Longitude</strong>' +
+                    '<div id="longitude-error" class="error-message latitude-error"></div>' +
+                    '<input type="text" name="longitude[]" value="" class="form-control mt-2 mb-2 longitude-input" id="add-edit-longitude-text-' + counter + '" placeholder="Longitude" readonly>' +
+                    '<strong>Latitude</strong>' +
+                    '<div id="latitude-error" class="error-message latitude-error"></div>' +
+                    '<input type="text" name="latitude[]" value="" class="form-control mt-2 mb-2 latitude-input" id="add-edit-latitude-text-' + counter + '" placeholder="Latitude" readonly>' +
+                    '<button type="button" class="btn btn-info remove-location" data-location-id="' + counter + '"><i class="fa fa-times" aria-hidden="true"></i></button>' +
+                    '</div>'
+                );
+
+                addMultiLocation.append(locationElement);
+
+                // Initialize map for the newly added location
+                initAddEditMultiMap(false, counter);
+            });
+
             $(document).on('click', '.remove-location', function () {
                 var locationId = $(this).data('location-id');
                 $('.location-div-' + locationId).remove();
@@ -1549,6 +1769,14 @@
 
         // edit modal working
         $(document).ready(function () {
+            const checkboxes = document.querySelectorAll('.input-day-checkbox');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    this.value = this.checked ? '1' : '0';
+                });
+            });
+
             var ckeditorInitialized = false;
 
             $(".edit-modal-btn").on("click", function () {
@@ -1581,25 +1809,26 @@
                 var availabilities = data.availabilities;
 
                 // Populate basic fields
-                const selectedUserIds = data.customized_users;
-                const user_detail = data.details;
+                // const selectedUserIds = data.user;
+                const user_detail = data.details ?? 'Business Details';
                 var user_type = data.type;
                 user_type = user_type.replace(/_/g, ' ');
                 user_type = user_type.charAt(0).toUpperCase() + user_type.slice(1);
-                $("#edit-id").val(data.id);
+                $("#edit-business-id").val(data.id);
                 $("#edit-type").val(user_type);
                 $("#edit-name").val(data.name ?? 'Koelpin, Hahn and Fay');
 
-                selectedUserIds.forEach(function (userId) {
-                    $("#edit-customized-users option[value='" + userId + "']").prop("selected", true);
-                });
+                // selectedUserIds.forEach(function (userId) {
+                //     $("#edit-customized-users option[value='" + selectedUserId + "']").prop("selected", true);
+                // });
+                $("#selected-user option[value='" + data.user + "']").prop("selected", true);
 
-                $("#edit-customized-users").trigger("change");
+                // $("#edit-customized-users").trigger("change");
                 $("#edit-category").val(data.category_id);
                 $("#edit-state").val(data.state ?? 'Colorado');
                 $("#edit-ratings").val(data.ratings ?? '0');
-                $("#edit-thumbnail").val(data.thumbnail ?? 'https://media.istockphoto.com/id/1147544806/vector/no-thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=Ni8CpW8dNAV0NrS6Odo5csGcWUySFydNki9FYi1XHYo=');
 
+                // $("#edit-thumbnail").val(data.thumbnail);
                 // $("#images").val(data.images);
 
                 function convertTo24HourFormat(time) {
@@ -1643,6 +1872,7 @@
 
                 // Populate image fields
                 populateImageFields(data.images);
+                populateThumbnailFields(data.thumbnail);
             }
 
             function initializeCKEditor(initialContent) {
@@ -1667,12 +1897,12 @@
                     var locationElement = $(
                         '<div>' +
                         '<strong>Edit Location</strong>' +
-                        '<input type="text" name="location" value="' + location + '" class="form-control mt-2 mb-2" id="edit-search-input-' + index + '" placeholder="Location" required>' +
-                        '<div id="edit-suggestions-' + index + '"></div>' +
+                        '<input type="text" name="location[]" value="' + location + '" class="form-control mt-2 mb-2" id="edit-search-input-' + index + '" placeholder="Location" >' +
+                        '<div id="edit-suggestions-' + index + '" class="multi-suggestions" style="display: none;"></div>' +
                         '<strong>Edit Longitude</strong>' +
-                        '<input type="text" name="longitude" value="' + longitude + '" class="form-control mt-2 mb-2" id="edit-longitude-' + index + '" placeholder="Longitude" required readonly>' +
+                        '<input type="text" name="longitude[]" value="' + longitude + '" class="form-control mt-2 mb-2" id="edit-longitude-' + index + '" placeholder="Longitude"  readonly>' +
                         '<strong>Edit Latitude</strong>' +
-                        '<input type="text" name="latitude" value="' + latitude + '" class="form-control mt-2 mb-2" id="edit-latitude-' + index + '" placeholder="Latitude" required readonly>' +
+                        '<input type="text" name="latitude[]" value="' + latitude + '" class="form-control mt-2 mb-2" id="edit-latitude-' + index + '" placeholder="Latitude"  readonly>' +
                         '</div>'
                     );
 
@@ -1693,12 +1923,12 @@
                 var locationElement = $(
                     '<div>' +
                     '<strong>Edit Location</strong>' +
-                    '<input type="text" name="location" value="' + locationValue + '" class="form-control mt-2 mb-2" id="edit-search-input" placeholder="Location" required>' +
-                    '<div id="edit-suggestions"></div>' +
+                    '<input type="text" name="location[]" value="' + locationValue + '" class="form-control mt-2 mb-2" id="edit-search-input" placeholder="Location" >' +
+                    '<div id="edit-suggestions" class="multi-suggestions" style="display: none;"></div>' +
                     '<strong>Edit Longitude</strong>' +
-                    '<input type="text" name="longitude" value="' + longitudeValue + '" class="form-control mt-2 mb-2" id="edit-longitude" placeholder="Longitude" required readonly>' +
+                    '<input type="text" name="longitude[]" value="' + longitudeValue + '" class="form-control mt-2 mb-2" id="edit-longitude" placeholder="Longitude"  readonly>' +
                     '<strong>Edit Latitude</strong>' +
-                    '<input type="text" name="latitude" value="' + latitudeValue + '" class="form-control mt-2 mb-2" id="edit-latitude" placeholder="Latitude" required readonly>' +
+                    '<input type="text" name="latitude[]" value="' + latitudeValue + '" class="form-control mt-2 mb-2" id="edit-latitude" placeholder="Latitude"  readonly>' +
                     '</div>'
                 );
 
@@ -1719,7 +1949,7 @@
                         images.forEach(function (image, index) {
                             var imageElement = $(
                                 '<strong>Edit Image:</strong><br/>' +
-                                '<img src="' + imageUrlBase + image + '" id="edit-multi-image-'+ index +'" style="width: 150px; height: 100px;" alt="business"/>' +
+                                '<img src="' + imageUrlBase + image + '" id="edit-multi-image-' + index + '" style="width: 150px; height: 100px;" alt="business"/>' +
                                 '<input type="file" name="images[]" value="" class="form-control mt-2 mb-2" id="edit-multi-images" data-multi-images="' + index + '"/>' +
                                 '<hr>'
                             );
@@ -1738,6 +1968,32 @@
                 }
             }
 
+            function populateThumbnailFields(thumbnail) {
+                var thumbnailUrlBase = '{{ asset('') }}/uploads/business/';
+                var thumbnailDiv = $('.edit-thumbnail-div');
+                var emptyThumbnailUrl = 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg';
+
+                if (thumbnail && thumbnail.length > 0) {
+                    if (thumbnail.length > 0 && thumbnail[0].trim() !== '') {
+                        var thumbnailUrl = thumbnailUrlBase + thumbnail;
+                        $("#edit-thumbnail").attr("src", thumbnailUrl);
+                    } else {
+                        $("#edit-thumbnail").attr("src", emptyThumbnailUrl);
+                    }
+                } else {
+                    thumbnailDiv.empty();
+
+                    var imageElement = $(
+                        '<strong>Edit Thumbnail:</strong><br/>' +
+                        '<img src="' + thumbnailUrlBase + thumbnail + '" style="width: 150px; height: 100px;" alt="business"/>' +
+                        '<input type="file" name="thumbnail" value="" class="form-control mt-2 mb-2" id="thumbnail-image"/>' +
+                        '<hr>'
+                    );
+
+                    thumbnailDiv.append(imageElement);
+                }
+            }
+
             $(document).on('change', '#edit-multi-images', function (event) {
                 var index = $(this).attr('data-multi-images');
                 var input = event.target;
@@ -1745,7 +2001,7 @@
 
                 reader.onload = function () {
                     var dataURL = reader.result;
-                    $('#edit-multi-image-'+ index +'').attr('src', dataURL);
+                    $('#edit-multi-image-' + index + '').attr('src', dataURL);
                 };
 
                 reader.readAsDataURL(input.files[0]);

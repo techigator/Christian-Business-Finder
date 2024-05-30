@@ -1,8 +1,9 @@
 @extends('admin/layouts/app')
-@section('title', 'Christian Business Finder')
+@section('title', 'Dashboard')
 @section('content')
 
     <?php
+
     use App\Models\logo;
     use App\Models\setting;
 
@@ -17,11 +18,46 @@
                 <h4 class="welcome-text">Welcome back</h4>
                 <div class="dashboard-title">Christian Business Finder</div>
                 <p class="dashboard-description text-center">
-                    Welcome to the admin dashboard of Christian Business Finder. Here you can manage various aspects of the application.
+                    Welcome to the admin dashboard of Christian Business Finder. Here you can manage various aspects of
+                    the application.
                 </p>
             </div>
         </div>
         <hr>
+
+        @if($user)
+            @php
+                $type = str_replace('_', ' ', ucwords($user->type ?? ''))
+            @endphp
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-xl-stretch">
+                        <div class="card-header border-0">
+                            <div class="card-toolbar"
+                                 style="display: flex; justify-content: center; text-align: center; padding-top: 15px;">
+                                @if($user->name)
+                                    <p class="mr-4">Name: <strong>{{ $user->name ?? '' }}</strong></p>
+                                @endif
+                                @if($user->email)
+                                    <p class="mr-4">Email: <strong>{{ $user->email ?? '' }}</strong></p>
+                                @endif
+                                @if($type)
+                                    <p class="mr-4">Type: <strong>{{ $type ?? '' }}</strong></p>
+                                @endif
+                                @if($couponCode)
+                                    <p class="mr-4">Coupon Code: <strong>{{ $couponCode ?? '' }}</strong></p>
+                                @endif
+                                @if($user->referral_code)
+                                    <p class="mr-4">Referral Code:
+                                        <strong>{{ $user->referral_code ?? '' }}</strong></p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="app-content">
             <div class="dashboard-title">
                 This week sales and purchase
@@ -31,8 +67,10 @@
                     <div class="card card-xl-stretch mb-5 mb-xl-8">
                         <div class="card-header border-0 pt-5">
                             <div class="card-toolbar" data-kt-buttons="true" data-kt-initialized="1">
-                                <a class="btn btn-sm btn-color-muted btn-active btn-active-primary active px-4 me-1" id="kt_charts_widget_6_sales_btn">Sales</a>
-                                <a class="btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1" id="kt_charts_widget_6_expenses_btn">Expenses</a>
+                                <a class="btn btn-sm btn-color-muted btn-active btn-active-primary active px-4 me-1"
+                                   id="kt_charts_widget_6_sales_btn">Sales</a>
+                                <a class="btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1"
+                                   id="kt_charts_widget_6_expenses_btn">Expenses</a>
                             </div>
                         </div>
                         <div class="card-body">

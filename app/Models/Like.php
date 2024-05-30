@@ -12,7 +12,7 @@ class Like extends Model
 
     protected $fillable = [
         'user_id',
-        'suggestion_id'
+        'buisness_id',
     ];
 
     // public function suggestion(){
@@ -21,6 +21,6 @@ class Like extends Model
 
     public function buisness()
     {
-        return $this->belongsTo(Buisness::class, 'buisness_id');
+        return $this->belongsTo(Buisness::class, 'buisness_id', 'id');
     }
 }

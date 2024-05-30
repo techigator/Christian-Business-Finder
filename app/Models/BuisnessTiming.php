@@ -16,4 +16,9 @@ class BuisnessTiming extends Model
         'closing_hours',
         'availability',
     ];
+
+    public function business()
+    {
+        return $this->belongsTo(Buisness::class, 'buisness_id', 'id');
+    }
 }

@@ -53,6 +53,24 @@
     @include('layouts.links') @yield('css')
 
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px #7C6947;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px #7C6947;
+        }
+
         .select2-container {
             box-sizing: border-box;
             display: block;
@@ -209,7 +227,7 @@
     ?>
         <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{{asset($logo->img)}}" alt="AdminLTELogo">
+        <img class="animation__shake" src="{{ asset($logo->img) }}" alt="AdminLTELogo">
     </div>
 
     <!-- Navbar -->
@@ -275,12 +293,22 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4"
+           style="height: 100rem; min-height: 100rem; position: absolute; top: 0;">
         <!-- Brand Logo -->
-        <a href="{{ url('dashboard') }}" class="brand-link">
-            <img src="{{ asset($logo->img) }}" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light"></span>
-        </a>
+        @if(Auth::user()->type === 'admin')
+            <a href="{{ url('admin/dashboard') }}" class="brand-link">
+                <img src="{{ asset($logo->img) }}" alt="AdminLTE Logo" class="brand-image elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light"></span>
+            </a>
+        @elseif(Auth::user()->type === 'sales_person')
+            <a href="{{ url('sale-person/dashboard') }}" class="brand-link">
+                <img src="{{ asset($logo->img) }}" alt="AdminLTE Logo" class="brand-image elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light"></span>
+            </a>
+        @endif
 
         <!-- Sidebar -->
         <div class="sidebar">
@@ -288,7 +316,7 @@
             <!-- Sidebar user (optional) -->
             <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{asset('assets/backend_assets/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('assets/backend_assets/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Administrator</a>
@@ -316,23 +344,47 @@
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
 
-                    <li class="nav-item">
-                        <a href="{{ url('dashboard') }}" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    </li>
-
-
-                    @if(\Illuminate\Support\Facades\Auth::user()->type === 'admin')
-
+                    @if(Auth::user()->type === 'admin')
+                        <li class="nav-item">
+                            <a href="{{ url('admin/dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('notification.index') }}" class="nav-link">
                                 <i class="nav-icon fa fa-bell" aria-hidden="true"></i>
                                 <p>
                                     Notifications
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.coupon') }}" class="nav-link">
+                                <i class="nav-icon fa fa-gift" aria-hidden="true"></i>
+                                <p>
+                                    Coupons
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('subscription.index') }}" class="nav-link">
+                                <i class="nav-icon fa fa-shopping-bag" aria-hidden="true"></i>
+                                <p>
+                                    Subscription
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('banner.index') }}" class="nav-link">
+                                <i class="nav-icon fa fa-images" aria-hidden="true"></i>
+                                <p>
+                                    Banners
                                 </p>
                             </a>
                         </li>
@@ -347,7 +399,7 @@
                         </li>--}}
                         <li class="nav-item">
                             <a href="{{ route('logo_index') }}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
+                                <i class="nav-icon fa fa-image"></i>
                                 <p>
                                     Logo
                                 </p>
@@ -363,7 +415,7 @@
                         </li>--}}
                         <li class="nav-item">
                             <a href="{{route('category_index')}}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
+                                <i class="nav-icon fa fa-list"></i>
                                 <p>
                                     Category
                                 </p>
@@ -371,30 +423,67 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{route('business.index')}}" class="nav-link">
-                                <i class="nav-icon far fa-building"></i>
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-briefcase"></i>
                                 <p>
-                                    Business
+                                    All Businesses
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('business.index', 'admin') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Admin Businesses</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('business.index', 'business') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Free Businesses</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('business.index', 'paid_member') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Paid Businesses</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('business.index', 'sales_person') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sales Person Businesses</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('cms_index') }}" class="nav-link">
+                                <i class="nav-icon fa fa-newspaper"></i>
+                                <p>
+                                    CMS
                                 </p>
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-            <a href="{{ route('cms_index') }}" class="nav-link">
-              <i class="nav-icon fa fa-newspaper"></i>
-              <p>
-                CMS
-              </p>
-            </a>
-          </li> -->
                         <li class="nav-item">
+                            <a href="{{ route('payment.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-money-check"></i>
+                                <p>
+                                    Payments
+                                </p>
+                            </a>
+                        </li>
+
+                        {{--<li class="nav-item">
                             <a href="{{ route('testimonials_index') }}" class="nav-link">
                                 <i class="nav-icon fa fa-users"></i>
                                 <p>
                                     Testimonials
                                 </p>
                             </a>
-                        </li>
+                        </li>--}}
                         <li class="nav-item">
                             <a href="{{ route('setting_index') }}" class="nav-link">
                                 <i class="nav-icon fa fa-wrench"></i>
@@ -405,17 +494,66 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('user.index') }}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-user"></i>
+                                {{--<i class="nav-icon fas fa-chart-pie"></i>--}}
                                 <p>
-                                    Users
+                                    All Users
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('user.index', 'user') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Users</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.index', 'church') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Church</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.index', 'consumer') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Consumers</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.index', 'business') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Businesses</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.index', 'paid_member') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Paid Members</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.index', 'sales_person') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Sales Persons</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @elseif(Auth::user()->type === 'sales_person')
+                        <li class="nav-item">
+                            <a href="{{ url('sale-person/dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
                                 </p>
                             </a>
                         </li>
-                    @else
+
                         <li class="nav-item">
                             <a href="{{route('business.sales.index')}}" class="nav-link">
-                                <i class="nav-icon far fa-building"></i>
+                                <i class="nav-icon fa fa-briefcase"></i>
                                 <p>
                                     Business
                                 </p>
@@ -1045,6 +1183,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.0/js/select2.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYvOXB3SFyyeR0usVOgnLyoDiAd2XDunU&libraries=places"></script>
 
 
 @include('layouts.scripts')
