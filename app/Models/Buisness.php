@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Buisness extends Model
 {
@@ -75,7 +76,7 @@ class Buisness extends Model
         return $this->hasMany(BuisnessTiming::class, 'buisness_id');
     }
 
-    public function banner(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function banner(): HasMany
     {
         return $this->hasMany(Buisness::class, 'buisness_id', 'id');
     }

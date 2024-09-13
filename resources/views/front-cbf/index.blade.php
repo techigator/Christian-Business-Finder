@@ -22,9 +22,6 @@
                                             <button class="close" type="button">×</button>
                                         </div>
                                     </div>
-                                    {{--<div class="col-md-3">
-                                        <button type="submit" class="btn themeBtn">Submit</button>
-                                    </div>--}}
                                 </div>
                             </form>
 

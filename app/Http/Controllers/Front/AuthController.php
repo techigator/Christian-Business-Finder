@@ -57,8 +57,6 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'number' => 'required',
-            'denomination' => 'required',
         ]);
 
         $validator->sometimes('home_church_name', 'required', function ($input) {
@@ -79,6 +77,10 @@ class AuthController extends Controller
 
         $validator->sometimes('view_as', 'required', function ($input) {
             return in_array($input->type, ['business', 'consumer']);
+        });
+
+        $validator->sometimes('number', 'required', function ($input) {
+            return in_array($input->type, ['business', 'church']);
         });
 
         $validator->sometimes('country', 'required', function ($input) {
@@ -375,7 +377,6 @@ class AuthController extends Controller
             'type' => 'required',
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'number' => 'required',
             'business_phone_number' => 'required',
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'business_type' => 'required',

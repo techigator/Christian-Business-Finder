@@ -42,6 +42,10 @@ Route::get('get-business-by-category/{id}', [UserController::class, 'getBusiness
 // comment by adil
 // Route::get('get-buisness-by-id/{id?}', [UserController::class, 'getBuisnessById']);
 
+// bank of america payment
+Route::post('bank-of-america-payment-gateway', [UserController::class, 'bankOfAmericaPaymentGateway']);
+
+
 // sign-up paypal payment
 Route::get('paypal-payment-gateway/{amount?}', [UserController::class, 'paypalPaymentGateway']);
 Route::post('user-create', [UserController::class, 'userCreate']);
@@ -78,20 +82,24 @@ Route::middleware(['auth:api'])->group(function () {
 // coupon
     Route::post('coupon-apply', [UserController::class, 'applyCoupon']);
 
-
 // chat
     Route::post('send-message', [MessageController::class, 'sendMessage']);
 
 // User
+    Route::get('user-type-change/{id?}', [UserController::class, 'userTypeChange']);
+    Route::post('user-type-change', [UserController::class, 'userTypeChange']);
     Route::post('update-info', [UserController::class, 'updateProfileInfo']);
     Route::get('user/{user_id}', [UserController::class, 'getUser']);
     Route::post('change-password', [UserController::class, 'changePassword']);
-    Route::get('user-type-change/{user_type}', [UserController::class, 'UserTypeChange']);
-    Route::get('logout', [UserController::class, 'logout']);
+    Route::get('user-type-change/{user_type}', [UserController::class, 'UserTypeChanges']);
+    Route::post('logout', [UserController::class, 'logout']);
     Route::post('update-profile', [UserController::class, 'updateProfileImage']);
 
 // business get with rating or user flag
     Route::get('get-buisness-by-id/{id?}', [UserController::class, 'getBusinessById']);
+
+// Rating Give To Business
+    Route::post('rate-business', [UserController::class, 'rateBusiness']);
 
 // Church
     Route::post('add-church', [UserController::class, 'addChurch']);
@@ -103,6 +111,7 @@ Route::middleware(['auth:api'])->group(function () {
 
 // Find by church
     Route::post('find-by-church', [UserController::class, 'findByChurch']);
+    Route::post('search-filtration', [UserController::class, 'searchFiltration']);
 
 // Likes
     Route::post('add-likes', [UserController::class, 'addLikes']);
@@ -115,6 +124,14 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('sent-chat-by-user', [UserController::class, 'sentChatByUser']);
     Route::post('sent-chat-by-image', [UserController::class, 'sentChatByImage']);
     Route::post('sent-chat-by-attachment', [UserController::class, 'sentChatByAttachment']);
+
+// Blocked user routes
+    Route::post('block-user', [UserController::class, 'blockUser']);
+    Route::post('unblock-user', [UserController::class, 'unblockUser']);
+    Route::get('block-users/status/{id?}', [UserController::class, 'blockStatus']);
+
+// report
+    Route::post('report', [UserController::class, 'report']);
 
 // admin notification receive
     Route::get('get-notification/{user_id?}', [UserController::class, 'getNotification']);
@@ -154,8 +171,6 @@ Route::middleware(['auth:api'])->group(function () {
 // add images
     Route::post('add-images', [ShopController::class, 'addImages']);
 
-// Rating Give To Business
-    Route::post('rate-business', [ShopController::class, 'rateBusiness']);
 
 // strip responds
     Route::post('strip-intent-responds', [ShopController::class, 'StripIntentResponds']);

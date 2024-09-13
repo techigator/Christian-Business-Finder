@@ -7,9 +7,12 @@ class category extends Model
     protected $table = 'category';
     public $primaryKey = 'id';
     protected $fillable = [
-
-        'user_id','is_deleted','name','slug','is_active','img'
-
+        'user_id',
+        'is_deleted',
+        'name',
+        'slug',
+        'is_active',
+        'img'
     ];
     public function image()
     {

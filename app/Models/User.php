@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -76,29 +77,39 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function business(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function business(): HasMany
     {
         return $this->hasMany(Buisness::class);
     }
 
-    public function sales_person(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function sales_person(): HasMany
     {
         return $this->hasMany(SalesPersonUser::class, 'user_id');
     }
 
-    public function referral_person(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function referral_person(): HasMany
     {
         return $this->hasMany(SalesPersonUser::class, 'referral_code', 'referral_code');
     }
 
-    public function coupon(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function coupon(): HasMany
     {
         return $this->hasMany(Coupon::class, 'user_id');
     }
 
-    public function payment(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function payment(): HasMany
     {
         return $this->hasMany(Payment::class, 'user_id');
+    }
+
+    public function reportsByMe(): HasMany
+    {
+        return $this->hasMany(Report::class, 'reporting_by');
+    }
+
+    public function reportsToMe(): HasMany
+    {
+        return $this->hasMany(Report::class, 'reporting_to');
     }
 
     public function isPaidMember(): bool
@@ -114,5 +125,15 @@ class User extends Authenticatable
     public function expireSubscription()
     {
         $this->update(['subscription_expires_at' => null]);
+    }
+
+    public function blockedUsers()
+    {
+        return $this->hasMany(BlockedUser::class, 'from_user');
+    }
+
+    public function blockedByUsers()
+    {
+        return $this->hasMany(BlockedUser::class, 'to_user');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CouponController;
@@ -36,7 +37,6 @@ use App\Http\Controllers\TestimonialsController;
 */
 
 // Auth Front Cbf View
-
 // Register
 Route::post('apply-coupon-web', [AuthController::class, 'applyCouponWeb'])->name('apply.coupon.web');
 Route::get('payment', [AuthController::class, 'paypalPaymentGateway'])->name('payment');
@@ -59,7 +59,6 @@ Route::post('/forget-form', [AuthController::class, 'resetPassword'])->name('fro
 Route::get('/reset-token/{otp?}', [AuthController::class, 'showResetPasswordForm'])->name('front.reset.password');
 Route::post('/reset-form', [AuthController::class, 'submitResetPasswordForm'])->name('front.reset.submit');
 // Auth Front Cbf View
-
 
 // Front Cbf View
 Route::get('/', [FrontController::class, 'index'])->name('front.index');
@@ -191,6 +190,11 @@ Route::group(['prefix' => '/admin', 'middleware' => ['customer']], function () {
     Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
     Route::get('/payment-user-detail/{id?}', [PaymentController::class, 'show'])->name('payment.user.detail.show');
     Route::post('/payment-user-delete/{id?}', [PaymentController::class, 'delete'])->name('payment.user.delete');
+
+    // report
+    Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+    Route::get('/report-detail/{id?}', [ReportController::class, 'show'])->name('report.show');
+    Route::post('/report-delete/{id?}', [ReportController::class, 'delete'])->name('report.delete');
 
     // subscription
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
